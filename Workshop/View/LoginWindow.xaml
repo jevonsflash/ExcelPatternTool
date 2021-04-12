@@ -1,0 +1,83 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="Workshop.View.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Workshop.View"
+        DataContext="{Binding Source={StaticResource Locator},Path=Login}"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        IsMaxRestoreButtonEnabled="False"
+        IsCloseButtonEnabled="True"
+        IsMinButtonEnabled="False"
+        
+        ShowTitleBar="False"
+        mc:Ignorable="d"
+        Title="" Height="350" Width="350">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+            <TextBlock  x:Name="TitleLabel"
+                       Margin="20 15"
+                       Padding="0"
+                       FontFamily="{DynamicResource HeaderFontFamily}"
+                       FontSize="{DynamicResource HeaderFontSize}"
+                       Text="登录" />
+
+        </StackPanel>
+        <StackPanel Orientation="Vertical" 
+                    x:Name="ProgressTextLayout"
+                    Grid.Row="1" 
+                    Margin="10,0"
+                    HorizontalAlignment="Stretch">
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="用户名"></Label>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding UserName}"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             ></TextBox>
+            </Grid>
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="密码"></Label>
+                <PasswordBox Grid.Column="1" 
+                             x:Name="MainPasswordBox"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             Password="123456"></PasswordBox>
+            </Grid>
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <RadioButton Content="员工登录" x:Name="IsEmployeeCheckBox" GroupName="1" Checked="RadioButton_Checked"></RadioButton>
+                <RadioButton Grid.Column="1" Content="管理员登录" GroupName="1" IsChecked="True"  Checked="RadioButton_Checked"></RadioButton>
+            </Grid>
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="座位"></Label>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding SeatList}" SelectedItem="{Binding CurrentSeat}" DisplayMemberPath="PostName"  IsEnabled="{Binding ElementName=IsEmployeeCheckBox, Path=IsChecked}" 
+                             ></ComboBox>
+            </Grid>
+        </StackPanel>
+        <Button Grid.Row="3" x:Name="LoginButton" Content="登录" Width="80" Click="LoginButton_Click"></Button>
+    </Grid>
+</mah:MetroWindow>

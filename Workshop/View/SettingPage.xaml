@@ -1,0 +1,74 @@
+﻿<Page x:Class="Workshop.View.SettingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Workshop.View"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        DataContext="{Binding Source={StaticResource Locator},Path=SettingPage}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+
+      Title="SettingPage">
+
+    <Grid>
+        <StackPanel Margin="20,0">
+	        <Grid Margin="0,10">
+		        <Grid.ColumnDefinitions>
+			        <ColumnDefinition Width="*"></ColumnDefinition>
+			        <ColumnDefinition Width="2*"></ColumnDefinition>
+		        </Grid.ColumnDefinitions>
+				<Label Content="使用SyntaxFactory库前缀"></Label>
+
+		        <mah:ToggleSwitch Grid.Column="1" 
+		                          IsOn="{Binding SettingInfo.AvoidUsingStatic}"></mah:ToggleSwitch>
+	        </Grid>
+			<Grid Margin="0,10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"></ColumnDefinition>
+					<ColumnDefinition Width="2*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Label Content="在新行上闭括号"></Label>
+				
+				<mah:ToggleSwitch Grid.Column="1" 
+				                  IsOn="{Binding SettingInfo.CloseCurlyOnNewLine}"></mah:ToggleSwitch>
+			</Grid>
+	       
+	        <Grid Margin="0,10">
+		        <Grid.ColumnDefinitions>
+			        <ColumnDefinition Width="*"></ColumnDefinition>
+			        <ColumnDefinition Width="2*"></ColumnDefinition>
+		        </Grid.ColumnDefinitions>
+				<Label Content="保留冗余的 API 调用"></Label>
+		        <mah:ToggleSwitch Grid.Column="1" 
+		                          IsOn="{Binding SettingInfo.KeepRedundantApiCalls}"></mah:ToggleSwitch>
+	        </Grid>
+	     
+
+	        <Grid Margin="0,10">
+		        <Grid.ColumnDefinitions>
+			        <ColumnDefinition Width="*"></ColumnDefinition>
+			        <ColumnDefinition Width="2*"></ColumnDefinition>
+		        </Grid.ColumnDefinitions>
+				<Label Content="在新行上开括号"></Label>
+		        <mah:ToggleSwitch Grid.Column="1" 
+		                          IsOn="{Binding SettingInfo.OpenCurlyOnNewLine}"></mah:ToggleSwitch>
+	        </Grid>
+
+	        <Grid Margin="0,10">
+		        <Grid.ColumnDefinitions>
+			        <ColumnDefinition Width="*"></ColumnDefinition>
+			        <ColumnDefinition Width="2*"></ColumnDefinition>
+		        </Grid.ColumnDefinitions>
+				<Label Content="保留原始空格"></Label>
+		        <mah:ToggleSwitch Grid.Column="1" 
+		                          IsOn="{Binding SettingInfo.PreserveOriginalWhitespace}"></mah:ToggleSwitch>
+	        </Grid>
+		</StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" >
+            <Button  Content="应用" x:Name="SaveToButton"  Command="{Binding SubmitCommand}" Width="120"></Button>
+
+        </StackPanel>
+
+    </Grid>
+</Page>

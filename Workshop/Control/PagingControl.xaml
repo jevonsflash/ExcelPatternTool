@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Workshop.Control.PagingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Workshop.Control"
+             mc:Ignorable="d" 
+             d:DesignHeight="300">
+        <UserControl.Resources>
+            <!--框样式-->
+            <Style TargetType="{x:Type Border}" x:Key="gBox">
+                <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                <Setter Property="Background" Value="#dfe6ec"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="2"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+
+            <!--公共按钮-->
+            <Style TargetType="{x:Type Button}" x:Key="gmButton">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="5,3,5,3"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style>
+
+            <!--文本框-->
+            <Style TargetType="{x:Type TextBox}" x:Key="gTextBlock">
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Width" Value="160"/>
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="#adb2b5"/>
+            </Style>
+
+            <!--文本标签-->
+            <Style TargetType="{x:Type Label}" x:Key="gLabel">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="#006699"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+        </UserControl.Resources>
+        <!--分页框-->
+        <Border Style="{StaticResource gBox}">
+            <StackPanel Orientation="Horizontal">
+                <Label Style="{StaticResource gLabel}" Content="转到"/>
+                <TextBox Width="50" Style="{StaticResource gTextBlock}" Text="{Binding JumpNum}" />
+                <Label Style="{StaticResource gLabel}" Content="页"/>
+                <Button Style="{StaticResource gmButton}" Margin="0,0,20,0" Content="GO" Command="{Binding JumpPageCommand}"/>
+                <Button Style="{StaticResource gmButton}" Margin="0,0,10,0" Content="上一页" Command="{Binding PrevPageCommand}"/>
+                <Button Style="{StaticResource gmButton}"  Content="下一页" Command="{Binding NextPageCommand}"/>
+
+                <Label Style="{StaticResource gLabel}" Content="【当前"/>
+                <Label Style="{StaticResource gLabel}" Content="0" Foreground="Red"/>
+                <Label Style="{StaticResource gLabel}" Content="页】"/>
+
+                <Label Style="{StaticResource gLabel}" Content="【共"/>
+                <Label Style="{StaticResource gLabel}" Content="0" Foreground="Red"/>
+                <Label Style="{StaticResource gLabel}" Content="页】"/>
+
+                <Label Style="{StaticResource gLabel}" Content="【共"/>
+                <Label Style="{StaticResource gLabel}" Content="0" Foreground="Red"/>
+                <Label Style="{StaticResource gLabel}" Content="条记录】"/>
+            </StackPanel>
+        </Border>
+</UserControl>

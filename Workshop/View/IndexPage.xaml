@@ -1,0 +1,68 @@
+﻿<Page x:Class="Workshop.View.IndexPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Workshop.View"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="http://metro.mahapps.com/winfx/xaml/shared"
+      xmlns:view="clr-namespace:Workshop.View"
+      DataContext="{Binding Source={StaticResource Locator},Path=IndexPage}"
+
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="800"
+      Title="IndexPage">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition Height="Auto"></RowDefinition>
+
+		</Grid.RowDefinitions>
+		<Grid Margin="20 0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0"
+                       x:Name="TitleBlock"
+                       Margin="0 15"
+                       Padding="0"
+                       FontFamily="{DynamicResource HeaderFontFamily}"
+                       FontSize="{DynamicResource HeaderFontSize}"
+                       Text="此工具能将C#代码，转换成使用语法工厂构造器（SyntaxFactory）生成等效语法树代码" />
+
+		</Grid>
+		<Grid Grid.Row="1">
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+
+			<TextBox x:Name="CurrentText" mah:TextBoxHelper.Watermark="输入待转换的C#代码" Margin="10" AcceptsReturn="True"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Text="{Binding CurrentContent}"/>
+			<TextBox Grid.Column="1" mah:TextBoxHelper.Watermark="点击生成按钮转换代码" Margin="10"   TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="{Binding ResponseContent}" />
+
+
+		</Grid>
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button  Content="生成" x:Name="SaveToButton" Width="120"  Command="{Binding ContinueCommand}"></Button>
+			</StackPanel>
+
+			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button x:Name="ClearButton" Content="复制到剪贴板" Command="{Binding CopyToClipboardCommand}"  Width="120"></Button>
+
+			</StackPanel>
+		</Grid>
+
+	</Grid>
+
+</Page>
