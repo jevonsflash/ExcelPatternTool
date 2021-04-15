@@ -34,18 +34,9 @@
         </Grid>
 
         <DataGrid Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  ItemsSource="{Binding OrderInfos}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="扫描时间" Binding="{Binding Createtime}"></DataGridTextColumn>
-                <DataGridTextColumn Header="姓名" Binding="{Binding UserName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="工序" Binding="{Binding ProcedureName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="序列号" Binding="{Binding SerialNumber}"></DataGridTextColumn>
-                <DataGridTextColumn Header="作业单" Binding="{Binding OrderNumber}"></DataGridTextColumn>
-                <DataGridTextColumn Header="产品型号" Binding="{Binding ProductModelNumber}"></DataGridTextColumn>
-                <DataGridTextColumn Header="产品描述" Binding="{Binding ProductDetail}"></DataGridTextColumn>
-            </DataGrid.Columns>
+                  AutoGenerateColumns="True"
+                  AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+                  ItemsSource="{Binding Employees}">
         </DataGrid>
 
     </Grid>

@@ -1,4 +1,6 @@
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.EntityFrameworkCore;
+using Workshop.Core.DataBase;
 using Workshop.View;
 
 namespace Workshop.ViewModel
@@ -13,6 +15,11 @@ namespace Workshop.ViewModel
             SimpleIoc.Default.Register<CategoryPageViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<SettingPageViewModel>();
+            var connectionString = @"Data Source=mato.db";
+            var contextOptions = new DbContextOptionsBuilder<WorkshopDbContext>()
+                .UseSqlite(connectionString)
+                .Options;
+            SimpleIoc.Default.Register<WorkshopDbContext>(()=>new WorkshopDbContext(contextOptions));
 
         }
 

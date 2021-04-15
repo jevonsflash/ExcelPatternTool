@@ -20,15 +20,15 @@ namespace Workshop.Control
 
         private void CategoryComboBox_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            var ctl = (sender as ComboBox);
-            var source = ctl.ItemsSource as List<CategoryInfo>;
-            var dc = (ctl.DataContext as InfoBase).Category;
-            if (dc != null)
-            {
-                var selectedOne = source.FirstOrDefault(c => c.Code == dc.Code);
-                ctl.SelectedItem = selectedOne;
+            //var ctl = (sender as ComboBox);
+            //var source = ctl.ItemsSource as List<EmployeeDto>;
+            //var dc = (ctl.DataContext as InfoBase).Category;
+            //if (dc != null)
+            //{
+            //    var selectedOne = source.FirstOrDefault(c => c.Code == dc.Code);
+            //    ctl.SelectedItem = selectedOne;
 
-            }
+            //}
         }
     }
 }

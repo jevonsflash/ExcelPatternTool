@@ -67,7 +67,6 @@ namespace Workshop.View
             if (!(bool)this.IsEmployeeCheckBox.IsChecked)
             {
                 var vm = this.DataContext as LoginViewModel;
-                vm.CurrentSeat = null;
             }
         }
     }

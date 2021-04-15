@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SimpleExcelImport;
+﻿using Workshop.Infrastructure.ExcelHandler;
 
-namespace Workshop.Model
+namespace Workshop.Model.Excel
 {
     public class ProductTypeInfoExcel_wyts
     {

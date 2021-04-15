@@ -14,14 +14,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using SimpleExcelImport;
 using Workshop.Common;
 using Workshop.Control;
+using Workshop.Core.DataBase;
+using Workshop.Core.Domains;
 using Workshop.Helper;
 using Workshop.Model;
-using Workshop.Model.Excel;
-using Workshop.Model.Tables;
 using Workshop.Service;
 using Workshop.View;
 namespace Workshop.ViewModel
@@ -31,32 +31,33 @@ namespace Workshop.ViewModel
 
         private string filePath;
 
-        public CategoryPageViewModel()
+        private readonly WorkshopDbContext _dbContext;
+        public CategoryPageViewModel(WorkshopDbContext dbContext)
         {
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.CreateCommand = new RelayCommand(CreateAction);
-            this.RemoveCommand = new RelayCommand<CategoryInfo>(RemoveAction);
-            this.EditCommand = new RelayCommand<CategoryInfo>(EditAction);
+            this.RemoveCommand = new RelayCommand<EmployeeDto>(RemoveAction);
+            this.EditCommand = new RelayCommand<EmployeeDto>(EditAction);
             InitData();
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
-
+            this._dbContext = dbContext;
 
         }
 
         private void InitData()
         {
-            IList<CategoryInfo> data = null;
+            IList<EmployeeDto> data = null;
 
             InvokeHelper.InvokeOnUi(null, () =>
             {
-                data = WebDataService.GetCategory();
+                
                 Thread.Sleep(2000);
 
             }).ContinueWith((t) =>
             {
 
-                this.CategoryInfos = new ObservableCollection<CategoryInfo>(data);
-                this.CategoryInfos.CollectionChanged += CategoryInfos_CollectionChanged;
+                this.EmployeeInfos = new ObservableCollection<EmployeeDto>(data);
+                this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
             });
 
 
@@ -64,11 +65,11 @@ namespace Workshop.ViewModel
 
         private void CategoryPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(this.CategoryInfos))
+            if (e.PropertyName == nameof(this.EmployeeInfos))
             {
-                if (this.CategoryInfos != null && this.CategoryInfos.Count > 0)
+                if (this.EmployeeInfos != null && this.EmployeeInfos.Count > 0)
                 {
-                    LocalDataService.SaveCollectionLocal(this.CategoryInfos);
+                    LocalDataService.SaveCollectionLocal(this.EmployeeInfos);
 
                 }
             }
@@ -80,7 +81,13 @@ namespace Workshop.ViewModel
             SubmitCommand.RaiseCanExecuteChanged();
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
-                if (!WebDataService.EditCategory(e.NewItems[0] as CategoryInfo))
+                var result = 0;
+                using (var dbContext=this._dbContext)
+                {
+                    dbContext.Employee.Update(e.NewItems[0] as Employee);
+                    result= dbContext.SaveChanges();
+                }
+                if (result == 0)
                 {
                     MessageBox.Show("更新失败");
 
@@ -88,18 +95,29 @@ namespace Workshop.ViewModel
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                if (!WebDataService.DelCategory(e.OldItems[0] as CategoryInfo))
+                var result = 0;
+                using (var dbContext = this._dbContext)
+                {
+                    dbContext.Employee.Remove(e.OldItems[0] as Employee);
+                    result = dbContext.SaveChanges();
+                }
+                if (result == 0)
                 {
                     MessageBox.Show("删除失败");
 
                 }
+               
 
             }
-            App.GolobelCategorys = new List<CategoryInfo>(WebDataService.GetCategory());
+            using (var dbContext = this._dbContext)
+            {
+               var result= dbContext.Employee.ToList();
+                App.GolobelCategorys = new List<Employee>(result);
+            }
 
         }
 
-        private void RemoveAction(CategoryInfo obj)
+        private void RemoveAction(EmployeeDto obj)
         {
             if (obj == null)
             {
@@ -110,12 +128,12 @@ namespace Workshop.ViewModel
         }
 
 
-        internal void RemoveCategory(CategoryInfo CategoryInfo)
+        internal void RemoveCategory(EmployeeDto CategoryInfo)
         {
-            if (CategoryInfos.Any(c => c.Id == CategoryInfo.Id))
+            if (EmployeeInfos.Any(c => c.Id == CategoryInfo.Id))
             {
-                var current = CategoryInfos.FirstOrDefault(c => c.Id == CategoryInfo.Id);
-                CategoryInfos.RemoveAt(CategoryInfos.IndexOf(current));
+                var current = EmployeeInfos.FirstOrDefault(c => c.Id == CategoryInfo.Id);
+                EmployeeInfos.RemoveAt(EmployeeInfos.IndexOf(current));
             }
             else
             {
@@ -124,7 +142,7 @@ namespace Workshop.ViewModel
             }
         }
 
-        private void EditAction(CategoryInfo obj)
+        private void EditAction(EmployeeDto obj)
         {
             if (obj == null)
             {
@@ -132,7 +150,7 @@ namespace Workshop.ViewModel
 
             }
             var childvm = SimpleIoc.Default.GetInstance<CreateCategoryViewModel>();
-            childvm.CurrentCategoryInfo = obj;
+            childvm.CurrentEmployee = obj;
 
             var cpwindow = new CreateCategoryWindow();
             cpwindow.ShowDialog();
@@ -149,7 +167,7 @@ namespace Workshop.ViewModel
 
         private void SubmitAction()
         {
-            var odInfos = CategoryInfos.ToList();
+            var odInfos = EmployeeInfos.ToList();
 
 
 
@@ -163,39 +181,39 @@ namespace Workshop.ViewModel
         }
 
 
-        private ObservableCollection<CategoryInfo> _categoryTypeInfos;
+        private ObservableCollection<EmployeeDto> _categoryTypeInfos;
 
-        public ObservableCollection<CategoryInfo> CategoryInfos
+        public ObservableCollection<EmployeeDto> EmployeeInfos
         {
             get
             {
                 if (_categoryTypeInfos == null)
                 {
-                    _categoryTypeInfos = new ObservableCollection<CategoryInfo>();
+                    _categoryTypeInfos = new ObservableCollection<EmployeeDto>();
                 }
                 return _categoryTypeInfos;
             }
             set
             {
                 _categoryTypeInfos = value;
-                RaisePropertyChanged(nameof(CategoryInfos));
+                RaisePropertyChanged(nameof(EmployeeInfos));
             }
         }
 
-        public void CreateCategory(CategoryInfo CategoryInfo)
+        public void CreateCategory(EmployeeDto model)
         {
-            var id = Guid.NewGuid().ToString("N");
+            var id = Guid.NewGuid();
             var createtime = DateTime.Now;
-            CategoryInfo.Id = id;
-            CategoryInfo.CreateTime = createtime;
-            if (CategoryInfos.Any(c => c.Id == CategoryInfo.Id))
+            model.Id = id;
+            model.CreateTime = createtime;
+            if (EmployeeInfos.Any(c => c.Id == model.Id))
             {
-                var current = CategoryInfos.FirstOrDefault(c => c.Id == CategoryInfo.Id);
-                CategoryInfos[CategoryInfos.IndexOf(current)] = CategoryInfo;
+                var current = EmployeeInfos.FirstOrDefault(c => c.Id == model.Id);
+                EmployeeInfos[EmployeeInfos.IndexOf(current)] = model;
             }
             else
             {
-                CategoryInfos.Add(CategoryInfo);
+                EmployeeInfos.Add(model);
 
             }
         }
@@ -203,7 +221,7 @@ namespace Workshop.ViewModel
 
         private bool CanSubmit()
         {
-            return this.CategoryInfos.Count > 0;
+            return this.EmployeeInfos.Count > 0;
 
         }
 
@@ -212,8 +230,8 @@ namespace Workshop.ViewModel
 
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
-        public RelayCommand<CategoryInfo> EditCommand { get; set; }
-        public RelayCommand<CategoryInfo> RemoveCommand { get; set; }
+        public RelayCommand<EmployeeDto> EditCommand { get; set; }
+        public RelayCommand<EmployeeDto> RemoveCommand { get; set; }
 
     }
 

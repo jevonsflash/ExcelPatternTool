@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Messaging;
 using Workshop.Common;
+using Workshop.Core.Domains;
 using Workshop.Helper;
 using Workshop.Model;
-using Workshop.Model.Apis;
 using Workshop.Service;
 
 namespace Workshop
@@ -19,7 +19,7 @@ namespace Workshop
     /// </summary>
     public partial class App : Application
     {
-        public static List<CategoryInfo> GolobelCategorys;
+        public static List<Employee> GolobelCategorys;
         public static string Session;
         public App()
         {

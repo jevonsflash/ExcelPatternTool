@@ -25,7 +25,7 @@ namespace Workshop.View
             InitializeComponent();
             
             var vm = this.DataContext as CreateCategoryViewModel;
-            if (!string.IsNullOrEmpty(vm.CurrentCategoryInfo.Id))
+            if (vm.CurrentEmployee.Id!=Guid.Empty)
             {
                 this.Title = TitleBlock.Text = "修改类别";
                 this.CreateButton.Content = "提交修改";

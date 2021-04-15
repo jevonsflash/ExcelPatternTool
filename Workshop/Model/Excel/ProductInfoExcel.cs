@@ -1,9 +1,8 @@
-﻿using System.Security.AccessControl;
-using Exportable.Attribute;
+﻿using Exportable.Attribute;
 using Exportable.Models;
-using SimpleExcelImport;
+using Workshop.Infrastructure.ExcelHandler;
 
-namespace Workshop.Model
+namespace Workshop.Model.Excel
 {
     public class ProductInfoExcel
     {

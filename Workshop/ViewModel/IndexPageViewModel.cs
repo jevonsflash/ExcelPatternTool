@@ -12,6 +12,8 @@ using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using Workshop.Helper;
 using Workshop.Model;
+using Workshop.Model.Enum;
+using Workshop.Model.Excel;
 
 namespace Workshop.ViewModel
 {
@@ -192,7 +194,7 @@ namespace Workshop.ViewModel
         private string _currentContent;
 
         public string CurrentContent
-        {
+        { 
             get { return _currentContent; }
             set
             {

@@ -14,7 +14,7 @@ namespace Workshop.ViewModel
     {
         public CreateCategoryViewModel()
         {
-            this.CurrentCategoryInfo = new CategoryInfo();
+            this.CurrentEmployee = new EmployeeDto();
             this.SubmitCommand = new RelayCommand(SubmitAction);
             this.RemoveCommand = new RelayCommand(RemoveAction, CanSubmit);
             this.PropertyChanged += CreateProductPageViewModel_PropertyChanged;
@@ -23,7 +23,7 @@ namespace Workshop.ViewModel
 
         private void CreateProductPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(this.CurrentCategoryInfo))
+            if (e.PropertyName == nameof(this.CurrentEmployee))
             {
                 this.SubmitCommand.RaiseCanExecuteChanged();
                 this.RemoveCommand.RaiseCanExecuteChanged();
@@ -32,32 +32,32 @@ namespace Workshop.ViewModel
 
         private void RemoveAction()
         {
-            basevm.RemoveCategory(this.CurrentCategoryInfo);
-            this.CurrentCategoryInfo = new CategoryInfo();
+            basevm.RemoveCategory(this.CurrentEmployee);
+            this.CurrentEmployee = new EmployeeDto();
 
         }
 
         private void SubmitAction()
         {
-            basevm.CreateCategory(this.CurrentCategoryInfo);
-            this.CurrentCategoryInfo = new CategoryInfo();
+            basevm.CreateCategory(this.CurrentEmployee);
+            this.CurrentEmployee = new EmployeeDto();
 
         }
 
         private bool CanSubmit()
         {
-            return this.CurrentCategoryInfo != null && !string.IsNullOrEmpty(CurrentCategoryInfo.Id);
+            return this.CurrentEmployee != null && CurrentEmployee.Id!=Guid.Empty;
         }
 
-        private CategoryInfo _currentCategoryInfo;
+        private EmployeeDto _currentEmployee;
 
-        public CategoryInfo CurrentCategoryInfo
+        public EmployeeDto CurrentEmployee
         {
-            get { return _currentCategoryInfo; }
+            get { return _currentEmployee; }
             set
             {
-                _currentCategoryInfo = value;
-                RaisePropertyChanged(nameof(CurrentCategoryInfo));
+                _currentEmployee = value;
+                RaisePropertyChanged(nameof(CurrentEmployee));
             }
         }
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Workshop.Model
+﻿namespace Workshop.Model.Enum
 {
     public enum ErrorType
     {

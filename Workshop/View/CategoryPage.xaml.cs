@@ -29,14 +29,14 @@ namespace Workshop.View
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.EditCommand.Execute(item.DataContext as CategoryInfo);
+            vm.EditCommand.Execute(item.DataContext as EmployeeDto);
         }
 
         private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.RemoveCommand.Execute(item.DataContext as CategoryInfo);
+            vm.RemoveCommand.Execute(item.DataContext as EmployeeDto);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
