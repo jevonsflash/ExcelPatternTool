@@ -1,13 +1,22 @@
-﻿namespace Workshop.Core.Domains
+﻿using System.ComponentModel;
+
+namespace Workshop.Core.Domains
 {
     public class EnterpriseSocialInsuranceAndFund : BaseDomainInfo
     {
-        public string SocialInsuranceEnterprise { get; set; }
-        public string SupplementarySocialInsuranceEnterprise { get; set; }
-        public string ProvidentFundEnterprise { get; set; }
-        public string SupplementaryProvidentFundEnterprise { get; set; }
-        public string UnionFeeEnterprise { get; set; }
-        public string SupplementaryUnionFeeDeductEnterprise { get; set; }
-        public string Sum { get; set; }
+        [DisplayName("社保企业")]
+        public double SocialInsuranceEnterprise { get; set; }
+        [DisplayName("补社保企业")]
+        public double SupplementarySocialInsuranceEnterprise { get; set; }
+        [DisplayName("公积金企业")]
+        public double ProvidentFundEnterprise { get; set; }
+        [DisplayName("补公积金企业")]
+        public double SupplementaryProvidentFundEnterprise { get; set; }
+        [DisplayName("工会费企业")]
+        public double UnionFeeEnterprise { get; set; }
+        [DisplayName("补扣工会费企业")]
+        public double SupplementaryUnionFeeDeductEnterprise { get; set; }
+        [DisplayName("总支付")]
+        public double Sum { get; set; }
     }
 }

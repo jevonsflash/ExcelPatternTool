@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Workshop.Infrastructure.ExcelHandler;
@@ -8,29 +9,30 @@ namespace Workshop.Core.Domains
 {
     public class Employee : BaseDomainInfo
     {
-        [ExcelImport("年", order = 0)] 
+        [DisplayName("年")] 
         public int Year { get; set; }
-        [ExcelImport("月", order = 1)]
+        [DisplayName("月")]
         public int Mounth { get; set; }
-        [ExcelImport("批次", order = 2)]
+        [DisplayName("批次")]
         public string Batch { get; set; }
-        [ExcelImport("序号", order = 3)]
+        [DisplayName("序号")]
         public string SerialNum { get; set; }
-        [ExcelImport("部门", order = 4)]
+        [DisplayName("部门")]
         public string Dept { get; set; }
-        [ExcelImport("项目", order = 5)]
+        [DisplayName("项目")]
         public string Proj { get; set; }
-        [ExcelImport("状态", order = 6)]
+        [DisplayName("状态")]
         public string State { get; set; }
-        [ExcelImport("姓名", order = 7)]
+        [DisplayName("姓名")]
         public string Name { get; set; }
-        [ExcelImport("身份证号码", order = 8)]
+        [DisplayName("身份证号码")]
         public string IDCard { get; set; }
-        [ExcelImport("工资等级", order = 9)]
+        [DisplayName("工资等级")]
         public string Level { get; set; }
-        [ExcelImport("工作性质", order = 10)]
+        [DisplayName("工作性质")]
         public string JobCate { get; set; }
 
+        [DisplayName("工作性质")]
         public EmployeeAccount EmployeeAccount { get; set; }
         public EmployeeSalay SalayInfo { get; set; }
         public EmployeeSocialInsuranceAndFund EmployeeSocialInsuranceAndFund { get; set; }

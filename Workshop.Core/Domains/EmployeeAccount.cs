@@ -1,20 +1,21 @@
-﻿using Workshop.Infrastructure.ExcelHandler;
+﻿using System.ComponentModel;
+using Workshop.Infrastructure.ExcelHandler;
 
 namespace Workshop.Core.Domains
 {
     public class EmployeeAccount : BaseDomainInfo
     {
-        [ExcelImport("账号", order = 11)]
+        [DisplayName("账号")]
         public string AccountNum { get; set; }
 
-        [ExcelImport("名称和地点", order = 12)]
+        [DisplayName("名称和地点")]
         public string AccountBankAlias { get; set; }
-        [ExcelImport("银行名称", order = 13)]
+        [DisplayName("银行名称")]
         public string AccountBankName { get; set; }
-        [ExcelImport("银行地点", order = 14)]
+        [DisplayName("银行地点")]
         public string AccountBankLoc { get; set; }
 
-        [ExcelImport("个人社保号", order = 15)]
+        [DisplayName("个人社保号")]
         public string SocialInsuranceNum { get; set; }
 
     }

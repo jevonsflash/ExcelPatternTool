@@ -5,7 +5,7 @@ using NPOI.SS.UserModel;
 
 namespace Workshop.Infrastructure.ExcelHandler
 {
-    internal class XLSReader : BaseExcelReader, IExcelReader
+    public class XLSReader : BaseExcelReader, IExcelReader
     {
         MemoryStream mem;
         private FileStream fileStr;

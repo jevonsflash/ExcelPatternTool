@@ -27,7 +27,7 @@ namespace Workshop.ViewModel
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
 
             this.GetDataCommand = new RelayCommand(GetDataAction, CanSubmit);
-            this.Employees=new ObservableCollection<dynamic>();
+            this.Employees = new ObservableCollection<dynamic>();
         }
 
         private void GetDataAction()
@@ -90,12 +90,13 @@ namespace Workshop.ViewModel
         {
             var result = DocHelper.ImportFrom((importer) =>
             {
-                
-                var op1=new ImportOption<EmpoyeeImportEntity>(1,2);
-               var r1= importer.ExcelToList(op1);
-              
 
-               return new {Employees=r1};
+                var op1 = new ImportOption<EmpoyeeImportEntity>(0, 2);
+                op1.SheetName = "全职";
+                var r1 = importer.ExcelToList(op1);
+
+
+                return new { Employees = r1 };
 
             });
             this.Employees = new ObservableCollection<dynamic>(result);

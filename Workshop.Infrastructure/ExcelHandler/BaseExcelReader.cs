@@ -6,7 +6,7 @@ using NPOI.SS.UserModel;
 
 namespace Workshop.Infrastructure.ExcelHandler
 {
-    internal class BaseExcelReader
+    public class BaseExcelReader
     {
 
         internal T GetDataToObject<T>(IRow row, List<Column> columns)
@@ -57,6 +57,11 @@ namespace Workshop.Infrastructure.ExcelHandler
                         bool tmpBool = ExtractBooleanFromCell(cell);
                         AssignValue(objType, columns[j].PropName, result, Convert.ToBoolean(tmpBool));
                         break;
+                    case "formulatedtype`1":
+                        var gType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
+                        var tmpFormularted = ExtractDateFromFomular(cell, gType);
+                        AssignValue(objType, columns[j].PropName, result, tmpFormularted);
+                        break;
                     default:
                         double tmpDef = ExtractNumericFromCell(cell);
                         AssignValue(objType, columns[j].PropName, result, (object)tmpDef);
@@ -96,8 +101,10 @@ namespace Workshop.Infrastructure.ExcelHandler
             double value = 0;
             switch (cell.CellType)
             {
-                case CellType.Blank:
                 case CellType.Formula:
+                    value = cell.CachedFormulaResultType == CellType.Numeric ? cell.NumericCellValue : 0;
+                    break;
+                case CellType.Blank:
                 case CellType.Unknown:
                     value = 0;
                     break;
@@ -122,12 +129,15 @@ namespace Workshop.Infrastructure.ExcelHandler
             DateTime value = DateTime.Now;
             switch (cell.CellType)
             {
+                case CellType.Formula:
+                    value = (cell.CachedFormulaResultType == CellType.Numeric
+                             || cell.CachedFormulaResultType == CellType.String) ? cell.DateCellValue : default;
+                    break;
                 case CellType.Blank:
                 case CellType.Unknown:
                 case CellType.Boolean:
                 case CellType.Error:
-                case CellType.Formula:
-                    value = DateTime.Now;
+                    value = default;
                     break;
                 case CellType.Numeric:
                     value = cell.DateCellValue;
@@ -148,6 +158,11 @@ namespace Workshop.Infrastructure.ExcelHandler
             }
             switch (cell.CellType)
             {
+                case CellType.Formula:
+                    value = cell.CachedFormulaResultType == CellType.String
+                              ? cell.StringCellValue : string.Empty;
+                    break;
+
                 case CellType.Blank:
                 case CellType.Unknown:
                     value = string.Empty;
@@ -158,9 +173,7 @@ namespace Workshop.Infrastructure.ExcelHandler
                 case CellType.Error:
                     value = "Error Code:" + cell.ErrorCellValue.ToString();
                     break;
-                case CellType.Formula:
-                    value = cell.CellFormula;
-                    break;
+
                 case CellType.Numeric:
                     value = cell.NumericCellValue.ToString();
                     break;
@@ -170,6 +183,133 @@ namespace Workshop.Infrastructure.ExcelHandler
             }
             return value;
         }
+
+        private IFormulatedType ExtractDateFromFomular<T>(ICell cell) where T : struct
+        {
+            FormulatedType<T> value = default;
+            if (cell.CellType == CellType.Formula)
+            {
+                var TType = typeof(T);
+                string colTypeDesc = TType.Name.ToLowerInvariant();
+                T realValue;
+                switch (colTypeDesc)
+                {
+                    case "string":
+                        string tmpStr = ExtractStringFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpStr, TType);
+                        break;
+                    case "datetime":
+                        DateTime tmpDt = ExtractDateFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpDt, TType);
+                        break;
+                    case "int":
+                    case "int32":
+                        double tmpInt = ExtractNumericFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpInt, TType);
+                        break;
+
+                    case "decimal":
+                        double tmpDecimal = ExtractNumericFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpDecimal, TType);
+                        break;
+                    case "int64":
+                    case "long":
+                        double tmpLong = ExtractNumericFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpLong, TType);
+                        break;
+
+                    case "double":
+                        double tmpDb = ExtractNumericFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpDb, TType);
+                        break;
+                    case "single":
+                        double tmpSingle = ExtractNumericFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpSingle, TType);
+                        break;
+                    case "boolean":
+                    case "bool":
+                        bool tmpBool = ExtractBooleanFromCell(cell);
+                        realValue = (T)Convert.ChangeType(tmpBool, TType);
+                        break;
+                    default:
+                        realValue = new T();
+                        break;
+
+                }
+
+                value.Value = realValue;
+                value.Formula = cell.CellFormula;
+            }
+
+            return value;
+        }
+
+        private IFormulatedType ExtractDateFromFomular(ICell cell, Type type)
+        {
+            IFormulatedType value = default;
+            if (cell.CellType == CellType.Formula)
+            {
+                var TType = type;
+                string colTypeDesc = TType.Name.ToLowerInvariant();
+                switch (colTypeDesc)
+                {
+                    case "string":
+                        string tmpStr = ExtractStringFromCell(cell);
+                        value = new FormulatedType<string>();
+                        (value as FormulatedType<string>).Value = tmpStr;
+                        break;
+                    case "datetime":
+                        DateTime tmpDt = ExtractDateFromCell(cell);
+                        value = new FormulatedType<DateTime>();
+                        (value as FormulatedType<DateTime>).Value = tmpDt;
+                        break;
+                    case "int":
+                    case "int32":
+                        double tmpInt = ExtractNumericFromCell(cell);
+                        value = new FormulatedType<int>();
+                        (value as FormulatedType<int>).Value = Convert.ToInt32(tmpInt);
+                        break;
+
+                    case "decimal":
+                        double tmpDecimal = ExtractNumericFromCell(cell);
+                        value = new FormulatedType<decimal>();
+                        (value as FormulatedType<decimal>).Value = Convert.ToDecimal(tmpDecimal);
+                        break;
+                    case "int64":
+                    case "long":
+                        double tmpLong = ExtractNumericFromCell(cell);
+                        value = new FormulatedType<long>();
+                        (value as FormulatedType<long>).Value = Convert.ToInt64(tmpLong);
+                        break;
+
+                    case "double":
+                        double tmpDb = ExtractNumericFromCell(cell);
+                        value = new FormulatedType<double>();
+                        (value as FormulatedType<double>).Value = tmpDb;
+                        break;
+                    case "single":
+                        double tmpSingle = ExtractNumericFromCell(cell);
+                        value = new FormulatedType<float>();
+                        (value as FormulatedType<float>).Value = Convert.ToSingle(tmpSingle);
+                        break;
+                    case "boolean":
+                    case "bool":
+                        bool tmpBool = ExtractBooleanFromCell(cell);
+                        value = new FormulatedType<bool>();
+                        (value as FormulatedType<bool>).Value = Convert.ToBoolean(tmpBool);
+                        break;
+                    default:
+                        value = new FormulatedType<int>();
+                        break;
+
+                }
+
+                value.Formula = cell.CellFormula;
+            }
+
+            return value;
+        }
+
 
         private void AssignValue(Type objType, string propertyName, object instance, object data)
         {
@@ -205,7 +345,7 @@ namespace Workshop.Infrastructure.ExcelHandler
                     columns.Add(tmp);
                 }
             }
-            return columns.OrderBy(x=>x.ColumnOrder).ToList();
+            return columns.OrderBy(x => x.ColumnOrder).ToList();
         }
     }
 }

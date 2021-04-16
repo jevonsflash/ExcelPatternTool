@@ -5,7 +5,7 @@ using NPOI.XSSF.UserModel;
 
 namespace Workshop.Infrastructure.ExcelHandler
 {
-    internal class XLSXReader : BaseExcelReader, IExcelReader
+    public class XLSXReader : BaseExcelReader, IExcelReader
     {
         MemoryStream mem;
         private XSSFWorkbook document;

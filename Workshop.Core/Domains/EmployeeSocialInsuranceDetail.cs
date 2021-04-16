@@ -1,11 +1,18 @@
-﻿namespace Workshop.Core.Domains
+﻿using System.ComponentModel;
+
+namespace Workshop.Core.Domains
 {
     public class EmployeeSocialInsuranceDetail : BaseDomainInfo
     {
-        public string BasicOldAgeInsurance { get; set; }
-        public string BasicMedicalInsurance { get; set; }
-        public string UnemploymentInsurance { get; set; }
-        public string Check { get; set; }
-        public string ProvidentFund { get; set; }
+        [DisplayName("基本养老险保险费（个人）")]
+        public double BasicOldAgeInsurance { get; set; }
+        [DisplayName("基本医疗保险费（个人）")]
+        public double BasicMedicalInsurance { get; set; }
+        [DisplayName("失业保险费（个人）")]
+        public double UnemploymentInsurance { get; set; }
+        [DisplayName("验算（个人）")]
+        public double Check { get; set; }
+        [DisplayName("公积金（个人）")]
+        public double ProvidentFund { get; set; }
     }
 }

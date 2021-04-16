@@ -1,16 +1,28 @@
-﻿namespace Workshop.Core.Domains
+﻿using System.ComponentModel;
+
+namespace Workshop.Core.Domains
 {
     public class EmployeeSocialInsuranceAndFund : BaseDomainInfo
     {
-        public string SocialInsurancePersonal { get; set; }
-        public string SupplementarySocialInsurancePersonal { get; set; }
-        public string ProvidentFundPersonal { get; set; }
-        public string SupplementaryProvidentFundPersonal { get; set; }
-        public string BeforeFillingOut { get; set; }
-        public string PersonalIncomeTax { get; set; }
-        public string UnionFeePersonal { get; set; }
-        public string SupplementaryUnionFeeDeductPersonal { get; set; }
-        public string SupplementaryCommercialInsuranceDeduct { get; set; }
-        public string Sum { get; set; }
+        [DisplayName("社保个人")]
+        public double SocialInsurancePersonal { get; set; }
+        [DisplayName("补社保个人")]
+        public double SupplementarySocialInsurancePersonal { get; set; }
+        [DisplayName("公积金个人")]
+        public double ProvidentFundPersonal { get; set; }
+        [DisplayName("补公积金个人")]
+        public double SupplementaryProvidentFundPersonal { get; set; }
+        [DisplayName("税后补退")]
+        public double BeforeFillingOut { get; set; }
+        [DisplayName("个人所得税")]
+        public double PersonalIncomeTax { get; set; }
+        [DisplayName("工会费个人")]
+        public double UnionFeePersonal { get; set; }
+        [DisplayName("补扣工会费个人")]
+        public double SupplementaryUnionFeeDeductPersonal { get; set; }
+        [DisplayName("补扣福利商保")]
+        public double SupplementaryCommercialInsuranceDeduct { get; set; }
+        [DisplayName("实发薪金")]
+        public double Sum { get; set; }
     }
 }

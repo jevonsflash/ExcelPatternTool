@@ -1,33 +1,65 @@
-﻿namespace Workshop.Core.Domains
+﻿using System;
+using System.ComponentModel;
+
+namespace Workshop.Core.Domains
 {
     public class EmployeeSalay : BaseDomainInfo
     {
-        //培训试用期工资
-        public string ProbationSalary { get; set; }
-        public string BasicSalary { get; set; }
-        public string SkillSalary { get; set; }
-        public string PerformanceBonus { get; set; }
-        public string PostAllowance { get; set; }
-        public string OtherAllowances { get; set; }
-        public string SalesBonus { get; set; }
-        public string Bonus1 { get; set; }
-        public string Bonus2 { get; set; }
-        public string PerformanceRewards { get; set; }
-        public string PerformanceDeduct { get; set; }
-        public string NightAllowances { get; set; }
-        public string OrdinaryOvertime { get; set; }
-        public string HolidayOvertime { get; set; }
-        public string AgeBonus { get; set; }
-        public string AttendanceDeduct { get; set; }
-        public string MonthlyAttendance { get; set; }
-        public string QuarterlyAttendance { get; set; }
-        public string OtherRewards { get; set; }
-        public string OtherDeduct { get; set; }
-        public string SupplementaryRewards { get; set; }
-        public string SupplementaryDeduct { get; set; }
-        public string ParttimeSalary { get; set; }
-        public string Sum { get; set; }
-        public string HostelAllowances { get; set; }
-        public string MealAllowances { get; set; }
+        [DisplayName("培训试用期工资")]
+        public double ProbationSalary { get; set; }
+        [DisplayName("基本工资")]
+        public double BasicSalary { get; set; }
+        [DisplayName("技能工资")]
+        public double SkillSalary { get; set; }
+        [DisplayName("绩效奖金")]
+        public double PerformanceBonus { get; set; }
+        [DisplayName("岗位津贴")]
+        public double PostAllowance { get; set; }
+        [DisplayName("其他津贴")]
+        public double OtherAllowances { get; set; }
+        [DisplayName("销售奖励")]
+        public double SalesBonus { get; set; }
+        [DisplayName("奖金1")]
+        public double Bonus1 { get; set; }
+        [DisplayName("奖金2")]
+        public double Bonus2 { get; set; }
+        [DisplayName("绩效奖励/扣罚")]
+        public double PerformanceRewards { get; set; }
+        [DisplayName("绩效扣罚")]
+        public double PerformanceDeduct { get; set; }
+        [DisplayName("夜班费")]
+        public double NightAllowances { get; set; }
+        [DisplayName("普通加班费")]
+        public double OrdinaryOvertime { get; set; }
+        [DisplayName("节日加班费")]
+        public double HolidayOvertime { get; set; }
+        [DisplayName("年限")]
+        public double AgeBonus { get; set; }
+        [DisplayName("考勤扣")]
+        public double AttendanceDeduct { get; set; }
+        [DisplayName("月全勤")]
+        public double MonthlyAttendance { get; set; }
+        [DisplayName("季度全勤")]
+        public double QuarterlyAttendance { get; set; }
+        [DisplayName("其他应发")]
+        public double OtherRewards { get; set; }
+        [DisplayName("其他应扣")]
+        public double OtherDeduct { get; set; }
+        [DisplayName("补发")]
+        public double SupplementaryRewards { get; set; }
+        [DisplayName("补扣")]
+        public double SupplementaryDeduct { get; set; }
+        [DisplayName("兼职工资")]
+        public double ParttimeSalary { get; set; }
+        [DisplayName("应发合计")]
+        public double Sum { get; set; }
+        [DisplayName("税后补扣\r\n(宿舍费) ")]
+        public double HostelAllowances { get; set; }
+        [DisplayName("税后补扣\r\n(餐费) ")]
+        public double MealAllowances { get; set; }
+        [DisplayName("临时计税")]
+        public double TemporaryTax { get; set; }
+        [DisplayName("应发+临时计税项目")]
+        public double SumWithTemporaryTax { get; set; }
     }
 }
