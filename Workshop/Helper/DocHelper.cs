@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Exportable.Engines.Excel;
-using Workshop.Infrastructure.ExcelHandler;
+using Workshop.Infrastructure.Core;
+using Workshop.Infrastructure.Models;
 using Workshop.Model;
 using Workshop.Model.Excel;
 
@@ -18,12 +18,10 @@ namespace Workshop.Helper
         private static string _fileName = "未命名Excel";
         private static string _excelFilesXlsxXls = "Excel 2007文件|*.xlsx|Excel 99-03文件|*.xls";
 
-        public static void SaveTo<T>(IList<T> src) where T : class
+        public static void SaveTo<T>(IList<T> src, ExportOption exportOption) where T : class
         {
-            IExcelExportEngine engine = new ExcelExportEngine();
-            engine.AddData(src);
-            engine.SetFormat(ExcelVersion.XLSX);
-            MemoryStream memory = engine.Export();
+            Exporter exporter = new Exporter();
+            var buff = exporter.ProcessGetBytes(src, exportOption);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = CommonHelper.DesktopPath;
@@ -40,7 +38,7 @@ namespace Workshop.Helper
             {
                 var aa = saveFileDialog.FileName;
                 FileStream fs = new FileStream(aa, FileMode.Create);
-                byte[] buff = memory.ToArray();
+
                 fs.Write(buff, 0, buff.Length);
                 fs.Close();
             }
@@ -69,11 +67,11 @@ namespace Workshop.Helper
 
         public static List<T> ImportFromPath<T>(string filePath, ImportOption importOption)
         {
-            if (importOption==null)
+            if (importOption == null)
             {
                 importOption = new ImportOption(0, 1);
             }
-            ImportFromExcel import = new ImportFromExcel();
+            Importer import = new Importer();
             List<T> output = new List<T>();
 
             var data1 = new byte[0];
@@ -103,7 +101,7 @@ namespace Workshop.Helper
                     return output;
                 }
 
-                output = import.ExcelToList<T>(importOption).ToList();
+                output = import.Process<T>(importOption).ToList();
             }
             catch (Exception e)
             {
@@ -116,7 +114,7 @@ namespace Workshop.Helper
 
         }
 
-        public static dynamic ImportFrom(Func<ImportFromExcel,dynamic> action)
+        public static dynamic ImportFromDelegator(Func<Importer, dynamic> action)
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
@@ -128,7 +126,7 @@ namespace Workshop.Helper
             if (result == true)
             {
                 var filePath = openFileDialog.FileName;
-                return ImporTask(filePath,action);
+                return ImportFromPathDelegator(filePath, action);
             }
             else
             {
@@ -136,9 +134,9 @@ namespace Workshop.Helper
             }
         }
 
-        public static dynamic ImporTask(string filePath, Func<ImportFromExcel, dynamic> action)
+        public static dynamic ImportFromPathDelegator(string filePath, Func<Importer, dynamic> action)
         {
-            ImportFromExcel import = new ImportFromExcel();
+            Importer import = new Importer();
 
             var data1 = new byte[0];
             try

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Workshop.Infrastructure.ExcelHandler
+namespace Workshop.Infrastructure.Models
 {
-    internal class Column
+    internal class ColumnMetadata
     {
         public string ColumnName { get; set; }
         public string PropName { get; set; }
@@ -10,7 +10,12 @@ namespace Workshop.Infrastructure.ExcelHandler
         public int ColumnOrder { get; set; }
         public bool Ignore { get; set; }
 
-        public Column()
+        public string Format { get; set; }
+        public string FieldValueType { get; set; }
+        public string DefaultForNullOrInvalidValues { get; set; }
+
+
+        public ColumnMetadata()
         {
             Ignore = false;
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using Workshop.Infrastructure.ExcelHandler;
 
 namespace Workshop.Core.Domains
 {

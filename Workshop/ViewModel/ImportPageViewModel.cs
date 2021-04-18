@@ -15,7 +15,7 @@ using Workshop.Model;
 using Workshop.Service;
 using Workshop.Model.Excel;
 using Workshop.Helper;
-using Workshop.Infrastructure.ExcelHandler;
+using Workshop.Infrastructure.Models;
 
 namespace Workshop.ViewModel
 {
@@ -81,19 +81,19 @@ namespace Workshop.ViewModel
             {
 
 
-                DocHelper.SaveTo(odInfos);
+                
             }
 
         }
 
         private void ImportAction()
         {
-            var result = DocHelper.ImportFrom((importer) =>
+            var result = DocHelper.ImportFromDelegator((importer) =>
             {
 
                 var op1 = new ImportOption<EmpoyeeImportEntity>(0, 2);
                 op1.SheetName = "全职";
-                var r1 = importer.ExcelToList(op1);
+                var r1 = importer.Process<EmpoyeeImportEntity>(op1);
 
 
                 return new { Employees = r1 };

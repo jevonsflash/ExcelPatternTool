@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Workshop.Infrastructure.ExcelHandler
+﻿namespace Workshop.Infrastructure.Core
 {
     public interface IFormulatedType
     {
@@ -21,7 +17,7 @@ namespace Workshop.Infrastructure.ExcelHandler
     }
 
 
-    public class LabeledType<T>
+    public class CommentedType<T>
     {
         public T Value { get; set; }
         public string Label { get; set; }

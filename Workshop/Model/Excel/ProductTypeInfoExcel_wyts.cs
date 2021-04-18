@@ -1,64 +1,64 @@
-﻿using Workshop.Infrastructure.ExcelHandler;
+﻿using Workshop.Infrastructure.Attributes;
 
 namespace Workshop.Model.Excel
 {
     public class ProductTypeInfoExcel_wyts
     {
-        [ExcelImport("序号", order = 1)]
+        [Importable("序号", 1)]
         public string Id { get; set; }
 
-        [ExcelImport("产品名称", order = 2)]
+        [Importable("产品名称", 2)]
         public string Name { get; set; }
 
-        [ExcelImport("产品描述", order = 3)]
+        [Importable("产品描述", 3)]
         public string Desc { get; set; }
 
-        [ExcelImport("调试", order = 4)]
+        [Importable("调试", 4)]
         public string 调试 { get; set; }
 
 
-        [ExcelImport("调试单价", order = 5)]
+        [Importable("调试单价", 5)]
         public string 调试单价 { get; set; }
 
-        [ExcelImport("老化", order = 6)]
+        [Importable("老化", 6)]
         public string 老化 { get; set; }
 
 
-        [ExcelImport("老化单价", order = 7)]
+        [Importable("老化单价", 7)]
         public string 老化单价 { get; set; }
 
-        [ExcelImport("精调1", order = 8)]
+        [Importable("精调1", 8)]
         public string 精调1 { get; set; }
 
 
-        [ExcelImport("精调1单价", order = 9)]
+        [Importable("精调1单价", 9)]
         public string 精调1单价 { get; set; }
 
-        [ExcelImport("精调2", order = 10)]
+        [Importable("精调2", 10)]
         public string 精调2 { get; set; }
 
 
-        [ExcelImport("精调2单价", order = 11)]
+        [Importable("精调2单价", 11)]
         public string 精调2单价 { get; set; }
 
-        [ExcelImport("驻波外观", order = 12)]
+        [Importable("驻波外观", 12)]
         public string 驻波外观 { get; set; }
 
-        [ExcelImport("驻波外观单价", order = 13)]
+        [Importable("驻波外观单价", 13)]
         public string 驻波外观单价 { get; set; }
 
-        [ExcelImport("封盖螺钉数", order = 14)]
+        [Importable("封盖螺钉数", 14)]
         public string 封盖螺钉数 { get; set; }
 
 
-        [ExcelImport("封盖单价", order = 15)]
+        [Importable("封盖单价", 15)]
         public string 封盖单价 { get; set; }
 
-        [ExcelImport("写芯片", order = 16)]
+        [Importable("写芯片", 16)]
         public string 写芯片 { get; set; }
 
 
-        [ExcelImport("写芯片单价", order = 17)]
+        [Importable("写芯片单价", 17)]
         public string 写芯片单价 { get; set; }
 
     }

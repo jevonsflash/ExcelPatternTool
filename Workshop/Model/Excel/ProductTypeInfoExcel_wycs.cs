@@ -1,125 +1,125 @@
-﻿using Workshop.Infrastructure.ExcelHandler;
+﻿using Workshop.Infrastructure.Attributes;
 
 namespace Workshop.Model.Excel
 {
     public class ProductTypeInfoExcel_wycs
     {
-        [ExcelImport("序号", order = 1)]
+        [Importable("序号", 1)]
         public string Id { get; set; }
 
-        [ExcelImport("产品名称", order = 2)]
+        [Importable("产品名称", 2)]
         public string Name { get; set; }
 
-        [ExcelImport("产品描述", order = 3)]
+        [Importable("产品描述", 3)]
         public string Desc { get; set; }
 
-        [ExcelImport("升级", order = 4)]
+        [Importable("升级", 4)]
         public string 升级 { get; set; }
 
 
-        [ExcelImport("升级单价", order = 5)]
+        [Importable("升级单价", 5)]
         public string 升级单价 { get; set; }
 
-        [ExcelImport("驻波", order = 6)]
+        [Importable("驻波", 6)]
         public string 驻波 { get; set; }
 
 
-        [ExcelImport("驻波单价", order = 7)]
+        [Importable("驻波单价", 7)]
         public string 驻波单价 { get; set; }
 
-        [ExcelImport("测试1", order = 8)]
+        [Importable("测试1", 8)]
         public string 测试1 { get; set; }
 
 
-        [ExcelImport("测试1单价", order = 9)]
+        [Importable("测试1单价", 9)]
         public string 测试1单价 { get; set; }
 
-        [ExcelImport("测试2", order = 10)]
+        [Importable("测试2", 10)]
         public string 测试2 { get; set; }
 
 
-        [ExcelImport("测试2单价", order = 11)]
+        [Importable("测试2单价", 11)]
         public string 测试2单价 { get; set; }
 
-        [ExcelImport("测试3", order = 12)]
+        [Importable("测试3", 12)]
         public string 测试3 { get; set; }
 
 
-        [ExcelImport("测试3单价", order = 13)]
+        [Importable("测试3单价", 13)]
         public string 测试3单价 { get; set; }
 
-        [ExcelImport("TD检测", order = 14)]
+        [Importable("TD检测", 14)]
         public string TD检测 { get; set; }
 
-        [ExcelImport("TD单价", order = 15)]
+        [Importable("TD单价", 15)]
         public string TD单价 { get; set; }
 
-        [ExcelImport("GSM检测", order = 16)]
+        [Importable("GSM检测", 16)]
         public string GSM检测 { get; set; }
 
-        [ExcelImport("GSM单价", order = 17)]
+        [Importable("GSM单价", 17)]
         public string GSM单价 { get; set; }
 
-        [ExcelImport("DCS检测", order = 18)]
+        [Importable("DCS检测", 18)]
         public string DCS检测 { get; set; }
 
-        [ExcelImport("DCS单价", order = 19)]
+        [Importable("DCS单价", 19)]
         public string DCS单价 { get; set; }
 
 
-        [ExcelImport("LET检测", order = 20)]
+        [Importable("LET检测", 20)]
         public string LET检测 { get; set; }
 
-        [ExcelImport("LET单价", order = 21)]
+        [Importable("LET单价", 21)]
         public string LET单价 { get; set; }
 
 
-        [ExcelImport("WCDMA检测", order = 22)]
+        [Importable("WCDMA检测", 22)]
         public string WCDMA检测 { get; set; }
 
-        [ExcelImport("WCDMA单价", order = 23)]
+        [Importable("WCDMA单价", 23)]
         public string WCDMA单价 { get; set; }
 
 
-        [ExcelImport("CDMA2000检测", order = 24)]
+        [Importable("CDMA2000检测", 24)]
         public string CDMA2000检测 { get; set; }
 
-        [ExcelImport("CDMA2000单价", order = 25)]
+        [Importable("CDMA2000单价", 25)]
         public string CDMA2000单价 { get; set; }
 
 
-        [ExcelImport("FDD", order = 26)]
+        [Importable("FDD", 26)]
         public string FDD { get; set; }
 
-        [ExcelImport("FDD单价", order = 27)]
+        [Importable("FDD单价", 27)]
         public string FDD单价 { get; set; }
 
 
-        [ExcelImport("出场检查", order = 28)]
+        [Importable("出场检查", 28)]
         public string 出场检查 { get; set; }
 
 
-        [ExcelImport("出场检查单价", order = 29)]
+        [Importable("出场检查单价", 29)]
         public string 出场检查单价 { get; set; }
 
-        [ExcelImport("监控", order = 30)]
+        [Importable("监控", 30)]
         public string 监控 { get; set; }
 
 
-        [ExcelImport("监控单价", order = 31)]
+        [Importable("监控单价", 31)]
         public string 监控单价 { get; set; }
-        [ExcelImport("MODEM检查", order = 32)]
+        [Importable("MODEM检查", 32)]
         public string MODEM检查 { get; set; }
 
 
-        [ExcelImport("MODEM单价", order = 33)]
+        [Importable("MODEM单价", 33)]
         public string MODEM单价 { get; set; }
 
-        [ExcelImport("外观检验", order = 34)]
+        [Importable("外观检验", 34)]
         public string 外观检验 { get; set; }
 
 
-        [ExcelImport("外观单价", order = 35)]
+        [Importable("外观单价", 35)]
         public string 外观单价 { get; set; }
 
 

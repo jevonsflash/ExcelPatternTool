@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Workshop.Infrastructure.ExcelHandler;
 
 namespace Workshop.Core.Domains
 {

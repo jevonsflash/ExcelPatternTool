@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NPOI.SS.UserModel;
+using Workshop.Infrastructure.Attributes;
+using Workshop.Infrastructure.Models;
 
-namespace Workshop.Infrastructure.ExcelHandler
+namespace Workshop.Infrastructure.Core
 {
-    public class BaseExcelReader
+    public class BaseReader
     {
 
-        internal T GetDataToObject<T>(IRow row, List<Column> columns)
+        internal T GetDataToObject<T>(IRow row, List<ColumnMetadata> columns)
         {
             T result = (T)Activator.CreateInstance(typeof(T));
             Type objType = typeof(T);
@@ -319,12 +321,12 @@ namespace Workshop.Infrastructure.ExcelHandler
                 BindingFlags.Instance | BindingFlags.SetProperty, null, instance, new Object[] { data });
         }
 
-        internal List<Column> GetTypeDefinition(Type type)
+        internal List<ColumnMetadata> GetTypeDefinition(Type type)
         {
-            List<Column> columns = new List<Column>();
+            List<ColumnMetadata> columns = new List<ColumnMetadata>();
             foreach (var prop in type.GetProperties())
             {
-                var tmp = new Column();
+                var tmp = new ColumnMetadata();
                 var attrs = System.Attribute.GetCustomAttributes(prop);
                 tmp.PropName = prop.Name;
                 tmp.PropType = prop.PropertyType;
@@ -332,12 +334,12 @@ namespace Workshop.Infrastructure.ExcelHandler
                 tmp.ColumnOrder = int.MaxValue;
                 foreach (var attr in attrs)
                 {
-                    if (attr is ExcelImport)
+                    if (attr is ImportableAttribute)
                     {
-                        ExcelImport attribute = (ExcelImport)attr;
-                        tmp.ColumnName = attribute.GetName();
-                        tmp.ColumnOrder = attribute.order;
-                        tmp.Ignore = attribute.ignore;
+                        ImportableAttribute attribute = (ImportableAttribute)attr;
+                        tmp.ColumnName = attribute.Name;
+                        tmp.ColumnOrder = attribute.Order;
+                        tmp.Ignore = attribute.Ignore;
                     }
                 }
                 if (!tmp.Ignore)
