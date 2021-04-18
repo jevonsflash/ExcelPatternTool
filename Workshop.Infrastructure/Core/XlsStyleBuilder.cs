@@ -18,6 +18,11 @@ namespace Workshop.Infrastructure.Core
             Workbook = workbook;
         }
 
+        public short GetBuiltIndDataFormat(string dataFormat)
+        {
+            var result = HSSFDataFormat.GetBuiltinFormat(dataFormat);
+            return result;
+        }
 
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
@@ -56,9 +61,9 @@ namespace Workshop.Infrastructure.Core
                 color.R,
                 color.G,
                 color.B
-            }; 
+            };
             IColor result;
-            HSSFPalette customPalette = (this.Workbook as HSSFWorkbook) .GetCustomPalette();
+            HSSFPalette customPalette = (this.Workbook as HSSFWorkbook).GetCustomPalette();
             if (this._palleteColorSize >= 63)
             {
                 HSSFColor hSSFColor = customPalette.FindColor(color.R, color.G, color.B);

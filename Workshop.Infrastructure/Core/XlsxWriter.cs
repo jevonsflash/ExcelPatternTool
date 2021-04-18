@@ -38,17 +38,20 @@ namespace Workshop.Infrastructure.Core
             int lastRow = dataCollection.Count();
 
 
-            //rows
             int row = firstRow + rowsToSkip;
+            if (genHeader)
+            {
+                var headerRow = sheet.CreateRow(row);
+                SetHeaderToRow<T>(rowsToSkip, columnMetas, headerRow, row);
+                row += 1;
+            }
             foreach (var data in dataCollection)
             {
-                IRow fila = sheet.CreateRow(row);
-
-                SetDataToRow(rowsToSkip, genHeader, columnMetas, fila, data, row);
+                var newRow = sheet.CreateRow(row);
+                SetDataToRow(columnMetas, newRow, data);
                 row += 1;
             }
 
-            //Set autowidth
             int col = 0;
             row = firstRow + rowsToSkip;
             foreach (var cell in sheet.GetRow(row).Cells)
@@ -61,7 +64,6 @@ namespace Workshop.Infrastructure.Core
 
             document.Write(memoryStream);
 
-            //Fix memorystream closed by NPOI for XLSX format
             if (!memoryStream.CanRead)
             {
                 MemoryStream newMemoryStream = new MemoryStream(memoryStream.ToArray());

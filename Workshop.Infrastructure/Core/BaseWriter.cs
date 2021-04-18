@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Workshop.Infrastructure.Attributes;
 using Workshop.Infrastructure.Models;
+using Workshop.Infrastructure.Services;
 
 namespace Workshop.Infrastructure.Core
 {
@@ -53,15 +55,22 @@ namespace Workshop.Infrastructure.Core
 
         internal ICellStyle GetStyleWithFormat(ICellStyle baseStyle, string dataFormat)
         {
-            ICellStyle cellStyle = this.Document.CreateCellStyle();
+            var cellStyle = this.Document.CreateCellStyle();
             cellStyle.CloneStyleFrom(baseStyle);
 
             if (string.IsNullOrWhiteSpace(dataFormat))
                 return cellStyle;
 
-
-            IDataFormat dataFormat2 = this.Document.CreateDataFormat();
-            cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
+            short builtIndDataFormat = StyleBuilderProvider.GetStyleBuilder(this.Document).GetBuiltIndDataFormat(dataFormat);
+            if (builtIndDataFormat != -1)
+            {
+                cellStyle.DataFormat = builtIndDataFormat;
+            }
+            else
+            {
+                IDataFormat dataFormat2 = this.Document.CreateDataFormat();
+                cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
+            }
             return cellStyle;
 
 
@@ -70,25 +79,23 @@ namespace Workshop.Infrastructure.Core
 
         internal IFont CreateFont(StyleMetadata rowStyle)
         {
-            IColor fontColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.FontColor);
+            var fontColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.FontColor);
             return StyleBuilderProvider.GetStyleBuilder(this.Document).GetFont(rowStyle.FontSize, rowStyle.FontName, fontColor);
         }
 
-
-
-        public  StyleMetadata GetClassStyle(Type type)
+        public StyleMetadata GetClassStyleDefinition(Type type)
         {
             StyleMetadata styleMetadata;
-            var defaultFontName = "Calibry";
-            var defaultFontColor = "#FFFFFF";
-            short defaultFontSize = 11;
-            var defaultBorderColor = "#000000";
-            var defaultBackColor = "#888888";
-            foreach (var ct in type.GetCustomAttributes())
+            var defaultFontName = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontName"];
+            var defaultFontColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontColor"];
+            short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontSize"]);
+            var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
+            var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
+            foreach (var attr in type.GetCustomAttributes())
             {
-                if (ct != null && ct.GetType() == typeof(StyleAttribute))
+                if (attr is StyleAttribute)
                 {
-                    StyleAttribute exportableAttribute = (ct as StyleAttribute);
+                    StyleAttribute exportableAttribute = (attr as StyleAttribute);
                     styleMetadata = new StyleMetadata();
 
                     if (!string.IsNullOrWhiteSpace(exportableAttribute.FontName))
@@ -119,128 +126,225 @@ namespace Workshop.Infrastructure.Core
             return new StyleMetadata(defaultFontColor, defaultFontName, defaultFontSize, defaultBorderColor, defaultBackColor);
         }
 
+        public StyleMetadata GetPropStyleDefinition(PropertyInfo prop)
+        {
+            StyleMetadata styleMetadata;
+            var defaultFontName = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontName"];
+            var defaultFontColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontColor"];
+            short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontSize"]);
+            var defaultBorderColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultBorderColor"];
+            var defaultBackColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultBackColor"];
+
+            var attrs = Attribute.GetCustomAttributes(prop);
+
+            foreach (var attr in attrs)
+            {
+                if (attr is StyleAttribute)
+                {
+                    var exportableAttribute = (attr as StyleAttribute);
+                    styleMetadata = new StyleMetadata();
+
+                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontName))
+                        styleMetadata.FontName = exportableAttribute.FontName;
+                    else
+                        styleMetadata.FontName = defaultFontName;
+                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontColor))
+                        styleMetadata.FontColor = exportableAttribute.FontColor;
+                    else
+                        styleMetadata.FontColor = defaultFontColor;
+                    if ((exportableAttribute.FontSize) > 0)
+                        styleMetadata.FontSize = exportableAttribute.FontSize;
+                    else
+                        styleMetadata.FontSize = defaultFontSize;
+                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BorderColor))
+                        styleMetadata.BorderColor = exportableAttribute.BorderColor;
+                    else
+                        styleMetadata.BorderColor = defaultBorderColor;
+                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BackColor))
+                        styleMetadata.BackColor = exportableAttribute.BackColor;
+                    else
+                        styleMetadata.BackColor = defaultBackColor;
+                    return styleMetadata;
+                }
+            }
+
+            return new StyleMetadata(defaultFontColor, defaultFontName, defaultFontSize, defaultBorderColor, defaultBackColor);
+        }
+
         internal ICellStyle CreateCellStyle(StyleMetadata rowStyle)
         {
-            IColor borderColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BorderColor);
-            IColor backColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BackColor);
-            IFont font = this.CreateFont(rowStyle);
+            var borderColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BorderColor);
+            var backColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BackColor);
+            var font = this.CreateFont(rowStyle);
             ICellStyle cellStyle;
             var styleBuilder = StyleBuilderProvider.GetStyleBuilder(this.Document);
             cellStyle = styleBuilder.GetCellStyle(backColor, borderColor, font);
 
             return cellStyle;
         }
-        internal void SetDataToRow<T>(int rowsToSkip, bool genHeader, IEnumerable<ColumnMetadata> columnMetas, IRow fila, T data, int row)
+
+        internal void SetHeaderToRow<T>(int rowsToSkip, IEnumerable<ColumnMetadata> columnMetas, IRow row,
+             int rowCount)
+        {
+            //cells
+            int cellCount = 0;
+            if (rowCount - rowsToSkip == 0)
+            {
+                foreach (var columnMeta in columnMetas)
+                {
+                    var cell = row.CreateCell(cellCount);
+
+                    var headerFormat = GetClassStyleDefinition(typeof(T));
+                    ICellStyle headerCellStyle = CreateCellStyle(headerFormat);
+                    cell.CellStyle = headerCellStyle;
+                    cell.SetCellValue(columnMeta.ColumnName);
+                    cellCount += 1;
+                }
+            }
+        }
+
+        internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data)
         {
             //cells
             int cellCount = 0;
 
             foreach (var columnMeta in columnMetas)
             {
-                var currentCell = fila.CreateCell(cellCount);
+                var cell = row.CreateCell(cellCount);
 
-                var propValue = data.GetType().GetProperty(columnMeta.PropName).GetValue(data, null);
-                var propType = data.GetType().GetProperty(columnMeta.PropName).PropertyType;
+                var propertyInfo = data.GetType().GetProperty(columnMeta.PropName);
+                var propValue = propertyInfo.GetValue(data, null);
+                var propType = propertyInfo.PropertyType;
 
-
-                //代表第一行
-                if (row - rowsToSkip == 0)
+                if (propValue == null)
                 {
-                    if (genHeader)
+                    cell.SetCellValue("");
+                    cellCount++;
+                    continue;
+                }
+
+
+                var bodyFormat = GetPropStyleDefinition(propertyInfo);
+                var bodyBaseCellStyle = CreateCellStyle(bodyFormat);
+
+                var bodyCellStyle = GetStyleWithFormat(bodyBaseCellStyle, columnMeta.Format);
+
+
+                if (string.IsNullOrEmpty(columnMeta.FieldValueType))
+                {
+                    string colTypeDesc = propType.Name.ToLowerInvariant();
+                    switch (colTypeDesc)
                     {
-                        var headerFormat = GetClassStyle(typeof(T));
-                        ICellStyle cell = CreateCellStyle(headerFormat);
-                        fila.GetCell(cellCount).CellStyle = cell;
-                        fila.GetCell(cellCount).SetCellValue(columnMeta.ColumnName);
+                        case "string":
+                            var strCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(strCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                        case "datetime":
+                            var dateCellValue = Convert.ToDateTime(propValue);
+                            cell.SetCellValue(dateCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            break;
+                        case "int":
+                        case "int32":
+                        case "decimal":
+                        case "int64":
+                        case "long":
+                        case "double":
+                        case "single":
+                            var numCellValue = Convert.ToDouble(propValue);
+                            cell.SetCellValue(numCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            cell.SetCellType(CellType.Numeric);
+                            break;
+                        case "boolean":
+                        case "bool":
+                            var cellValue = Convert.ToBoolean(propValue);
+                            cell.SetCellValue(cellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                        case "formulatedtype`1":
+                            var gType = propType.GenericTypeArguments.FirstOrDefault();
+                            string gTypeDesc = gType.Name.ToLowerInvariant();
+
+                            var formulatedValue = (propValue as IFormulatedType).GetValue();
+                            var formula = (propValue as IFormulatedType).Formula;
+                            if (gTypeDesc == "string")
+                            {
+                                cell.SetCellValue(Convert.ToString(formulatedValue));
+                                cell.CellStyle = bodyBaseCellStyle;
+                            }
+                            else if (gTypeDesc == "datetime")
+                            {
+                                cell.SetCellValue(Convert.ToDateTime(formulatedValue));
+                                cell.CellStyle = bodyCellStyle;
+                            }
+                            else if (gTypeDesc == "int" || gTypeDesc == "int32" || gTypeDesc == "decimal" ||
+                                     gTypeDesc == "int64" || gTypeDesc == "long" || gTypeDesc == "double" ||
+                                     gTypeDesc == "single")
+                            {
+                                cell.SetCellValue(Convert.ToDouble(formulatedValue));
+                                cell.CellStyle = bodyCellStyle;
+                            }
+                            else if (gTypeDesc == "boolean" || gTypeDesc == "bool")
+                            {
+                                cell.SetCellValue(Convert.ToBoolean(formulatedValue));
+                                cell.CellStyle = bodyBaseCellStyle;
+                            }
+
+                            cell.SetCellFormula(formula);
+                            cell.SetCellType(CellType.Formula);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                        default:
+                            var anyCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(anyCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
                     }
                 }
                 else
                 {
-                    if (propValue == null)
+                    var valueType = (FieldValueType)Enum.Parse(typeof(FieldValueType), columnMeta.FieldValueType);
+
+                    switch (valueType)
                     {
-                        fila.GetCell(cellCount).SetCellValue("");
-                        cellCount++;
-                        continue;
+                        case FieldValueType.Date:
+                            var dateCellValue = Convert.ToDateTime(propValue);
+                            cell.SetCellValue(dateCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            break;
+
+                        case FieldValueType.Numeric:
+                            var numericCellValue = Convert.ToDouble(propValue);
+                            cell.SetCellValue(numericCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            cell.SetCellType(CellType.Numeric);
+                            break;
+
+                        case FieldValueType.Text:
+                            var stringCellValue = propValue.ToString();
+                            cell.SetCellValue(stringCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            cell.SetCellType(CellType.String);
+                            break;
+
+                        case FieldValueType.Bool:
+                            var boolCellValue = Convert.ToBoolean(propValue);
+                            cell.SetCellValue(boolCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            cell.SetCellType(CellType.Boolean);
+                            break;
+
+                        default:
+                            var anyCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(anyCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
                     }
-
-                    var currentStyles = GetStyleWithFormat(currentCell.CellStyle, columnMeta.Format);
-
-                    if (string.IsNullOrEmpty(columnMeta.FieldValueType))
-                    {
-                        string colTypeDesc = propType.Name.ToLowerInvariant();
-                        switch (colTypeDesc)
-                        {
-                            case "string":
-                                var strCellValue = Convert.ToString(propValue);
-                                fila.GetCell(cellCount).SetCellValue(strCellValue);
-                                break;
-                            case "datetime":
-                                var dateCellValue = Convert.ToDateTime(propValue);
-                                fila.GetCell(cellCount).SetCellValue(dateCellValue);
-                                fila.GetCell(cellCount).CellStyle = currentStyles;
-                                break;
-                            case "int":
-                            case "int32":
-                            case "decimal":
-                            case "int64":
-                            case "long":
-                            case "double":
-                            case "single":
-                                var numCellValue = Convert.ToDouble(propValue);
-                                fila.GetCell(cellCount).SetCellValue(numCellValue);
-                                fila.GetCell(cellCount).CellStyle = currentStyles;
-                                fila.GetCell(cellCount).SetCellType(CellType.Numeric);
-                                break;
-                            case "boolean":
-                            case "bool":
-                                var cellValue = Convert.ToBoolean(propValue);
-                                fila.GetCell(cellCount).SetCellValue(cellValue);
-                                break;
-                            default:
-                                var anyCellValue = Convert.ToString(propValue);
-                                fila.GetCell(cellCount).SetCellValue(anyCellValue);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        var valueType = (FieldValueType)Enum.Parse(typeof(FieldValueType), columnMeta.FieldValueType);
-
-                        switch (valueType)
-                        {
-                            case FieldValueType.Date:
-                                var dateCellValue = Convert.ToDateTime(propValue);
-                                fila.GetCell(cellCount).SetCellValue(dateCellValue);
-                                fila.GetCell(cellCount).CellStyle = currentStyles;
-                                break;
-
-                            case FieldValueType.Numeric:
-                                var numericCellValue = Convert.ToDouble(propValue);
-                                fila.GetCell(cellCount).SetCellValue(numericCellValue);
-                                fila.GetCell(cellCount).CellStyle = currentStyles;
-                                fila.GetCell(cellCount).SetCellType(CellType.Numeric);
-                                break;
-
-                            case FieldValueType.Text:
-                                var stringCellValue = propValue.ToString();
-                                fila.GetCell(cellCount).SetCellValue(stringCellValue);
-                                fila.GetCell(cellCount).SetCellType(CellType.String);
-                                break;
-
-                            case FieldValueType.Bool:
-                                var boolCellValue = Convert.ToBoolean(propValue);
-                                fila.GetCell(cellCount).SetCellValue(boolCellValue);
-                                fila.GetCell(cellCount).SetCellType(CellType.Boolean);
-                                break;
-
-                            default:
-                                var anyCellValue = Convert.ToString(propValue);
-                                fila.GetCell(cellCount).SetCellValue(anyCellValue);
-                                break;
-                        }
-                    }
-
                 }
+
+
                 cellCount += 1;
 
             }

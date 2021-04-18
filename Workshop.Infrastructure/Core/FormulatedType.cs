@@ -3,6 +3,7 @@
     public interface IFormulatedType
     {
         string Formula { get; set; }
+        object GetValue();
     }
 
     public class FormulatedType<T> : IFormulatedType
@@ -13,6 +14,11 @@
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        public object GetValue()
+        {
+            return Value;
         }
     }
 
@@ -26,5 +32,10 @@
         {
             return Value.ToString();
         }
+        public object GetValue()
+        {
+            return Value;
+        }
+
     }
 }

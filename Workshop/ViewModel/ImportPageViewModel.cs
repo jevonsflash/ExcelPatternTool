@@ -91,9 +91,9 @@ namespace Workshop.ViewModel
             var result = DocHelper.ImportFromDelegator((importer) =>
             {
 
-                var op1 = new ImportOption<EmpoyeeImportEntity>(0, 2);
+                var op1 = new ImportOption<EmpoyeeEntity>(0, 2);
                 op1.SheetName = "全职";
-                var r1 = importer.Process<EmpoyeeImportEntity>(op1);
+                var r1 = importer.Process<EmpoyeeEntity>(op1);
 
 
                 return new { Employees = r1 };

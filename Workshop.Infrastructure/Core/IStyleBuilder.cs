@@ -26,6 +26,11 @@ namespace Workshop.Infrastructure.Core
         /// <param name="htmlColor"></param>
         /// <returns></returns>
         IColor GetColor(string htmlColor);
-
+        /// <summary>
+        /// 获取内建格式
+        /// </summary>
+        /// <param name="dataFormat"></param>
+        /// <returns></returns>
+        short GetBuiltIndDataFormat(string dataFormat);
     }
 }

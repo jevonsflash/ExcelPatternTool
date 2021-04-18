@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 
 namespace Workshop.Infrastructure.Core
@@ -13,6 +14,11 @@ namespace Workshop.Infrastructure.Core
             Workbook = workbook;
         }
 
+        public short GetBuiltIndDataFormat(string dataFormat)
+        {
+            var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
+            return result;
+        }
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
             var cell = Workbook.CreateCellStyle();
