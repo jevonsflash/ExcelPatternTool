@@ -33,10 +33,10 @@ namespace Workshop.Core.Entites
         public string State { get; set; }
         [Exportable("姓名", 7)]
         [Importable("姓名", 7)]
-        public string Name { get; set; }
+        public StyledType<string> Name { get; set; }
         [Exportable("身份证号码", 8)]
         [Importable("身份证号码", 8)]
-        public string IDCard { get; set; }
+        public StyledType<string> IDCard { get; set; }
         [Exportable("工资等级", 9)]
         [Importable("工资等级", 9)]
         public string Level { get; set; }
@@ -131,7 +131,7 @@ namespace Workshop.Core.Entites
         public double ParttimeSalary { get; set; }
         [Exportable("应发合计",  39)]
         [Importable("应发合计",  39)]
-        public FormulatedType<double> Sum { get; set; }
+        public FullAdvancedType<double> Sum { get; set; }
         [Exportable("税后补扣\r\n(宿舍费) ",  40)]
         [Importable("税后补扣\r\n(宿舍费) ",  40)]
         public double HostelAllowances { get; set; }

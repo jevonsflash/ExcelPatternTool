@@ -2,6 +2,7 @@
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using Workshop.Infrastructure.Services;
 
 namespace Workshop.Infrastructure.Core
 {
@@ -42,6 +43,11 @@ namespace Workshop.Infrastructure.Core
             cell.SetFont(font);
             return cell;
         }
+        public IColor GetFontColor(ICellStyle cellStyle)
+        {
+            var result = (cellStyle.GetFont(Workbook) as HSSFFont).GetHSSFColor(Workbook as HSSFWorkbook);
+            return result;
+        }
 
         public IFont GetFont(short fontSize, string fontName, IColor fontColor)
         {
@@ -53,8 +59,27 @@ namespace Workshop.Infrastructure.Core
             return font;
         }
 
+        public IColor GetBackgroundColor(ICellStyle cellStyle)
+        {
+            var result = (cellStyle as HSSFCellStyle).FillForegroundColorColor;
+            return result;
+
+        }
+        public IColor GetBoarderColor(ICellStyle cellStyle)
+        {
+            //can't be realized 
+            //var result = (cellStyle as HSSFCellStyle).BottomBorderColor;
+            var result = new HSSFColor.Automatic();
+            return result;
+
+        }
+
         public IColor GetColor(string htmlColor)
         {
+            if (string.IsNullOrEmpty(htmlColor))
+            {
+                return new HSSFColor.Automatic();
+            }
             Color color = ColorTranslator.FromHtml(htmlColor);
             byte[] array = new byte[]
             {
@@ -96,7 +121,43 @@ namespace Workshop.Infrastructure.Core
             }
             return result;
         }
+        public IRichTextString GetCommentInfo(string comment)
+        {
+            var result = new HSSFRichTextString("批注: " + comment);
+            return result;
+        }
+
+        public IComment GetComment(IRichTextString richTextString)
+        {
+            //https://www.cnblogs.com/zhuangjolon/p/9300704.html
+            HSSFPatriarch patr = (HSSFPatriarch)Workbook.GetSheetAt(0).CreateDrawingPatriarch();
+            HSSFComment comment12 = patr.CreateComment(new HSSFClientAnchor(0, 0, 0, 0, 1, 2, 2, 3));//批注显示定位        }
+            comment12.String = richTextString;
+            comment12.Author = AppConfigurtaionService.Configuration["CellComment:DefaultAuthor"];
+            return comment12;
+
+        }
+
+        public IComment GetComment(string comment)
+        {
+            var text = new HSSFRichTextString("批注: " + comment);
+            return GetComment(text);
+
+        }
+        public string GetARGBFromIColor(IColor fontColor)
+        {
+            if (fontColor != null)
+            {
+                var argb = (fontColor as HSSFColor).GetHexString();
+                if (string.IsNullOrEmpty(argb))
+                {
+                    return null;
+                }
+                var result = string.Format("#{0}", argb.Substring(2));
+                return result;
+            }
+            return null;
+        }
 
     }
-
 }

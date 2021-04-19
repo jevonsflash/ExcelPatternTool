@@ -32,5 +32,12 @@ namespace Workshop.Infrastructure.Core
         /// <param name="dataFormat"></param>
         /// <returns></returns>
         short GetBuiltIndDataFormat(string dataFormat);
+        IRichTextString GetCommentInfo(string comment);
+        IComment GetComment(IRichTextString richTextString);
+        IComment GetComment(string comment);
+        IColor GetFontColor(ICellStyle cellStyle);
+        string GetARGBFromIColor(IColor fontColor);
+        IColor GetBackgroundColor(ICellStyle cellStyle);
+        IColor GetBoarderColor(ICellStyle cellStyle);
     }
 }
