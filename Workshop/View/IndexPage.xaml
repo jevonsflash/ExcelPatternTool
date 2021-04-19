@@ -13,55 +13,64 @@
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800"
       Title="IndexPage">
+	<Page.Resources>
+		<ResourceDictionary>
+			<Style x:Key="LargeTileStyle" TargetType="mah:Tile">
+				<Setter Property="Height" Value="125" />
+				<Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+				<Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+				<Setter Property="TitleFontSize" Value="14" />
+				<Setter Property="Width" Value="300" />
+			</Style>
+
+			<Style x:Key="SmallTileStyle" TargetType="mah:Tile">
+				<Setter Property="Height" Value="125" />
+				<Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+				<Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
+				<Setter Property="TitleFontSize" Value="10" />
+				<Setter Property="Width" Value="147" />
+			</Style>
+		</ResourceDictionary>
+	</Page.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition Height="200"></RowDefinition>
 			<RowDefinition></RowDefinition>
-			<RowDefinition Height="Auto"></RowDefinition>
-
 		</Grid.RowDefinitions>
-		<Grid Margin="20 0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0"
-                       x:Name="TitleBlock"
-                       Margin="0 15"
-                       Padding="0"
-                       FontFamily="{DynamicResource HeaderFontFamily}"
-                       FontSize="{DynamicResource HeaderFontSize}"
-                       Text="此工具能将C#代码，转换成使用语法工厂构造器（SyntaxFactory）生成等效语法树代码" />
 
-		</Grid>
-		<Grid Grid.Row="1">
-
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition></ColumnDefinition>
-				<ColumnDefinition></ColumnDefinition>
-			</Grid.ColumnDefinitions>
+		<StackPanel Grid.Row="0" Orientation="Horizontal">
+			<mah:Tile Title="已导入"
+			          Background="#F1F1F1"
+			          Count="28"
+			          CountFontSize="42"
+			          HorizontalTitleAlignment="Center"
+			          Style="{StaticResource SmallTileStyle}"
+			          TitleFontSize="16"
+					  Foreground="{DynamicResource BlackBrush}"
+			          VerticalTitleAlignment="Top" >
 
 
-			<TextBox x:Name="CurrentText" mah:TextBoxHelper.Watermark="输入待转换的C#代码" Margin="10" AcceptsReturn="True"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Text="{Binding CurrentContent}"/>
-			<TextBox Grid.Column="1" mah:TextBoxHelper.Watermark="点击生成按钮转换代码" Margin="10"   TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="{Binding ResponseContent}" />
-
-
-		</Grid>
-		<Grid Grid.Row="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition></ColumnDefinition>
-				<ColumnDefinition></ColumnDefinition>
-			</Grid.ColumnDefinitions>
-
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-				<Button  Content="生成" x:Name="SaveToButton" Width="120"  Command="{Binding ContinueCommand}"></Button>
-			</StackPanel>
-
-			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-				<Button x:Name="ClearButton" Content="复制到剪贴板" Command="{Binding CopyToClipboardCommand}"  Width="120"></Button>
-
-			</StackPanel>
-		</Grid>
+			</mah:Tile>
+			<mah:Tile Title="Mail"
+			          Margin="3"
+			          Background="LightGray"
+			          HorizontalTitleAlignment="Right"
+			          Style="{StaticResource SmallTileStyle}">
+				<iconPacks:PackIconModern Width="40"
+				                          Height="40"
+				                          Kind="Email" />
+			</mah:Tile>
+			<mah:Tile Title="Weather"
+			          Background="LightGray"
+			          Style="{StaticResource SmallTileStyle}">
+				<iconPacks:PackIconMaterial Width="40"
+				                            Height="40"
+				                            Kind="WeatherCloudy" />
+			</mah:Tile>
+		</StackPanel>
+		<StackPanel Grid.Row="1">
+			<Button Content="继续工作" Width="100" HorizontalAlignment="Left" Click="Button_Click"></Button>
+		</StackPanel>
 
 	</Grid>
 

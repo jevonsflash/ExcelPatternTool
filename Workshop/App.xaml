@@ -6,9 +6,13 @@
              xmlns:vm="clr-namespace:Workshop.ViewModel"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime">
 	<Application.Resources>
 		<ResourceDictionary>
+			<system:Double x:Key="LargeFontSize">22</system:Double>
+			<system:Double x:Key="MiddleFontSize">18</system:Double>
+			<system:Double x:Key="SmallFontSize">12</system:Double>
 			<vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
 
 			<ResourceDictionary.MergedDictionaries>

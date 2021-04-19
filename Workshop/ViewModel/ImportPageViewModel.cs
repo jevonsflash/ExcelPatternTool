@@ -24,67 +24,67 @@ namespace Workshop.ViewModel
         public ImportPageViewModel()
         {
             this.ImportCommand = new RelayCommand(ImportAction, CanSubmit);
-            this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
-
             this.GetDataCommand = new RelayCommand(GetDataAction, CanSubmit);
-            this.Employees = new ObservableCollection<dynamic>();
+            this.Employees = new ObservableCollection<EmpoyeeEntity>();
+            this.ProcessResultList=new ObservableCollection<ProcessResult>();
         }
 
         private void GetDataAction()
         {
             foreach (var item in this.Employees)
             {
-                //var currentOrderTables = DataService.GetOrderListBySn(item.SerialNumber);
-                //if (currentOrderTables == null)
-                //{
-                //    MessageBox.Show("无作业单信息");
-                //    return;
-                //}
-                //if (false)
-                //{
-                //    MessageBox.Show(string.Format("无{0}序列号对应的作业单信息", item.SerialNumber));
-                //    return;
-                //}
-                //try
-                //{
-                //    var orderInfoTable = DataService.GetEmployee(currentOrderTable.job).FirstOrDefault();
-                //    if (orderInfoTable == null)
-                //    {
-                //        MessageBox.Show(string.Format("无{0}作业单号对应的作业单详细内容", currentOrderTable.job));
-                //        return;
-                //    }
-                //    item.OrderNumber = currentOrderTable.job;
-                //    item.ProductModelNumber = orderInfoTable.productTypeID;
-                //    item.ProductDetail = orderInfoTable.productTypeDesc;
-                //    item.Note = orderInfoTable.note;
-                //}
-                //catch (Exception ex)
-                //{
+                var group = Employees.GroupBy(c => c.Sum.Formula);
+                string mainFormula = default;
+                int seed = 0;
+                foreach (var groupItem in group)
+                {
+                    seed = Math.Max(seed, groupItem.Count());
+                    if (seed == groupItem.Count())
+                    {
+                        mainFormula = groupItem.Key;
+                    }
+                }
 
-                //    MessageBox.Show(string.Format("获取{0}作业单号对应的作业单详细内容时发生未经处理的异常:{1}", currentOrderTable.job, ex.Message));
-                //    continue;
+                foreach (var empoyee in Employees)
+                {
+                    var row = Employees.IndexOf(empoyee);
+                    var id = ProcessResultList.Count + 1;
+                    var level = 1;
+                    if (empoyee.Sum.Formula != mainFormula)
+                    {
+                        var column = "应发合计";
+                        var content = $"此列中的公式不满足该列主要公式，主要公式为:{mainFormula}";
+                        var newItem = new ProcessResult
+                        {
+                            Column = column,
+                            Row = row,
+                            Content = content,
+                            Id = id,
+                            Level = level
+                        };
+                        this.ProcessResultList.Add(newItem);
 
-                //}
+                    }
+
+                    if (empoyee.AgeBonus < 0)
+                    {
+                        var column = "年限";
+                        var content = $"此列中数据不满足大于等于0";
+                        var newItem = new ProcessResult
+                        {
+                            Column = column,
+                            Row = row,
+                            Content = content,
+                            Id = id,
+                            Level = level
+                        };
+                        this.ProcessResultList.Add(newItem);
+                    }
+
+                }
             }
-
-            //var aa = DataService.GetOrderListBySn("aa1820000774");
-            //var bb = DataService.GetEmployee("C000300041478");
         }
 
-        private void SubmitAction()
-        {
-            var odInfos = Employees.ToList();
-
-
-
-            if (odInfos.Count > 0)
-            {
-
-
-                
-            }
-
-        }
 
         private void ImportAction()
         {
@@ -99,12 +99,27 @@ namespace Workshop.ViewModel
                 return new { Employees = r1 };
 
             });
-            this.Employees = new ObservableCollection<dynamic>(result);
+
+            this.Employees = new ObservableCollection<EmpoyeeEntity>(result.Employees);
+
+
         }
 
-        private ObservableCollection<dynamic> _employees;
 
-        public ObservableCollection<dynamic> Employees
+        private ObservableCollection<ProcessResult> _processResultList;
+
+        public ObservableCollection<ProcessResult> ProcessResultList
+        {
+            get { return _processResultList; }
+            set
+            {
+                _processResultList = value;
+                RaisePropertyChanged(nameof(ProcessResultList));
+            }
+        }
+        private ObservableCollection<EmpoyeeEntity> _employees;
+
+        public ObservableCollection<EmpoyeeEntity> Employees
         {
             get { return _employees; }
             set
@@ -126,6 +141,5 @@ namespace Workshop.ViewModel
         public RelayCommand GetDataCommand { get; set; }
 
         public RelayCommand ImportCommand { get; set; }
-        public RelayCommand SubmitCommand { get; set; }
     }
 }

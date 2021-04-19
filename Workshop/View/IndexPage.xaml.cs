@@ -24,7 +24,12 @@ namespace Workshop.View
             InitializeComponent();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var source = (new Uri("pack://application:,,,/View/CategoryPage.xaml", UriKind.Absolute));
 
+            NavigationService.GetNavigationService(this).Navigate(source);
+        }
 
     }
 }

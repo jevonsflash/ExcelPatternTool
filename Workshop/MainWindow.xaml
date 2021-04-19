@@ -21,36 +21,12 @@
 			<!--  This is the template for all menu items. In this sample we use the glyph items.  -->
 			<DataTemplate x:Key="HamburgerMenuItem" DataType="{x:Type mah:HamburgerMenuGlyphItem}">
 				<DockPanel Height="48" LastChildFill="True">
-					<Grid x:Name="IconPart"
-                          Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength}"
-                          DockPanel.Dock="Left">
-						<Image Margin="12"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Source="{Binding Icon}" />
-					</Grid>
-					<TextBlock x:Name="TextPart"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Text="{Binding Label}" />
-				</DockPanel>
-				<DataTemplate.Triggers>
-					<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=PanePlacement}" Value="Right">
-						<Setter TargetName="IconPart" Property="DockPanel.Dock" Value="Right" />
-						<Setter TargetName="TextPart" Property="Margin" Value="8 0 0 0" />
-					</DataTrigger>
-				</DataTemplate.Triggers>
-			</DataTemplate>
-
-			<!--  This is the template for the option menu item  -->
-			<DataTemplate x:Key="HamburgerOptionsMenuItem" DataType="{x:Type mah:HamburgerMenuIconItem}">
-				<DockPanel Height="48" LastChildFill="True">
 					<ContentControl x:Name="IconPart"
-                                    Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength}"
-                                    Content="{Binding Icon}"
-                                    DockPanel.Dock="Left"
-                                    Focusable="False"
-                                    IsTabStop="False" />
+					                Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength}"
+					                Content="{Binding Icon}"
+					                DockPanel.Dock="Left"
+					                Focusable="False"
+					                IsTabStop="False" />
 					<TextBlock x:Name="TextPart"
                                VerticalAlignment="Center"
                                FontSize="16"
@@ -106,40 +82,39 @@
                                     HamburgerWidth="48"
                                     IsPaneOpen="True"
                                     ItemTemplate="{StaticResource HamburgerMenuItem}"
-                                    OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}"
                                     SelectedIndex="0"
                                     VerticalScrollBarOnLeftSide="False">
                 <!--  Items  -->
                 <mah:HamburgerMenu.ItemsSource>
                     <mah:HamburgerMenuItemCollection>
-                        <mah:HamburgerMenuIconItem  Label="欢迎使用" Tag="../View/IndexPage.xaml">
+                        <mah:HamburgerMenuIconItem  Label="概览" Tag="../View/IndexPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconMaterial  Margin="12" Kind="Home"
-                                                   Foreground="#007ACC"
+                                                   Foreground="White"
                                                    HorizontalAlignment="Center" 
                                                    VerticalAlignment="Center"></iconPacks:PackIconMaterial>
                             </mah:HamburgerMenuIconItem.Icon>
                         </mah:HamburgerMenuIconItem>
-                        <mah:HamburgerMenuIconItem Label="类别" Tag="../View/CategoryPage.xaml">
+                        <mah:HamburgerMenuIconItem Label="工作表" Tag="../View/CategoryPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconMaterial  Margin="12" Kind="Orbit"
-                                                             Foreground="#007ACC"
+                                                             Foreground="White"
                                                              HorizontalAlignment="Center" 
                                                              VerticalAlignment="Center"></iconPacks:PackIconMaterial>
                             </mah:HamburgerMenuIconItem.Icon>
                         </mah:HamburgerMenuIconItem>
-                        <mah:HamburgerMenuIconItem  Label="异常记录" Tag="../View/ErrorPage.xaml">
+                        <mah:HamburgerMenuIconItem  Label="导入" Tag="../View/ImportPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial  Margin="12" Kind="AlertCircle"
-                                                             Foreground="#007ACC"
+                                <iconPacks:PackIconMaterial  Margin="12" Kind="Import"
+                                                             Foreground="White"
                                                              HorizontalAlignment="Center" 
                                                              VerticalAlignment="Center"></iconPacks:PackIconMaterial>
                             </mah:HamburgerMenuIconItem.Icon>
                         </mah:HamburgerMenuIconItem>
-                        <mah:HamburgerMenuIconItem Label="小工具" Tag="../View/ToolsPage.xaml">
+                        <mah:HamburgerMenuIconItem Label="记录" Tag="../View/ToolsPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconMaterial  Margin="12" Kind="Apps"
-                                                             Foreground="#007ACC"
+                                                             Foreground="White"
                                                              HorizontalAlignment="Center" 
                                                              VerticalAlignment="Center"></iconPacks:PackIconMaterial>
                             </mah:HamburgerMenuIconItem.Icon>
@@ -147,7 +122,7 @@
                         <mah:HamburgerMenuIconItem Label="设置" Tag="../View/SettingPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconModern  Margin="12" Kind="Tools"
-                                                             Foreground="#007ACC"
+                                                             Foreground="White"
                                                              HorizontalAlignment="Center" 
                                                              VerticalAlignment="Center"></iconPacks:PackIconModern>
                             </mah:HamburgerMenuIconItem.Icon>
@@ -166,8 +141,10 @@
                             <TextBlock Grid.Row="0"
                                        Margin="0 15 0 5"
                                        Padding="0"
-                                       FontFamily="{DynamicResource HeaderFontFamily}"
-                                       FontSize="{DynamicResource HeaderFontSize}"
+                                       FontFamily="Segoe UI"
+                                       FontSize="30"
+                                       FontWeight="Light"
+                                       Foreground="{DynamicResource BlackBrush}"
                                        Text="{Binding ElementName=HamburgerMenuControl,Path=SelectedItem.Label}" />
 
                             <ContentControl Grid.Row="1" Focusable="False" >
@@ -175,7 +152,7 @@
                                 <Frame x:Name="MainFrame"
                                            Navigated="MainFrame_OnNavigated"
                                                Source="{Binding ElementName=HamburgerMenuControl,Path=SelectedItem.Tag}"
-                                               NavigationUIVisibility="Visible" />
+                                               NavigationUIVisibility="Hidden" />
 
 
                             </ContentControl>

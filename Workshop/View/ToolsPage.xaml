@@ -4,39 +4,49 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Workshop.View"
-        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:control="clr-namespace:Workshop.Control"
         mc:Ignorable="d"
+		d:DesignHeight="450" d:DesignWidth="800"
+
         Title="ToolsPage">
-    <Grid>
-        <WrapPanel 
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Top">
-            <Controls:Tile Title="装箱信息生成工具 版本2.0"
-                           Foreground="Black"
-                           TitleFontSize="12"
-                           HorizontalTitleAlignment="Center"
-                               Background="Transparent"
-                           Click="ButtonBase_OnClick"
-                               >
-                <iconPacks:PackIconModern Width="40"
-                                          Height="40"
-                                          Kind="BoxLayered" />
+	<Grid>
+		<ScrollViewer>
+			<ItemsControl 
+                
+                  VerticalAlignment="Top"
+                  ItemsSource="{Binding ContentList}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel Orientation="Horizontal" ItemHeight="300"
+                               ItemWidth="180" IsItemsHost="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid VerticalAlignment="Top" Background="White" Height="300" Margin="10">
+							<Grid.Effect>
+								<DropShadowEffect></DropShadowEffect>
+							</Grid.Effect>
+							
+							<StackPanel >
+								<control:SimpleKeyValueControl
+                                    HorizontalAlignment="Center"
+                                                           TextColor="White"
+                                                           KeyText="批次" ValueText="{Binding Title}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl   HorizontalAlignment="Center"
+                                                           TextColor="White"
+                                                                TextSize="12"
+                                                           KeyText="已扫描" ValueText="{Binding ProductInfos.Count}" UnitText="件"></control:SimpleKeyValueControl>
+							</StackPanel>
 
-            </Controls:Tile>
-            <Controls:Tile Title="作业单生成工具 版本1.1"
-                           Foreground="Black"
-                           TitleFontSize="12"
-                           HorizontalTitleAlignment="Center"
-                           Click="ButtonBase_OnClick1"
-                           Background="Transparent">
-                <iconPacks:PackIconModern Width="40"
-                                          Height="40"
-                                          Kind="PageArrow" />
-
-            </Controls:Tile>
-            
-        </WrapPanel>
-    </Grid>
+							
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
 
 </Page>

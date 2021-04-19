@@ -10,34 +10,56 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="IndexPage">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions> 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition></RowDefinition>
+			<RowDefinition Height="Auto"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+			</Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left" >
-                <Button Content="导入" Command="{Binding ImportCommand}" Width="120"></Button>
-                <Button Content="计算" Command="{Binding GetDataCommand}" Width="120"></Button>
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left" >
+				<Button Content="导入" Command="{Binding ImportCommand}" Width="120"></Button>
+				<Button Content="计算" Command="{Binding GetDataCommand}" Width="120"></Button>
 
-            </StackPanel>
+			</StackPanel>
+		</Grid>
+		<Grid Grid.Row="1" >
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="1*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<DataGrid Grid.Row="0"
+						VerticalScrollBarVisibility="Visible"
+	                  AutoGenerateColumns="True"
+	                  AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+	                  ItemsSource="{Binding Employees}">
+			</DataGrid>
+			<GridSplitter Grid.Row="1" Height="5" Margin="0,15,0,15"></GridSplitter>
+			<DataGrid Grid.Row="2"
+						VerticalScrollBarVisibility="Visible"
+			          AutoGenerateColumns="False"
+			          AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+			          ItemsSource="{Binding ProcessResultList}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+				<DataGridTextColumn Header="位置" Binding="{Binding Position}"></DataGridTextColumn>
+				<DataGridTextColumn Header="严重程度" Binding="{Binding Level}"></DataGridTextColumn>
+				<DataGridTextColumn Header="说明" Binding="{Binding Content}"></DataGridTextColumn>
+			</DataGrid.Columns>
+		</DataGrid>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" >
-                <Button Content="导出" x:Name="SaveToButton" Command="{Binding SubmitCommand}" Width="120"></Button>
+		</Grid>
+		<StackPanel Grid.Row="2" Orientation="Horizontal">
+			<Label Content="问题个数"></Label>
+			<Label Content="{Binding ProcessResultList.Count}"></Label>
+		</StackPanel>
 
-            </StackPanel>
-        </Grid>
 
-        <DataGrid Grid.Row="1"
-                  AutoGenerateColumns="True"
-                  AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
-                  ItemsSource="{Binding Employees}">
-        </DataGrid>
-
-    </Grid>
+	</Grid>
 </Page>
