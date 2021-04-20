@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using Workshop.Infrastructure.Attributes;
 using Workshop.Infrastructure.Models;
 
 namespace Workshop.Infrastructure.Core
 {
-    public class BaseReader
+    public class BaseReader : BaseHandler
     {
 
         internal T GetDataToObject<T>(IRow row, List<ColumnMetadata> columns)
@@ -61,8 +62,45 @@ namespace Workshop.Infrastructure.Core
                         break;
                     case "formulatedtype`1":
                         var gType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
-                        var tmpFormularted = ExtractDateFromFomular(cell, gType);
+                        var tmpFormularted = ExtractAdvancedFromCell(cell, gType, typeof(FormulatedType<>));
+                        (tmpFormularted as IFormulatedType).Formula = cell.CellFormula;
                         AssignValue(objType, columns[j].PropName, result, tmpFormularted);
+                        break;
+
+                    case "commentedtype`1":
+                        var commentedType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
+                        var tmpCommented = ExtractAdvancedFromCell(cell, commentedType, typeof(CommentedType<>));
+                        if (cell.CellComment != null)
+                        {
+                            (tmpCommented as ICommentedType).Comment = cell.CellComment.String.String;
+                        }
+
+                        AssignValue(objType, columns[j].PropName, result, tmpCommented);
+                        break;
+
+                    case "styledtype`1":
+                        var styledType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
+                        var tmpStyled = ExtractAdvancedFromCell(cell, styledType, typeof(StyledType<>));
+                        if (cell.CellComment != null)
+                        {
+                            (tmpStyled as IStyledType).Comment = cell.CellComment.String.String;
+                        }
+
+                        (tmpStyled as IStyledType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
+                        AssignValue(objType, columns[j].PropName, result, tmpStyled);
+                        break;
+
+                    case "fulladvancedtype`1":
+                        var fullarmedType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
+                        var tmpFullarmed = ExtractAdvancedFromCell(cell, fullarmedType, typeof(FullAdvancedType<>));
+                        (tmpFullarmed as IFullAdvancedType).Formula = cell.CellFormula;
+                        if (cell.CellComment != null)
+                        {
+                            (tmpFullarmed as IFullAdvancedType).Comment = cell.CellComment.String.String;
+                        }
+
+                        (tmpFullarmed as IFullAdvancedType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
+                        AssignValue(objType, columns[j].PropName, result, tmpFullarmed);
                         break;
                     default:
                         double tmpDef = ExtractNumericFromCell(cell);
@@ -73,6 +111,7 @@ namespace Workshop.Infrastructure.Core
             }
             return result;
         }
+
 
         private bool ExtractBooleanFromCell(ICell cell)
         {
@@ -186,9 +225,9 @@ namespace Workshop.Infrastructure.Core
             return value;
         }
 
-        private IFormulatedType ExtractDateFromFomular<T>(ICell cell) where T : struct
+        private IAdvancedType ExtractDateFromFomular<T>(ICell cell, Type iType) where T : struct
         {
-            FormulatedType<T> value = default;
+            var value = IAdvancedTypeFactory(iType, typeof(T));
             if (cell.CellType == CellType.Formula)
             {
                 var TType = typeof(T);
@@ -239,76 +278,69 @@ namespace Workshop.Infrastructure.Core
 
                 }
 
-                value.Value = realValue;
-                value.Formula = cell.CellFormula;
+                value.SetValue(realValue);
             }
 
             return value;
         }
 
-        private IFormulatedType ExtractDateFromFomular(ICell cell, Type type)
+
+        private IAdvancedType IAdvancedTypeFactory(Type iType, Type GenericType)
         {
-            IFormulatedType value = default;
-            if (cell.CellType == CellType.Formula)
+            var type = iType.MakeGenericType(GenericType);
+            IAdvancedType result = Activator.CreateInstance(type) as IAdvancedType;
+            return result;
+        }
+
+        private IAdvancedType ExtractAdvancedFromCell(ICell cell, Type type, Type iType)
+        {
+            var value = IAdvancedTypeFactory(iType, type);
+
+            var TType = type;
+            string colTypeDesc = TType.Name.ToLowerInvariant();
+            switch (colTypeDesc)
             {
-                var TType = type;
-                string colTypeDesc = TType.Name.ToLowerInvariant();
-                switch (colTypeDesc)
-                {
-                    case "string":
-                        string tmpStr = ExtractStringFromCell(cell);
-                        value = new FormulatedType<string>();
-                        (value as FormulatedType<string>).Value = tmpStr;
-                        break;
-                    case "datetime":
-                        DateTime tmpDt = ExtractDateFromCell(cell);
-                        value = new FormulatedType<DateTime>();
-                        (value as FormulatedType<DateTime>).Value = tmpDt;
-                        break;
-                    case "int":
-                    case "int32":
-                        double tmpInt = ExtractNumericFromCell(cell);
-                        value = new FormulatedType<int>();
-                        (value as FormulatedType<int>).Value = Convert.ToInt32(tmpInt);
-                        break;
+                case "string":
+                    string tmpStr = ExtractStringFromCell(cell);
+                    value.SetValue(tmpStr);
+                    break;
+                case "datetime":
+                    DateTime tmpDt = ExtractDateFromCell(cell);
+                    value.SetValue(tmpDt);
+                    break;
+                case "int":
+                case "int32":
+                    double tmpInt = ExtractNumericFromCell(cell);
+                    value.SetValue(Convert.ToInt32(tmpInt));
+                    break;
 
-                    case "decimal":
-                        double tmpDecimal = ExtractNumericFromCell(cell);
-                        value = new FormulatedType<decimal>();
-                        (value as FormulatedType<decimal>).Value = Convert.ToDecimal(tmpDecimal);
-                        break;
-                    case "int64":
-                    case "long":
-                        double tmpLong = ExtractNumericFromCell(cell);
-                        value = new FormulatedType<long>();
-                        (value as FormulatedType<long>).Value = Convert.ToInt64(tmpLong);
-                        break;
+                case "decimal":
+                    double tmpDecimal = ExtractNumericFromCell(cell);
+                    value.SetValue(Convert.ToDecimal(tmpDecimal));
+                    break;
+                case "int64":
+                case "long":
+                    double tmpLong = ExtractNumericFromCell(cell);
+                    value.SetValue(Convert.ToInt64(tmpLong));
+                    break;
 
-                    case "double":
-                        double tmpDb = ExtractNumericFromCell(cell);
-                        value = new FormulatedType<double>();
-                        (value as FormulatedType<double>).Value = tmpDb;
-                        break;
-                    case "single":
-                        double tmpSingle = ExtractNumericFromCell(cell);
-                        value = new FormulatedType<float>();
-                        (value as FormulatedType<float>).Value = Convert.ToSingle(tmpSingle);
-                        break;
-                    case "boolean":
-                    case "bool":
-                        bool tmpBool = ExtractBooleanFromCell(cell);
-                        value = new FormulatedType<bool>();
-                        (value as FormulatedType<bool>).Value = Convert.ToBoolean(tmpBool);
-                        break;
-                    default:
-                        value = new FormulatedType<int>();
-                        break;
-
-                }
-
-                value.Formula = cell.CellFormula;
+                case "double":
+                    double tmpDb = ExtractNumericFromCell(cell);
+                    value.SetValue(tmpDb);
+                    break;
+                case "single":
+                    double tmpSingle = ExtractNumericFromCell(cell);
+                    value.SetValue(Convert.ToSingle(tmpSingle));
+                    break;
+                case "boolean":
+                case "bool":
+                    bool tmpBool = ExtractBooleanFromCell(cell);
+                    value.SetValue(Convert.ToBoolean(tmpBool));
+                    break;
+                default:
+                    value = new FormulatedType<int>();
+                    break;
             }
-
             return value;
         }
 

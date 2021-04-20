@@ -10,18 +10,21 @@ namespace Workshop.Infrastructure.Core
     {
         MemoryStream mem;
         private FileStream fileStr;
-        private HSSFWorkbook document;
         private ISheet sheet;
         public XlsReader(byte[] data)
         {
             mem = new MemoryStream(data);
-            document = new HSSFWorkbook(mem);
+            var document = new HSSFWorkbook(mem);
+            base.Document = document;
+
         }
 
         public XlsReader(string filePath)
         {
             fileStr = new FileStream(filePath, FileMode.Open);
-            document = new HSSFWorkbook(fileStr);
+            var document = new HSSFWorkbook(fileStr);
+            base.Document = document;
+
         }
 
         public IEnumerable<T> ReadRows<T>(IImportOption importOption)
@@ -29,7 +32,7 @@ namespace Workshop.Infrastructure.Core
 
             List<T> result = new List<T>();
             var columns = GetTypeDefinition(typeof(T));
-            sheet = document.GetSheet(importOption.SheetName);
+            sheet = Document.GetSheet(importOption.SheetName);
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
             for (int i = firstRow + importOption.SkipRows; i <= lastRow; i++)
@@ -51,7 +54,7 @@ namespace Workshop.Infrastructure.Core
         {
             List<T> result = new List<T>();
             var columns = GetTypeDefinition(typeof(T));
-            sheet = document.GetSheetAt(sheetNumber);
+            sheet = Document.GetSheetAt(sheetNumber);
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
             for (int i = firstRow + rowsToSkip; i <= lastRow; i++)

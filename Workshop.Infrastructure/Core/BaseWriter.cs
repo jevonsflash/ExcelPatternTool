@@ -6,18 +6,14 @@ using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using Workshop.Infrastructure.Attributes;
 using Workshop.Infrastructure.Models;
 using Workshop.Infrastructure.Services;
 
 namespace Workshop.Infrastructure.Core
 {
-    public class BaseWriter
+    public class BaseWriter : BaseHandler
     {
-        private readonly IWorkbook _workbook;
-        public IWorkbook Document { get; set; }
-
         internal IEnumerable<ColumnMetadata> GetTypeDefinition(Type type)
         {
 
@@ -75,12 +71,6 @@ namespace Workshop.Infrastructure.Core
 
 
 
-        }
-
-        internal IFont CreateFont(StyleMetadata rowStyle)
-        {
-            var fontColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.FontColor);
-            return StyleBuilderProvider.GetStyleBuilder(this.Document).GetFont(rowStyle.FontSize, rowStyle.FontName, fontColor);
         }
 
         public StyleMetadata GetClassStyleDefinition(Type type)
@@ -171,18 +161,6 @@ namespace Workshop.Infrastructure.Core
             return new StyleMetadata(defaultFontColor, defaultFontName, defaultFontSize, defaultBorderColor, defaultBackColor);
         }
 
-        internal ICellStyle CreateCellStyle(StyleMetadata rowStyle)
-        {
-            var borderColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BorderColor);
-            var backColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BackColor);
-            var font = this.CreateFont(rowStyle);
-            ICellStyle cellStyle;
-            var styleBuilder = StyleBuilderProvider.GetStyleBuilder(this.Document);
-            cellStyle = styleBuilder.GetCellStyle(backColor, borderColor, font);
-
-            return cellStyle;
-        }
-
         internal void SetHeaderToRow<T>(int rowsToSkip, IEnumerable<ColumnMetadata> columnMetas, IRow row,
              int rowCount)
         {
@@ -195,7 +173,7 @@ namespace Workshop.Infrastructure.Core
                     var cell = row.CreateCell(cellCount);
 
                     var headerFormat = GetClassStyleDefinition(typeof(T));
-                    ICellStyle headerCellStyle = CreateCellStyle(headerFormat);
+                    ICellStyle headerCellStyle = MetaToCellStyle(headerFormat);
                     cell.CellStyle = headerCellStyle;
                     cell.SetCellValue(columnMeta.ColumnName);
                     cellCount += 1;
@@ -225,7 +203,7 @@ namespace Workshop.Infrastructure.Core
 
 
                 var bodyFormat = GetPropStyleDefinition(propertyInfo);
-                var bodyBaseCellStyle = CreateCellStyle(bodyFormat);
+                var bodyBaseCellStyle = MetaToCellStyle(bodyFormat);
 
                 var bodyCellStyle = GetStyleWithFormat(bodyBaseCellStyle, columnMeta.Format);
 
@@ -264,37 +242,10 @@ namespace Workshop.Infrastructure.Core
                             cell.CellStyle = bodyBaseCellStyle;
                             break;
                         case "formulatedtype`1":
-                            var gType = propType.GenericTypeArguments.FirstOrDefault();
-                            string gTypeDesc = gType.Name.ToLowerInvariant();
-
-                            var formulatedValue = (propValue as IFormulatedType).GetValue();
-                            var formula = (propValue as IFormulatedType).Formula;
-                            if (gTypeDesc == "string")
-                            {
-                                cell.SetCellValue(Convert.ToString(formulatedValue));
-                                cell.CellStyle = bodyBaseCellStyle;
-                            }
-                            else if (gTypeDesc == "datetime")
-                            {
-                                cell.SetCellValue(Convert.ToDateTime(formulatedValue));
-                                cell.CellStyle = bodyCellStyle;
-                            }
-                            else if (gTypeDesc == "int" || gTypeDesc == "int32" || gTypeDesc == "decimal" ||
-                                     gTypeDesc == "int64" || gTypeDesc == "long" || gTypeDesc == "double" ||
-                                     gTypeDesc == "single")
-                            {
-                                cell.SetCellValue(Convert.ToDouble(formulatedValue));
-                                cell.CellStyle = bodyCellStyle;
-                            }
-                            else if (gTypeDesc == "boolean" || gTypeDesc == "bool")
-                            {
-                                cell.SetCellValue(Convert.ToBoolean(formulatedValue));
-                                cell.CellStyle = bodyBaseCellStyle;
-                            }
-
-                            cell.SetCellFormula(formula);
-                            cell.SetCellType(CellType.Formula);
-                            cell.CellStyle = bodyBaseCellStyle;
+                        case "styledtype`1":
+                        case "commentedtype`1":
+                        case "fulladvancedtype`1":
+                            HandleAdvancedType(cell, propValue as IAdvancedType, propType, bodyFormat, columnMeta);
                             break;
                         default:
                             var anyCellValue = Convert.ToString(propValue);
@@ -350,5 +301,103 @@ namespace Workshop.Infrastructure.Core
             }
         }
 
+        private void HandleAdvancedType(ICell cell, IAdvancedType propValue, Type propType, StyleMetadata bodyFormat, ColumnMetadata columnMeta)
+        {
+            var bodyBaseCellStyle = MetaToCellStyle(bodyFormat);
+
+            var bodyCellStyle = GetStyleWithFormat(bodyBaseCellStyle, columnMeta.Format);
+
+
+            var gType = propType.GenericTypeArguments.FirstOrDefault();
+            string gTypeDesc = gType.Name.ToLowerInvariant();
+
+            var formulatedValue = propValue.GetValue();
+
+
+            if (gTypeDesc == "string")
+            {
+                cell.SetCellValue(Convert.ToString(formulatedValue));
+                cell.CellStyle = bodyBaseCellStyle;
+                cell.SetCellType(CellType.String);
+
+            }
+            else if (gTypeDesc == "datetime")
+            {
+                cell.SetCellValue(Convert.ToDateTime(formulatedValue));
+                cell.CellStyle = bodyCellStyle;
+            }
+            else if (gTypeDesc == "int" || gTypeDesc == "int32" || gTypeDesc == "decimal" ||
+                     gTypeDesc == "int64" || gTypeDesc == "long" || gTypeDesc == "double" ||
+                     gTypeDesc == "single")
+            {
+                cell.SetCellValue(Convert.ToDouble(formulatedValue));
+                cell.CellStyle = bodyCellStyle;
+                cell.SetCellType(CellType.Numeric);
+
+            }
+            else if (gTypeDesc == "boolean" || gTypeDesc == "bool")
+            {
+                cell.SetCellValue(Convert.ToBoolean(formulatedValue));
+                cell.CellStyle = bodyBaseCellStyle;
+                cell.SetCellType(CellType.Boolean);
+
+            }
+
+            if (propValue is IFormulatedType)
+            {
+                var formula = (propValue as IFormulatedType).Formula;
+
+                cell.SetCellFormula(formula);
+                cell.SetCellType(CellType.Formula);
+            }
+            else if (propValue is ICommentedType)
+            {
+                var comment = (propValue as ICommentedType).Comment;
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
+                }
+            }
+
+            else if (propValue is IStyledType)
+            {
+
+                var styleMeta = (propValue as IStyledType).StyleMetadata;
+                var specificCellStyle = MetaToCellStyle(styleMeta);
+
+                var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
+                cell.CellStyle = specificBodyCellStyle;
+
+
+                var comment = (propValue as IStyledType).Comment;
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
+                }
+            }
+
+            else if (propValue is IFullAdvancedType)
+            {
+                var formula = (propValue as IFormulatedType).Formula;
+
+                cell.SetCellFormula(formula);
+                cell.SetCellType(CellType.Formula);
+
+                var styleMeta = (propValue as IFullAdvancedType).StyleMetadata;
+                var specificCellStyle = MetaToCellStyle(styleMeta);
+
+                var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
+                cell.CellStyle = specificBodyCellStyle;
+
+
+                var comment = (propValue as IFullAdvancedType).Comment;
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
+                }
+            }
+
+
+        }
     }
 }
