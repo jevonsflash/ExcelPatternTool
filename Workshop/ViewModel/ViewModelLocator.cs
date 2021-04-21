@@ -1,6 +1,7 @@
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.EntityFrameworkCore;
 using Workshop.Core.DataBase;
+using Workshop.Core.Validators;
 using Workshop.View;
 
 namespace Workshop.ViewModel
@@ -20,6 +21,7 @@ namespace Workshop.ViewModel
                 .UseSqlite(connectionString)
                 .Options;
             SimpleIoc.Default.Register<WorkshopDbContext>(()=>new WorkshopDbContext(contextOptions));
+            SimpleIoc.Default.Register<Validator>(()=>new Validator());
 
         }
 

@@ -1,6 +1,6 @@
-﻿namespace Workshop.ViewModel
+﻿namespace Workshop.Model.Dto
 {
-    public class ProcessResult
+    public class ProcessResultDto
     {
         public int Id { get; set; }
         public string Position => $"{Row},{Column}";
@@ -9,7 +9,6 @@
 
         public string Column { get; set; }
         public int Row { get; set; }
-
 
     }
 }

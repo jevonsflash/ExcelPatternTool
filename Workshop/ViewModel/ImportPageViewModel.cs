@@ -9,80 +9,77 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using Workshop.Core.Domains;
 using Workshop.Core.Entites;
+using Workshop.Core.Validators;
 using Workshop.Model;
 using Workshop.Service;
 using Workshop.Model.Excel;
 using Workshop.Helper;
 using Workshop.Infrastructure.Models;
+using Workshop.Model.Dto;
 
 namespace Workshop.ViewModel
 {
     public class ImportPageViewModel : ViewModelBase
     {
+        private Validator validator;
         public ImportPageViewModel()
         {
+            validator = SimpleIoc.Default.GetInstance<Validator>();
             this.ImportCommand = new RelayCommand(ImportAction, CanSubmit);
             this.GetDataCommand = new RelayCommand(GetDataAction, CanSubmit);
             this.Employees = new ObservableCollection<EmpoyeeEntity>();
-            this.ProcessResultList=new ObservableCollection<ProcessResult>();
+            this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
         }
 
         private void GetDataAction()
         {
             foreach (var item in this.Employees)
             {
-                var group = Employees.GroupBy(c => c.Sum.Formula);
-                string mainFormula = default;
-                int seed = 0;
-                foreach (var groupItem in group)
-                {
-                    seed = Math.Max(seed, groupItem.Count());
-                    if (seed == groupItem.Count())
+
+                var row = Employees.IndexOf(item);
+                var id = ProcessResultList.Count + 1;
+                var level = 1;
+
+
+                var validateResult = validator.Validate(item);
+                var result = validateResult.Where(c => c.IsValidated == false)
+                    .Select(c => new ProcessResultDto()
                     {
-                        mainFormula = groupItem.Key;
-                    }
+                        Id = id,
+                        Row = row,
+                        Level = level,
+                        Content = c.Content,
+                        Column = c.Column,
+                    });
+
+
+                foreach (var processResultDto in result)
+                {
+                    this.ProcessResultList.Add(processResultDto);
+
                 }
 
-                foreach (var empoyee in Employees)
+            }
+        }
+
+        private string GetSumMainFormula()
+        {
+            var group = Employees.GroupBy(c => c.Sum.Formula);
+            string mainFormula = default;
+            int seed = 0;
+            foreach (var groupItem in @group)
+            {
+                seed = Math.Max(seed, groupItem.Count());
+                if (seed == groupItem.Count())
                 {
-                    var row = Employees.IndexOf(empoyee);
-                    var id = ProcessResultList.Count + 1;
-                    var level = 1;
-                    if (empoyee.Sum.Formula != mainFormula)
-                    {
-                        var column = "应发合计";
-                        var content = $"此列中的公式不满足该列主要公式，主要公式为:{mainFormula}";
-                        var newItem = new ProcessResult
-                        {
-                            Column = column,
-                            Row = row,
-                            Content = content,
-                            Id = id,
-                            Level = level
-                        };
-                        this.ProcessResultList.Add(newItem);
-
-                    }
-
-                    if (empoyee.AgeBonus < 0)
-                    {
-                        var column = "年限";
-                        var content = $"此列中数据不满足大于等于0";
-                        var newItem = new ProcessResult
-                        {
-                            Column = column,
-                            Row = row,
-                            Content = content,
-                            Id = id,
-                            Level = level
-                        };
-                        this.ProcessResultList.Add(newItem);
-                    }
-
+                    mainFormula = groupItem.Key;
                 }
             }
+
+            return mainFormula;
         }
 
 
@@ -106,9 +103,9 @@ namespace Workshop.ViewModel
         }
 
 
-        private ObservableCollection<ProcessResult> _processResultList;
+        private ObservableCollection<ProcessResultDto> _processResultList;
 
-        public ObservableCollection<ProcessResult> ProcessResultList
+        public ObservableCollection<ProcessResultDto> ProcessResultList
         {
             get { return _processResultList; }
             set
