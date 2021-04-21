@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Workshop.Core.Entites;
@@ -12,10 +13,11 @@ namespace Workshop.Core.Validators
 {
     public class Validator
     {
-        private ValidatorProvider validatorProvider;
+        private IValidatorProvider validatorProvider;
+        private Dictionary<string, string> aliasDictionary;
 
         public IEnumerable<ValidatorInfo> ValidatorInfos { get; set; }
-        public IEnumerable<ProcessResult> Validate(EmpoyeeEntity empoyeeEntity)
+        public IEnumerable<ProcessResult> Validate(object obj)
         {
 
             ValidatorInfos = validatorProvider.GetValidatorInfos();
@@ -24,8 +26,10 @@ namespace Workshop.Core.Validators
 
             foreach (var validator in ValidatorInfos)
             {
-                var currentConvention = validatorProvider.GetConvention(validator.Convention);
-                var currentResult = ValidateItem(validator, empoyeeEntity, currentConvention);
+                var currentConvention = validatorProvider.GetConvention(validator.Convention).Convention;
+                var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
+                validator.Expression = ValidateItem(genericType, validator.Expression);
+                var currentResult = currentConvention?.Invoke(validator, obj);
                 currentResult.Column = validator.PropName;
                 result.Add(currentResult);
             }
@@ -33,12 +37,29 @@ namespace Workshop.Core.Validators
             return result;
         }
 
-
-        private ProcessResult ValidateItem(ValidatorInfo c, EmpoyeeEntity e, Func<ValidatorInfo, EmpoyeeEntity, ProcessResult> convention)
+        private string ValidateItem(Type entityType, string originalString)
         {
-            var type = c.EntityType;
+            var result = originalString;
 
-            var aliasDictionary = new Dictionary<string, string>();
+
+            foreach (var pare in aliasDictionary)
+            {
+                var propName = pare.Value;
+                var propNameAlias = pare.Key;
+
+                if (!string.IsNullOrEmpty(propNameAlias))
+                {
+                    result = originalString.Replace(propNameAlias, propName);
+                }
+            }
+
+            return result;
+
+        }
+
+        private void InitAliasDictionary(Type entityType)
+        {
+            var type = entityType;
             foreach (var prop in type.GetProperties())
             {
                 var attrs = System.Attribute.GetCustomAttributes(prop);
@@ -57,30 +78,38 @@ namespace Workshop.Core.Validators
                 if (attribute != null && attribute.Ignore == false && !string.IsNullOrEmpty(attribute.Name))
                 {
                     propNameAlias = attribute.Name;
-                    aliasDictionary.Add(propName, propNameAlias);
-                }
-
-
-            }
-
-            foreach (var pare in aliasDictionary)
-            {
-                var propName = pare.Key;
-                var propNameAlias = pare.Value;
-
-                if (!string.IsNullOrEmpty(propNameAlias))
-                {
-                    c.Expression.Replace(propNameAlias, propName);
+                    aliasDictionary.Add(propNameAlias, propName);
                 }
             }
+        }
 
-            return convention?.Invoke(c, e);
+        public string GetOriginalPropertyName(string alias)
+        {
+            var result = string.Empty;
+            aliasDictionary.TryGetValue(alias, out result);
+            return result;
+        }
+
+        public Validator(IValidatorProvider validatorProvider):this()
+        {
+            SetValidatorProvider(validatorProvider);
+
         }
 
         public Validator()
         {
-            validatorProvider = new ValidatorProvider();
+            aliasDictionary = new Dictionary<string, string>();
+
         }
 
+        public void SetValidatorProvider(IValidatorProvider validatorProvider)
+        {
+            this.validatorProvider = validatorProvider;
+            var genericType = validatorProvider.GetType().GetGenericArguments().FirstOrDefault();
+            InitAliasDictionary(genericType);
+
+            this.validatorProvider.PropertyTypeMaper = this.GetOriginalPropertyName;
+
+        }
     }
 }

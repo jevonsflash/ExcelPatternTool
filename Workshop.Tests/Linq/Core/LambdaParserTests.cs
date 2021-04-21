@@ -28,7 +28,6 @@ namespace Workshop.Infrastructure.Linq.Core.Tests
 
             Console.WriteLine(o1);
             Console.WriteLine(o2);
-            Assert.Fail();
         }
 
 

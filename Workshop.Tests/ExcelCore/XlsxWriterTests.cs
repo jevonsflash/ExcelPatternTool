@@ -37,7 +37,7 @@ namespace Workshop.Infrastructure.Tests
 
         }
 
-        private IEnumerable<EmpoyeeEntity> GetDatas()
+        private IEnumerable<EmployeeEntity> GetDatas()
         {
             Importer import = new Importer();
             var filePath = @"D:\test.xlsx";
@@ -45,9 +45,9 @@ namespace Workshop.Infrastructure.Tests
 
             data1 = File.ReadAllBytes(filePath);
             import.LoadXlsx(data1);
-            var importOption = new ImportOption<EmpoyeeEntity>(0, 2);
+            var importOption = new ImportOption<EmployeeEntity>(0, 2);
             importOption.SheetName = "全职";
-            var output = import.Process<EmpoyeeEntity>(importOption).ToList();
+            var output = import.Process<EmployeeEntity>(importOption).ToList();
 
             return output;
         }

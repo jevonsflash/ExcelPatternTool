@@ -6,7 +6,7 @@ using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Entites
 {
-    public class EmpoyeeEntity
+    public class EmployeeEntity
     {
 
         [Exportable("年(Year)",0)]

@@ -28,9 +28,10 @@ namespace Workshop.ViewModel
         public ImportPageViewModel()
         {
             validator = SimpleIoc.Default.GetInstance<Validator>();
+            validator.SetValidatorProvider(new ValidatorProvider<EmployeeEntity>());
             this.ImportCommand = new RelayCommand(ImportAction, CanSubmit);
             this.GetDataCommand = new RelayCommand(GetDataAction, CanSubmit);
-            this.Employees = new ObservableCollection<EmpoyeeEntity>();
+            this.Employees = new ObservableCollection<EmployeeEntity>();
             this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
         }
 
@@ -88,16 +89,16 @@ namespace Workshop.ViewModel
             var result = DocHelper.ImportFromDelegator((importer) =>
             {
 
-                var op1 = new ImportOption<EmpoyeeEntity>(0, 2);
+                var op1 = new ImportOption<EmployeeEntity>(0, 2);
                 op1.SheetName = "全职";
-                var r1 = importer.Process<EmpoyeeEntity>(op1);
+                var r1 = importer.Process<EmployeeEntity>(op1);
 
 
                 return new { Employees = r1 };
 
             });
 
-            this.Employees = new ObservableCollection<EmpoyeeEntity>(result.Employees);
+            this.Employees = new ObservableCollection<EmployeeEntity>(result.Employees);
 
 
         }
@@ -114,9 +115,9 @@ namespace Workshop.ViewModel
                 RaisePropertyChanged(nameof(ProcessResultList));
             }
         }
-        private ObservableCollection<EmpoyeeEntity> _employees;
+        private ObservableCollection<EmployeeEntity> _employees;
 
-        public ObservableCollection<EmpoyeeEntity> Employees
+        public ObservableCollection<EmployeeEntity> Employees
         {
             get { return _employees; }
             set

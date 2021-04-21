@@ -14,13 +14,14 @@ namespace Workshop.Core.Validators
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;
             ProcessResult.Content = Description;
-
+            TargetName = "Value";//or Formula
 
         }
 
 
         public Type EntityType { get; set; }
         public string PropName { get; set; }
+        public string TargetName { get; set; }
         public string Description
         {
             get => _description;

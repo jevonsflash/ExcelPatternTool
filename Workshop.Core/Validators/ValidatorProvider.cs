@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Workshop.Core.Entites;
+using Workshop.Infrastructure.Core;
 using Workshop.Infrastructure.Linq.Core;
 using Workshop.Infrastructure.Models;
 
 namespace Workshop.Core.Validators
 {
-    public class ValidatorProvider
+    public class ValidatorProvider<T> : IValidatorProvider
     {
-        public Dictionary<string, Func<ValidatorInfo, EmpoyeeEntity, ProcessResult>> Conventions { get; set; }
+        public Dictionary<string, ValidateConvention> Conventions { get; set; }
         public ValidatorProvider()
         {
+            Conventions = new Dictionary<string, ValidateConvention>();
             Init();
         }
 
+        public Func<string, string> PropertyTypeMaper { get; set; }
         public void Init()
         {
-            var generalOne = new Func<ValidatorInfo, EmpoyeeEntity, ProcessResult>((c, e) =>
+            var generalOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
             {
 
 
@@ -41,28 +44,57 @@ namespace Workshop.Core.Validators
 
             });
 
-            var regularOne = new Func<ValidatorInfo, EmpoyeeEntity, ProcessResult>((c, e) =>
+            var regularOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
             {
 
 
                 object val = TryGetValue(c.PropName, e);
-                var propValue = val.ToString();
+
+                var input = string.Empty;
+
+                if (c.TargetName == "Value")
+                {
+                    var propValue = val.ToString();
+                    input = propValue;
+
+                }
+
+                else if (c.TargetName == "Formula")
+                {
+                    if (val is IFormulatedType)
+                    {
+                        input = (val as IFormulatedType).Formula;
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"设置TargetName为'Formula'时，指定的对象不是包含公式的类型");
+
+                    }
+                }
+
+                else
+                {
+                    throw new ArgumentException($"未知的TargetName类型{c.TargetName}");
+
+                }
+
                 var pattern = c.Expression;
 
-                var regularResult = Regex.IsMatch(propValue, pattern);
+                var regularResult = Regex.IsMatch(input, pattern);
                 c.ProcessResult.IsValidated = (bool)regularResult;
 
                 return c.ProcessResult;
 
             });
 
-            Conventions.Add("DefaultGeneral", generalOne);
-            Conventions.Add("DefaultRegular", regularOne);
+            Conventions.Add("DefaultGeneral", new ValidateConvention(generalOne));
+            Conventions.Add("DefaultRegular", new ValidateConvention(regularOne));
         }
 
-        private object TryGetValue(string varName, EmpoyeeEntity e)
+        private object TryGetValue(string varName, object e)
         {
-            var propertyInfo = e.GetType().GetProperty(varName);
+            var propName = PropertyTypeMaper?.Invoke(varName);
+            var propertyInfo = e.GetType().GetProperty(propName);
 
 
             if (propertyInfo != null)
@@ -78,22 +110,23 @@ namespace Workshop.Core.Validators
 
         public IEnumerable<ValidatorInfo> GetValidatorInfos()
         {
-            var result=new List<ValidatorInfo>();
+            var result = new List<ValidatorInfo>();
             result.Add(new ValidatorInfo()
             {
-                Description = "需要满足表达式",
-                EntityType = typeof(EmpoyeeEntity),
-                Expression = "",
+                Description = "需要满足正则表达式",
+                EntityType = typeof(T),
+                Expression = @"^ROUND\(Q\d+\+R\d+\+S\d+\+T\d+\+U\d+\+V\d+\+W\d+\+X\d+\+Y\d+\+Z\d+-AA\d+\+AB\d+\+AC\d+\+AD\d+\+AE\d+-AF\d+\+AG\d+\+AH\d+\+AI\d+-AJ\d+\+AK\d+-AL\d+\+AM\d+,2\)$",
                 Convention = "DefaultRegular",
-                PropName = "应发合计"
+                PropName = "应发合计",
+                TargetName = "Formula"
 
             });
             return result;
         }
 
-        public Func<ValidatorInfo, EmpoyeeEntity, ProcessResult> GetConvention(string type)
+        public ValidateConvention GetConvention(string type)
         {
-            Func<ValidatorInfo, EmpoyeeEntity, ProcessResult> result;
+            ValidateConvention result;
             this.Conventions.TryGetValue(type, out result);
             return result;
         }
