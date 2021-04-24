@@ -21,8 +21,8 @@ using Workshop.Control;
 using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
 using Workshop.Helper;
+using Workshop.Infrastructure.Helper;
 using Workshop.Model;
-using Workshop.Service;
 using Workshop.View;
 namespace Workshop.ViewModel
 {
@@ -69,7 +69,7 @@ namespace Workshop.ViewModel
             {
                 if (this.EmployeeInfos != null && this.EmployeeInfos.Count > 0)
                 {
-                    LocalDataService.SaveCollectionLocal(this.EmployeeInfos);
+                    LocalDataHelper.SaveCollectionLocal(this.EmployeeInfos);
 
                 }
             }

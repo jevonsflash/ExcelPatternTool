@@ -9,8 +9,8 @@ using GalaSoft.MvvmLight.Messaging;
 using Workshop.Common;
 using Workshop.Core.Domains;
 using Workshop.Helper;
+using Workshop.Infrastructure.Helper;
 using Workshop.Model;
-using Workshop.Service;
 
 namespace Workshop
 {

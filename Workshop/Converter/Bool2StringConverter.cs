@@ -16,7 +16,9 @@ namespace Workshop.Converter
             var str1 = (parameter as string).Split('|')[0];
             var str2 = (parameter as string).Split('|')[1];
 
-            return (bool)value ? str1 : str2;
+            if (value != null) return (bool) value ? str1 : str2;
+            var str3 = (parameter as string).Split('|')[2];
+            return str3;
 
 
 

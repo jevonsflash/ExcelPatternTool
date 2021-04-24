@@ -143,7 +143,7 @@ namespace Workshop.Core.Entites
         public double TemporaryTax { get; set; }
         [Exportable("应发+临时计税项目",  43)]
         [Importable("应发+临时计税项目",  43)]
-        public double SumWithTemporaryTax { get; set; }
+        public FullAdvancedType<double> SumWithTemporaryTax { get; set; }
         [Exportable("社保个人",  44)]
         [Importable("社保个人",  44)]
         public double SocialInsurancePersonal { get; set; }
@@ -173,7 +173,7 @@ namespace Workshop.Core.Entites
         public double SupplementaryCommercialInsuranceDeduct { get; set; }
         [Exportable("实发薪金",  53)]
         [Importable("实发薪金",  53)]
-        public double Sum1 { get; set; }
+        public FullAdvancedType<double> Sum1 { get; set; }
         [Exportable("社保企业",  54)]
         [Importable("社保企业",  54)]
         public double SocialInsuranceEnterprise { get; set; }
@@ -194,7 +194,7 @@ namespace Workshop.Core.Entites
         public double SupplementaryUnionFeeDeductEnterprise { get; set; }
         [Exportable("总支付",  60)]
         [Importable("总支付",  60)]
-        public double Sum2 { get; set; }
+        public FullAdvancedType<double> Sum2 { get; set; }
         [Exportable("基本养老险保险费（个人）",  61)]
         [Importable("基本养老险保险费（个人）",  61)]
         public double BasicOldAgeInsurance { get; set; }
@@ -206,9 +206,9 @@ namespace Workshop.Core.Entites
         public double UnemploymentInsurance { get; set; }
         [Exportable("验算（个人）",  64)]
         [Importable("验算（个人）",  64)]
-        public double Check { get; set; }
+        public FullAdvancedType<double> Check { get; set; }
         [Exportable("公积金（个人）",  65)]
         [Importable("公积金（个人）",  65)]
-        public double ProvidentFund { get; set; }
+        public FullAdvancedType<double> ProvidentFund { get; set; }
     }
 }

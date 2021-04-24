@@ -33,7 +33,7 @@ namespace Workshop.Core.Domains
 
         [DisplayName("工作性质")]
         public EmployeeAccount EmployeeAccount { get; set; }
-        public EmployeeSalay SalayInfo { get; set; }
+        public EmployeeSalay EmployeeSalay { get; set; }
         public EmployeeSocialInsuranceAndFund EmployeeSocialInsuranceAndFund { get; set; }
         public EnterpriseSocialInsuranceAndFund EnterpriseSocialInsuranceAndFund { get; set; }
         public EmployeeSocialInsuranceDetail EmployeeSocialInsuranceDetail { get; set; }

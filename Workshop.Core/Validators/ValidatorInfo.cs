@@ -19,7 +19,6 @@ namespace Workshop.Core.Validators
         }
 
 
-        public Type EntityType { get; set; }
         public string PropName { get; set; }
         public string TargetName { get; set; }
         public string Description

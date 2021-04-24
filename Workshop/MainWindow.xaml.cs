@@ -18,8 +18,8 @@ using Microsoft.Win32;
 using Workshop.Common;
 using Workshop.Control;
 using Workshop.Helper;
+using Workshop.Infrastructure.Helper;
 using Workshop.Model;
-using Workshop.Service;
 using Workshop.View;
 
 namespace Workshop
@@ -39,14 +39,14 @@ namespace Workshop
         {
             InvokeHelper.InvokeOnUi("正在检查网络", () =>
             {
-                var SettingInfo = LocalDataService.ReadObjectLocal<SettingInfo>();
+                var SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
                 if (SettingInfo == null)
                 {
                     SettingInfo = new SettingInfo()
                     {
                         Addr = "172.16.65.22"
                     };
-                    LocalDataService.SaveObjectLocal(SettingInfo);
+                    LocalDataHelper.SaveObjectLocal(SettingInfo);
 
                 }
 
@@ -64,18 +64,18 @@ namespace Workshop
                 Version = currentVersion,
                 RealeaseDate = DateTime.Now.Date
             };
-            var appInfo = LocalDataService.ReadObjectLocal<ApplicationInfo>();
+            var appInfo = LocalDataHelper.ReadObjectLocal<ApplicationInfo>();
             if (appInfo == null)
             {
-                LocalDataService.InitLocalPath();
-                LocalDataService.SaveObjectLocal(currentAppInfo);
+                LocalDataHelper.InitLocalPath();
+                LocalDataHelper.SaveObjectLocal(currentAppInfo);
             }
             else
             {
                 if (appInfo.Version < currentVersion)
                 {
-                    LocalDataService.InitLocalPath();
-                    LocalDataService.SaveObjectLocal(currentAppInfo);
+                    LocalDataHelper.InitLocalPath();
+                    LocalDataHelper.SaveObjectLocal(currentAppInfo);
                 }
             }
         }

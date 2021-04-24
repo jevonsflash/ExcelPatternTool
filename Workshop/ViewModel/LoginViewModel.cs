@@ -11,7 +11,6 @@ using System.Windows;
 using Workshop.Common;
 using Workshop.Control;
 using Workshop.Helper;
-using Workshop.Service;
 
 namespace Workshop.ViewModel
 {

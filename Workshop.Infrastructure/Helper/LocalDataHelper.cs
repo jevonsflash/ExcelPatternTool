@@ -1,25 +1,23 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Workshop.Helper;
-using Workshop.Model;
+using Newtonsoft.Json;
 
-namespace Workshop.Service
+namespace Workshop.Infrastructure.Helper
 {
-    public class LocalDataService
+    public class LocalDataHelper
     {
+        //const string _dirPrefix = "LocalData";
+        const string _dirPrefix = "Data";
+
+        //const string local = "local_";
+        const string _filePrefix = "_";
         public static IList<T> ReadCollectionLocal<T>() where T : class
         {
-            var basePath = CommonHelper.ExePath;
-            var dirPath = Path.Combine(basePath, "LocalData");
+            var basePath = CommonHelper.AppBasePath;
+            var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
-
-                var fileName = string.Format("local_{0}s.json", typeof(T).ToString());
+                var fileName = string.Format("{1}{0}s.json", typeof(T).Name, _filePrefix);
                 var filePath = Path.Combine(dirPath, fileName);
                 if (DirFileHelper.IsExistFile(filePath))
                 {
@@ -34,11 +32,11 @@ namespace Workshop.Service
 
         public static void SaveCollectionLocal<T>(IList<T> source) where T : class
         {
-            var basePath = CommonHelper.ExePath;
-            var dirPath = Path.Combine(basePath, "LocalData");
+            var basePath = CommonHelper.AppBasePath;
+            var dirPath = Path.Combine(basePath, _dirPrefix);
             DirFileHelper.CreateDir(dirPath);
             var serializedstr = JsonConvert.SerializeObject(source);
-            var fileName = string.Format("local_{0}s.json", typeof(T).ToString());
+            var fileName = string.Format("{1}{0}s.json", typeof(T).Name, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             DirFileHelper.CreateFile(filePath, serializedstr);
         }
@@ -46,10 +44,10 @@ namespace Workshop.Service
         public static T ReadObjectLocal<T>() where T : class
         {
             var basePath = CommonHelper.ExePath;
-            var dirPath = Path.Combine(basePath, "LocalData");
+            var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
-                var fileName = string.Format("local_{0}.json", typeof(T).ToString());
+                var fileName = string.Format("{1}{0}.json", typeof(T).Name, _filePrefix);
                 var filePath = Path.Combine(dirPath, fileName);
                 if (DirFileHelper.IsExistFile(filePath))
                 {
@@ -64,10 +62,10 @@ namespace Workshop.Service
         public static void SaveObjectLocal<T>(T source) where T : class
         {
             var basePath = CommonHelper.ExePath;
-            var dirPath = Path.Combine(basePath, "LocalData");
+            var dirPath = Path.Combine(basePath, _dirPrefix);
             DirFileHelper.CreateDir(dirPath);
             var serializedstr = JsonConvert.SerializeObject(source);
-            var fileName = string.Format("local_{0}.json", typeof(T).ToString());
+            var fileName = string.Format("{1}{0}.json", typeof(T).Name, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             DirFileHelper.CreateFile(filePath, serializedstr);
         }
@@ -76,7 +74,7 @@ namespace Workshop.Service
         public static void InitLocalPath()
         {
             var basePath = CommonHelper.ExePath;
-            var dirPath = Path.Combine(basePath, "LocalData");
+            var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
                 DirFileHelper.ClearDirectory(dirPath);

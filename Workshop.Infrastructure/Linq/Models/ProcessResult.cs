@@ -3,7 +3,7 @@
     public class ProcessResult
     {
         public int Id { get; set; }
-        public string Position => $"{Row},{Column}";
+        public string Position => $"第{Row}行, 列名称:{Column}";
         public int Level { get; set; }
         public string Content { get; set; }
 

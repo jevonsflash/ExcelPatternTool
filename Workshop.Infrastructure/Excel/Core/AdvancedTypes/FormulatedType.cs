@@ -20,5 +20,14 @@
             Value = (T)value;
         }
 
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Value.Equals(obj);
+        }
     }
 }

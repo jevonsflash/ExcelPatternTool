@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
-using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
-using Workshop.Common;
 
-namespace Workshop.Helper
+namespace Workshop.Infrastructure.Helper
 {
     public enum Method
     {
@@ -67,12 +63,8 @@ namespace Workshop.Helper
             }
             catch (Exception e)
             {
-                App.Current.Dispatcher.Invoke(() =>
-                {
-                    Messenger.Default.Send("", MessengerToken.CLOSEPROGRESS);
-
-                });
-                MessageBox.Show("未能连接至远程服务器，请检查网络连接", "无网络", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LogHelper.LogError(e.Message);
+                throw e;
             }
 
 

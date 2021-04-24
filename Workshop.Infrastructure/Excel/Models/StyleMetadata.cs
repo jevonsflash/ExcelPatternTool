@@ -6,7 +6,6 @@ namespace Workshop.Infrastructure.Models
 {
     public class StyleMetadata
     {
-
         public string FontColor { get; set; }
         public string FontName { get; set; }
         public short FontSize { get; set; }

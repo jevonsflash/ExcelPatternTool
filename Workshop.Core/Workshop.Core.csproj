@@ -22,4 +22,12 @@
     <ProjectReference Include="..\Workshop.Infrastructure\Workshop.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\_ValidatorInfos.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

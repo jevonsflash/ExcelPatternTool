@@ -31,7 +31,7 @@ namespace Workshop.Core.Validators.Tests
             importOption.SheetName = "全职";
             this.Employees = import.Process<EmployeeEntity>(importOption).ToList();
 
-            var validator = new Validator(new ValidatorProvider<EmployeeEntity>());
+            var validator = new Validator(new DefaultValidatorProvider<EmployeeEntity>());
 
             foreach (var item in this.Employees)
             {

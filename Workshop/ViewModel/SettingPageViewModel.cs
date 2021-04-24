@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Workshop.Infrastructure.Helper;
 using Workshop.Model;
-using Workshop.Service;
 
 namespace Workshop.ViewModel
 {
@@ -16,7 +16,7 @@ namespace Workshop.ViewModel
         {
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.PropertyChanged += SettingPageViewModel_PropertyChanged;
-            SettingInfo = LocalDataService.ReadObjectLocal<SettingInfo>();
+            SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
         }
 
         private bool _hasChanged;
@@ -56,7 +56,7 @@ namespace Workshop.ViewModel
 
         private void SubmitAction()
         {
-            LocalDataService.SaveObjectLocal(SettingInfo);
+            LocalDataHelper.SaveObjectLocal(SettingInfo);
             HasChanged = false;
 
 

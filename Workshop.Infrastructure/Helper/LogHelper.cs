@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Threading;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
-namespace Workshop.Helper
+namespace Workshop.Infrastructure.Helper
 {
     public class LogHelper
     {
@@ -21,7 +19,7 @@ namespace Workshop.Helper
 
         static LogHelper()
         {
-            FilePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Logs");
+            FilePath = Path.Combine(CommonHelper.AppBasePath, "Logs");
             _writeThread = new Thread(WriteMsg);
             MsgQueue = new Queue<string>();
             _writeThread.Start();
