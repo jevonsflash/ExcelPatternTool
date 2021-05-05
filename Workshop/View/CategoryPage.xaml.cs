@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Workshop.Core.Domains;
 using Workshop.Model;
 using Workshop.ViewModel;
 
@@ -29,20 +31,28 @@ namespace Workshop.View
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.EditCommand.Execute(item.DataContext as EmployeeDto);
+            vm.EditCommand.Execute(item.DataContext as Employee);
         }
 
         private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.RemoveCommand.Execute(item.DataContext as EmployeeDto);
+            vm.RemoveCommand.Execute(item.DataContext as Employee);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             ViewModelLocator.Cleanup<CategoryPageViewModel>();
 
+        }
+        private void DataGrid_OnAutoGeneratingColumn(object? sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (string.IsNullOrEmpty(((PropertyDescriptor)e.PropertyDescriptor).DisplayName))
+            {
+                e.Cancel = true;
+            }
+            e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
         }
     }
 }

@@ -6,57 +6,97 @@
       DataContext="{Binding Source={StaticResource Locator},Path=CategoryPage}"
       Unloaded="Page_Unloaded"
       xmlns:local="clr-namespace:Workshop.View"
+      xmlns:control="clr-namespace:Workshop.Control"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProcedurePage">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+			</Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                <Button  Content="添加" Command="{Binding CreateCommand}"  Width="120"></Button>
-            </StackPanel>
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+				<Button  Content="添加" Command="{Binding CreateCommand}"  Width="120"></Button>
+			</StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                <Button  Content="导出" x:Name="SaveToButton"  Command="{Binding SubmitCommand}"  Width="120"></Button>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button  Content="导出" x:Name="SaveToButton"  Command="{Binding SubmitCommand}"  Width="120"></Button>
 
-            </StackPanel>
-        </Grid>
+			</StackPanel>
+		</Grid>
 
-        <DataGrid Grid.Row="1"
-                  IsReadOnly="False"
+		<DataGrid Grid.Row="1"
+                  IsReadOnly="True"
+				  RowHeight="150"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding  CategoryInfos}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="类别名称" Binding="{Binding  Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="类别名称" Binding="{Binding  Code}"></DataGridTextColumn>
-                <DataGridTextColumn Header="类别描述" Binding="{Binding Description}"></DataGridTextColumn>
-                <DataGridTextColumn Header="添加时间" Binding="{Binding  CreateTime}"></DataGridTextColumn>
-                <DataGridTemplateColumn Header="操作"  Width="300">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Width="120" Content="修改" Click="ButtonEdit_OnClick"></Button>
-                                <Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                  AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+                  ItemsSource="{Binding  EmployeeInfos}">
 
-    </Grid>
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="批次" Binding="{Binding Batch}"></DataGridTextColumn>
+				<DataGridTextColumn Header="序号" Binding="{Binding SerialNum}"></DataGridTextColumn>
+				<DataGridTextColumn Header="部门" Binding="{Binding Dept}"></DataGridTextColumn>
+				<DataGridTextColumn Header="项目" Binding="{Binding Proj}"></DataGridTextColumn>
+				<DataGridTextColumn Header="状态" Binding="{Binding State}"></DataGridTextColumn>
+				<DataGridTextColumn Header="姓名" Binding="{Binding Name}"></DataGridTextColumn>
+				<DataGridTextColumn Header="身份证号码" Binding="{Binding IDCard}"></DataGridTextColumn>
+
+				<DataGridTemplateColumn Header="员工银行信息"  Width="300">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ItemsControl DataContext="{Binding EmployeeAccount}">
+								<control:SimpleKeyValueControl KeyText="账号" ValueText="{Binding AccountNum}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="名称和地点" ValueText="{Binding AccountBankAlias}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="银行名称" ValueText="{Binding AccountBankName}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="银行地点" ValueText="{Binding AccountBankLoc}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="个人社保号" ValueText="{Binding SocialInsuranceNum}"></control:SimpleKeyValueControl>
+							</ItemsControl>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="员工薪酬信息"  Width="300">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ItemsControl DataContext="{Binding EmployeeSalay}">
+								<control:SimpleKeyValueControl KeyText="基本工资" ValueText="{Binding BasicSalary}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="应发合计" ValueText="{Binding Sum}"></control:SimpleKeyValueControl>
+							</ItemsControl>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="员工薪酬信息"  Width="300">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ItemsControl DataContext="{Binding EmployeeSocialInsuranceAndFund}">
+								<control:SimpleKeyValueControl KeyText="社保个人" ValueText="{Binding SocialInsurancePersonal}"></control:SimpleKeyValueControl>
+								<control:SimpleKeyValueControl KeyText="公积金个人" ValueText="{Binding ProvidentFundPersonal}"></control:SimpleKeyValueControl>
+							</ItemsControl>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="操作"  Width="300">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition></ColumnDefinition>
+									<ColumnDefinition></ColumnDefinition>
+								</Grid.ColumnDefinitions>
+								<Button Grid.Column="0" Width="120" Content="修改" Click="ButtonEdit_OnClick"></Button>
+								<Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+
+	</Grid>
 </Page>

@@ -6,6 +6,7 @@ using System.Text;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using Workshop.Core.Domains;
 using Workshop.Model;
 
 namespace Workshop.ViewModel
@@ -14,7 +15,7 @@ namespace Workshop.ViewModel
     {
         public CreateCategoryViewModel()
         {
-            this.CurrentEmployee = new EmployeeDto();
+            this.CurrentEmployee = new Employee();
             this.SubmitCommand = new RelayCommand(SubmitAction);
             this.RemoveCommand = new RelayCommand(RemoveAction, CanSubmit);
             this.PropertyChanged += CreateProductPageViewModel_PropertyChanged;
@@ -33,14 +34,14 @@ namespace Workshop.ViewModel
         private void RemoveAction()
         {
             basevm.RemoveCategory(this.CurrentEmployee);
-            this.CurrentEmployee = new EmployeeDto();
+            this.CurrentEmployee = new Employee();
 
         }
 
         private void SubmitAction()
         {
             basevm.CreateCategory(this.CurrentEmployee);
-            this.CurrentEmployee = new EmployeeDto();
+            this.CurrentEmployee = new Employee();
 
         }
 
@@ -49,9 +50,9 @@ namespace Workshop.ViewModel
             return this.CurrentEmployee != null && CurrentEmployee.Id!=Guid.Empty;
         }
 
-        private EmployeeDto _currentEmployee;
+        private Employee _currentEmployee;
 
-        public EmployeeDto CurrentEmployee
+        public Employee CurrentEmployee
         {
             get { return _currentEmployee; }
             set

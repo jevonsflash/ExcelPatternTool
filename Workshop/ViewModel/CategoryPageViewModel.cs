@@ -36,29 +36,30 @@ namespace Workshop.ViewModel
         {
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.CreateCommand = new RelayCommand(CreateAction);
-            this.RemoveCommand = new RelayCommand<EmployeeDto>(RemoveAction);
-            this.EditCommand = new RelayCommand<EmployeeDto>(EditAction);
-            InitData();
+            this.RemoveCommand = new RelayCommand<Employee>(RemoveAction);
+            this.EditCommand = new RelayCommand<Employee>(EditAction);
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
             this._dbContext = dbContext;
+            InitData();
 
         }
 
         private void InitData()
         {
-            IList<EmployeeDto> data = null;
+            IList<Employee> data = null;
 
-            InvokeHelper.InvokeOnUi(null, () =>
-            {
-                
-                Thread.Sleep(2000);
+            var task = InvokeHelper.InvokeOnUi<IList<Employee>>(null, () =>
+        {
+            var result = this._dbContext.Employee.Where(c => true).ToList();
+            return result;
 
-            }).ContinueWith((t) =>
-            {
 
-                this.EmployeeInfos = new ObservableCollection<EmployeeDto>(data);
-                this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
-            });
+        }, (t) =>
+             {
+                 data = t;
+                 this.EmployeeInfos = new ObservableCollection<Employee>(data);
+                 this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
+             });
 
 
         }
@@ -82,11 +83,8 @@ namespace Workshop.ViewModel
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 var result = 0;
-                using (var dbContext=this._dbContext)
-                {
-                    dbContext.Employee.Update(e.NewItems[0] as Employee);
-                    result= dbContext.SaveChanges();
-                }
+                _dbContext.Employee.Update(e.NewItems[0] as Employee);
+                result = _dbContext.SaveChanges();
                 if (result == 0)
                 {
                     MessageBox.Show("更新失败");
@@ -96,28 +94,21 @@ namespace Workshop.ViewModel
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var result = 0;
-                using (var dbContext = this._dbContext)
-                {
-                    dbContext.Employee.Remove(e.OldItems[0] as Employee);
-                    result = dbContext.SaveChanges();
-                }
+                _dbContext.Employee.Remove(e.OldItems[0] as Employee);
+                result = _dbContext.SaveChanges();
                 if (result == 0)
                 {
                     MessageBox.Show("删除失败");
 
                 }
-               
+
 
             }
-            using (var dbContext = this._dbContext)
-            {
-               var result= dbContext.Employee.ToList();
-                App.GolobelCategorys = new List<Employee>(result);
-            }
+
 
         }
 
-        private void RemoveAction(EmployeeDto obj)
+        private void RemoveAction(Employee obj)
         {
             if (obj == null)
             {
@@ -128,7 +119,7 @@ namespace Workshop.ViewModel
         }
 
 
-        internal void RemoveCategory(EmployeeDto CategoryInfo)
+        internal void RemoveCategory(Employee CategoryInfo)
         {
             if (EmployeeInfos.Any(c => c.Id == CategoryInfo.Id))
             {
@@ -142,7 +133,7 @@ namespace Workshop.ViewModel
             }
         }
 
-        private void EditAction(EmployeeDto obj)
+        private void EditAction(Employee obj)
         {
             if (obj == null)
             {
@@ -181,15 +172,15 @@ namespace Workshop.ViewModel
         }
 
 
-        private ObservableCollection<EmployeeDto> _categoryTypeInfos;
+        private ObservableCollection<Employee> _categoryTypeInfos;
 
-        public ObservableCollection<EmployeeDto> EmployeeInfos
+        public ObservableCollection<Employee> EmployeeInfos
         {
             get
             {
                 if (_categoryTypeInfos == null)
                 {
-                    _categoryTypeInfos = new ObservableCollection<EmployeeDto>();
+                    _categoryTypeInfos = new ObservableCollection<Employee>();
                 }
                 return _categoryTypeInfos;
             }
@@ -200,7 +191,7 @@ namespace Workshop.ViewModel
             }
         }
 
-        public void CreateCategory(EmployeeDto model)
+        public void CreateCategory(Employee model)
         {
             var id = Guid.NewGuid();
             var createtime = DateTime.Now;
@@ -230,8 +221,8 @@ namespace Workshop.ViewModel
 
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
-        public RelayCommand<EmployeeDto> EditCommand { get; set; }
-        public RelayCommand<EmployeeDto> RemoveCommand { get; set; }
+        public RelayCommand<Employee> EditCommand { get; set; }
+        public RelayCommand<Employee> RemoveCommand { get; set; }
 
     }
 

@@ -13,12 +13,14 @@ using System.Windows;
 using AutoMapper;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
 using Workshop.Core.Entites;
 using Workshop.Core.Validators;
 using Workshop.Model;
 using Workshop.Model.Excel;
 using Workshop.Helper;
+using Workshop.Infrastructure.Core;
 using Workshop.Infrastructure.Helper;
 using Workshop.Infrastructure.Models;
 using Workshop.Model.Dto;
@@ -27,8 +29,9 @@ namespace Workshop.ViewModel
 {
     public class ImportPageViewModel : ViewModelBase
     {
+        private readonly WorkshopDbContext _dbContext;
         private Validator validator;
-        public ImportPageViewModel()
+        public ImportPageViewModel(WorkshopDbContext dbContext)
         {
             validator = SimpleIoc.Default.GetInstance<Validator>();
             validator.SetValidatorProvider(new DefaultValidatorProvider<EmployeeEntity>());
@@ -39,6 +42,7 @@ namespace Workshop.ViewModel
             this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
             this.ProcessResultList.CollectionChanged += ProcessResultList_CollectionChanged;
             this.PropertyChanged += ImportPageViewModel_PropertyChanged;
+            this._dbContext = dbContext;
         }
 
         private void ImportPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -60,31 +64,63 @@ namespace Workshop.ViewModel
             this.IsValidSuccess = this.ProcessResultList.Count == 0;
         }
 
-        private void SubmitAction()
+        private async void SubmitAction()
         {
-            var employeeAccount = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeAccount>(this.Employees);
-            var employeeSalay = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSalay>(this.Employees, new MapperConfiguration(cfg=> cfg.CreateMap<EmployeeEntity, EmployeeSalay>().ForMember()));
-            var employeeSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceAndFund>(this.Employees);
-            var enterpriseSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EnterpriseSocialInsuranceAndFund>(this.Employees);
-            var employeeSocialInsuranceDetail = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceDetail>(this.Employees);
-            var aa = AutoMapperHelper.MapToList<EmployeeEntity, Employee>(this.Employees).Select(c => new Employee()
+            var task = InvokeHelper.InvokeOnUi<IEnumerable<Employee>>(null, () =>
             {
-                Year = c.Year,
-                Mounth = c.Mounth,
-                Batch = c.Batch,
-                SerialNum = c.SerialNum,
-                Dept = c.Dept,
-                Proj = c.Proj,
-                State = c.State,
-                Name = c.Name,
-                IDCard = c.IDCard,
-                Level = c.Level,
-                EmployeeAccount = employeeAccount.FirstOrDefault(d => d.Id == c.Id),
-                EmployeeSalay = employeeSalay.FirstOrDefault(d => d.Id == c.Id),
-                EmployeeSocialInsuranceAndFund = employeeSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
-                EnterpriseSocialInsuranceAndFund = enterpriseSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
-                EmployeeSocialInsuranceDetail = employeeSocialInsuranceDetail.FirstOrDefault(d => d.Id == c.Id)
+                var employeeAccount = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeAccount>(this.Employees);
+                var employeeSalay = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSalay>(this.Employees, new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    cfg.CreateMap<EmployeeEntity, EmployeeSalay>()
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum.Value));
+                }));
+                var employeeSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceAndFund>()
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum1.Value));
+                }));
+                var enterpriseSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EnterpriseSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    cfg.CreateMap<EmployeeEntity, EnterpriseSocialInsuranceAndFund>()
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum2.Value));
+                }));
+                var employeeSocialInsuranceDetail = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceDetail>(this.Employees, new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceDetail>();
+                }));
+                var resultEmployees = AutoMapperHelper.MapToList<EmployeeEntity, Employee>(this.Employees).Select(c => new Employee()
+                {
+                    Year = c.Year,
+                    Mounth = c.Mounth,
+                    Batch = c.Batch,
+                    SerialNum = c.SerialNum,
+                    Dept = c.Dept,
+                    Proj = c.Proj,
+                    State = c.State,
+                    Name = c.Name,
+                    IDCard = c.IDCard,
+                    Level = c.Level,
+                    EmployeeAccount = employeeAccount.FirstOrDefault(d => d.Id == c.Id),
+                    EmployeeSalay = employeeSalay.FirstOrDefault(d => d.Id == c.Id),
+                    EmployeeSocialInsuranceAndFund = employeeSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
+                    EnterpriseSocialInsuranceAndFund = enterpriseSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
+                    EmployeeSocialInsuranceDetail = employeeSocialInsuranceDetail.FirstOrDefault(d => d.Id == c.Id)
 
+                });
+                this._dbContext.Employee.AddRangeAsync(resultEmployees);
+                var result = this._dbContext.SaveChanges();
+
+                return resultEmployees;
+
+
+
+            }, async (t) =>
+            {
+              
             });
         }
 
@@ -116,47 +152,37 @@ namespace Workshop.ViewModel
                     this.ProcessResultList.Add(processResultDto);
 
                 }
-
             }
-
-
-
         }
 
-        private string GetSumMainFormula()
-        {
-            var group = Employees.GroupBy(c => c.Sum.Formula);
-            string mainFormula = default;
-            int seed = 0;
-            foreach (var groupItem in @group)
-            {
-                seed = Math.Max(seed, groupItem.Count());
-                if (seed == groupItem.Count())
-                {
-                    mainFormula = groupItem.Key;
-                }
-            }
-
-            return mainFormula;
-        }
 
 
         private void ImportAction()
         {
-            var result = DocHelper.ImportFromDelegator((importer) =>
+
+
+            var task = InvokeHelper.InvokeOnUi<dynamic>(null, () =>
             {
+                var result = DocHelper.ImportFromDelegator((importer) =>
+                {
 
-                var op1 = new ImportOption<EmployeeEntity>(0, 2);
-                op1.SheetName = "全职";
-                var r1 = importer.Process<EmployeeEntity>(op1);
+                    var op1 = new ImportOption<EmployeeEntity>(0, 2);
+                    op1.SheetName = "全职";
+                    var r1 = importer.Process<EmployeeEntity>(op1);
 
 
-                return new { Employees = r1 };
+                    return new {Employees = r1};
 
+                });
+                return result;
+
+
+            }, (t) =>
+            {
+                var data = t;
+                this.Employees = new ObservableCollection<EmployeeEntity>(data.Employees);
+                this.IsValidSuccess = null;
             });
-
-            this.Employees = new ObservableCollection<EmployeeEntity>(result.Employees);
-            this.IsValidSuccess = null;
 
         }
 

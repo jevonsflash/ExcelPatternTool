@@ -51,7 +51,7 @@ namespace Workshop.Helper
         /// <param name="action"></param>
         /// <param name="thenAction"></param>
         /// <returns></returns>
-        public static Task<T> InvokeOnUi<T>(string title, Func<T> action, Action thenAction = null)
+        public static Task<T> InvokeOnUi<T>(string title, Func<T> action, Action<T> thenAction = null)
         {
             var task = Task.Factory.StartNew(() =>
             {
@@ -70,7 +70,7 @@ namespace Workshop.Helper
                 {
 
                     ProgressWindow.StaticUnShowDialog();
-                    thenAction?.Invoke();
+                    thenAction?.Invoke(result);
                 });
                 return result;
             });
