@@ -1,9 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Workshop.Core.Domains
 {
     public class EmployeeSocialInsuranceDetail : BaseDomainInfo
     {
+        public Guid EmployeeId { get; set; }
+        public Employee Employee { get; set; }
         [DisplayName("基本养老险保险费（个人）")]
         public double BasicOldAgeInsurance { get; set; }
         [DisplayName("基本医疗保险费（个人）")]

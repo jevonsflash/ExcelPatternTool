@@ -7,7 +7,7 @@ namespace Workshop.Core.Validators
     public interface IValidatorProvider
     {
         Func<string, string> PropertyTypeMaper { get; set; }
-        IEnumerable<ValidatorInfo> GetValidatorInfos();
+        IEnumerable<ValidatorInfoItem> GetValidatorInfos();
         ValidateConvention GetConvention(string type);
     }
 }

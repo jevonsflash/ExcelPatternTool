@@ -17,12 +17,12 @@ namespace Workshop.Converter
 
             if (bool.Parse((string)parameter))
             {
-                return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+                return value != null && (bool)value ? Visibility.Visible : Visibility.Collapsed;
 
             }
             else
             {
-                return (bool)value ? Visibility.Collapsed : Visibility.Visible;
+                return value != null && (bool)value ? Visibility.Collapsed : Visibility.Visible;
 
             }
         }

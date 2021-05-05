@@ -5,6 +5,8 @@ namespace Workshop.Core.Domains
 {
     public class EmployeeSalay : BaseDomainInfo
     {
+        public Guid EmployeeId { get; set; }
+        public Employee Employee { get; set; }
         [DisplayName("培训试用期工资")]
         public double ProbationSalary { get; set; }
         [DisplayName("基本工资")]

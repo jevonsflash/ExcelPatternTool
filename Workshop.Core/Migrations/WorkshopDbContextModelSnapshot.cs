@@ -31,21 +31,6 @@ namespace Workshop.Core.Migrations
                     b.Property<string>("Dept")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("EmployeeAccountId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeSalayId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeSocialInsuranceAndFundId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmployeeSocialInsuranceDetailId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EnterpriseSocialInsuranceAndFundId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("IDCard")
                         .HasColumnType("TEXT");
 
@@ -75,16 +60,6 @@ namespace Workshop.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeAccountId");
-
-                    b.HasIndex("EmployeeSalayId");
-
-                    b.HasIndex("EmployeeSocialInsuranceAndFundId");
-
-                    b.HasIndex("EmployeeSocialInsuranceDetailId");
-
-                    b.HasIndex("EnterpriseSocialInsuranceAndFundId");
-
                     b.ToTable("Employee");
                 });
 
@@ -109,10 +84,16 @@ namespace Workshop.Core.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SocialInsuranceNum")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeAccount");
                 });
@@ -139,6 +120,9 @@ namespace Workshop.Core.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("HolidayOvertime")
@@ -212,6 +196,9 @@ namespace Workshop.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.ToTable("SalayInfo");
                 });
 
@@ -225,6 +212,9 @@ namespace Workshop.Core.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("PersonalIncomeTax")
@@ -256,6 +246,9 @@ namespace Workshop.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.ToTable("EmployeeSocialInsuranceAndFund");
                 });
 
@@ -277,6 +270,9 @@ namespace Workshop.Core.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("ProvidentFund")
                         .HasColumnType("REAL");
 
@@ -284,6 +280,9 @@ namespace Workshop.Core.Migrations
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeSocialInsuranceDetail");
                 });
@@ -295,6 +294,9 @@ namespace Workshop.Core.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("ProvidentFundEnterprise")
@@ -320,41 +322,69 @@ namespace Workshop.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.ToTable("EnterpriseSocialInsuranceAndFund");
+                });
+
+            modelBuilder.Entity("Workshop.Core.Domains.EmployeeAccount", b =>
+                {
+                    b.HasOne("Workshop.Core.Domains.Employee", "Employee")
+                        .WithOne("EmployeeAccount")
+                        .HasForeignKey("Workshop.Core.Domains.EmployeeAccount", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Workshop.Core.Domains.EmployeeSalay", b =>
+                {
+                    b.HasOne("Workshop.Core.Domains.Employee", "Employee")
+                        .WithOne("EmployeeSalay")
+                        .HasForeignKey("Workshop.Core.Domains.EmployeeSalay", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Workshop.Core.Domains.EmployeeSocialInsuranceAndFund", b =>
+                {
+                    b.HasOne("Workshop.Core.Domains.Employee", "Employee")
+                        .WithOne("EmployeeSocialInsuranceAndFund")
+                        .HasForeignKey("Workshop.Core.Domains.EmployeeSocialInsuranceAndFund", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Workshop.Core.Domains.EmployeeSocialInsuranceDetail", b =>
+                {
+                    b.HasOne("Workshop.Core.Domains.Employee", "Employee")
+                        .WithOne("EmployeeSocialInsuranceDetail")
+                        .HasForeignKey("Workshop.Core.Domains.EmployeeSocialInsuranceDetail", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Workshop.Core.Domains.EnterpriseSocialInsuranceAndFund", b =>
+                {
+                    b.HasOne("Workshop.Core.Domains.Employee", "Employee")
+                        .WithOne("EnterpriseSocialInsuranceAndFund")
+                        .HasForeignKey("Workshop.Core.Domains.EnterpriseSocialInsuranceAndFund", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Workshop.Core.Domains.Employee", b =>
                 {
-                    b.HasOne("Workshop.Core.Domains.EmployeeAccount", "EmployeeAccount")
-                        .WithMany()
-                        .HasForeignKey("EmployeeAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Workshop.Core.Domains.EmployeeSalay", "EmployeeSalay")
-                        .WithMany()
-                        .HasForeignKey("EmployeeSalayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Workshop.Core.Domains.EmployeeSocialInsuranceAndFund", "EmployeeSocialInsuranceAndFund")
-                        .WithMany()
-                        .HasForeignKey("EmployeeSocialInsuranceAndFundId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Workshop.Core.Domains.EmployeeSocialInsuranceDetail", "EmployeeSocialInsuranceDetail")
-                        .WithMany()
-                        .HasForeignKey("EmployeeSocialInsuranceDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Workshop.Core.Domains.EnterpriseSocialInsuranceAndFund", "EnterpriseSocialInsuranceAndFund")
-                        .WithMany()
-                        .HasForeignKey("EnterpriseSocialInsuranceAndFundId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("EmployeeAccount");
 
                     b.Navigation("EmployeeSalay");

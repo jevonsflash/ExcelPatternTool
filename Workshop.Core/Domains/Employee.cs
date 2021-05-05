@@ -31,11 +31,6 @@ namespace Workshop.Core.Domains
         [DisplayName("工作性质")]
         public string JobCate { get; set; }
 
-        public Guid EmployeeAccountId { get; set; }
-        public Guid EmployeeSalayId { get; set; }
-        public Guid EmployeeSocialInsuranceAndFundId { get; set; }
-        public Guid EnterpriseSocialInsuranceAndFundId { get; set; }
-        public Guid EmployeeSocialInsuranceDetailId { get; set; }
         [DisplayName("员工银行账号信息")]
         public EmployeeAccount EmployeeAccount { get; set; }
         [DisplayName("员工薪酬信息")]

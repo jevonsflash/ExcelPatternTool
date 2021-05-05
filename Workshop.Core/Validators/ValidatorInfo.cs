@@ -7,9 +7,14 @@ namespace Workshop.Core.Validators
 {
     public class ValidatorInfo
     {
+        public IEnumerable<ValidatorInfoItem> List { get; set; }
+    }
+
+    public class ValidatorInfoItem
+    {
         private string _description;
 
-        public ValidatorInfo()
+        public ValidatorInfoItem()
         {
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;

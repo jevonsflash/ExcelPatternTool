@@ -1,9 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Workshop.Core.Domains
 {
     public class EnterpriseSocialInsuranceAndFund : BaseDomainInfo
     {
+        public Guid EmployeeId { get; set; }
+        public Employee Employee { get; set; }
         [DisplayName("社保企业")]
         public double SocialInsuranceEnterprise { get; set; }
         [DisplayName("补社保企业")]

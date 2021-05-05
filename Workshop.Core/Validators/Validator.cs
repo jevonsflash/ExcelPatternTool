@@ -16,7 +16,7 @@ namespace Workshop.Core.Validators
         private IValidatorProvider validatorProvider;
         private Dictionary<string, string> aliasDictionary;
 
-        public IEnumerable<ValidatorInfo> ValidatorInfos { get; set; }
+        public IEnumerable<ValidatorInfoItem> ValidatorInfos { get; set; }
         public IEnumerable<ProcessResult> Validate(object obj)
         {
 

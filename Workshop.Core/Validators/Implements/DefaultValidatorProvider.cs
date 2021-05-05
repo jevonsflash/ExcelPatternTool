@@ -24,8 +24,9 @@ namespace Workshop.Core.Validators
         public Func<string, string> PropertyTypeMaper { get; set; }
         public void Init()
         {
-            var generalOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
+            var generalOne = new Func<ValidatorInfoItem, object, ProcessResult>((c, e) =>
             {
+
                 var lambdaParser = new LambdaParser();
                 var propName = PropertyTypeMaper?.Invoke(c.PropName);
 
@@ -73,7 +74,7 @@ namespace Workshop.Core.Validators
 
             });
 
-            var regularOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
+            var regularOne = new Func<ValidatorInfoItem, object, ProcessResult>((c, e) =>
             {
 
 
@@ -143,10 +144,10 @@ namespace Workshop.Core.Validators
             }
         }
 
-        public IEnumerable<ValidatorInfo> GetValidatorInfos()
+        public IEnumerable<ValidatorInfoItem> GetValidatorInfos()
         {
-            var result = LocalDataHelper.ReadCollectionLocal<ValidatorInfo>();
-            return result;
+            var result = LocalDataHelper.ReadObjectLocal<ValidatorInfo>();
+            return result.List;
         }
 
         public ValidateConvention GetConvention(string type)

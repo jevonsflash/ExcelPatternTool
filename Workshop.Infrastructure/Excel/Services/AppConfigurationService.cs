@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Configuration.Memory;
 
 namespace Workshop.Infrastructure.Services
 {
@@ -14,9 +15,9 @@ namespace Workshop.Infrastructure.Services
         public static IConfiguration Configuration { get; set; }
         static AppConfigurtaionService()
         {
-            Configuration = new ConfigurationBuilder()
-                .Add(new JsonConfigurationSource { Path = "appsettings.json", ReloadOnChange = true })
-                .Build();
+            var builder = new ConfigurationBuilder();
+            builder.Add(new JsonConfigurationSource { Path = "appsettings.json", ReloadOnChange = true });
+            Configuration = builder.Build();
         }
     }
 }

@@ -50,15 +50,32 @@ namespace Workshop.ViewModel
 
             var task = InvokeHelper.InvokeOnUi<IList<Employee>>(null, () =>
         {
-            var result = this._dbContext.Employee.Where(c => true).ToList();
+            var result = this._dbContext.Employee.Where(c => true)
+                .Include(c=>c.EmployeeAccount)
+                .Include(c=>c.EmployeeSalay)
+                .Include(c=>c.EmployeeSocialInsuranceAndFund)
+                .Include(c=>c.EnterpriseSocialInsuranceAndFund)
+                .Include(c=>c.EmployeeSocialInsuranceDetail)
+                
+                .ToList();
             return result;
 
 
         }, (t) =>
              {
                  data = t;
-                 this.EmployeeInfos = new ObservableCollection<Employee>(data);
-                 this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
+                 try
+                 {
+                     this.EmployeeInfos = new ObservableCollection<Employee>(data);
+                     this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
+
+
+                 }
+                 catch (Exception e)
+                 {
+                     Console.WriteLine(e);
+                     throw;
+                 }
              });
 
 
@@ -68,11 +85,7 @@ namespace Workshop.ViewModel
         {
             if (e.PropertyName == nameof(this.EmployeeInfos))
             {
-                if (this.EmployeeInfos != null && this.EmployeeInfos.Count > 0)
-                {
-                    LocalDataHelper.SaveCollectionLocal(this.EmployeeInfos);
-
-                }
+                
             }
         }
 

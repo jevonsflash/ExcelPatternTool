@@ -1,9 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Workshop.Core.Domains
 {
     public class EmployeeAccount : BaseDomainInfo
     {
+
+        public Guid EmployeeId { get; set; }
+        public Employee Employee { get; set; }
+
         [DisplayName("账号")]
         public string AccountNum { get; set; }
 

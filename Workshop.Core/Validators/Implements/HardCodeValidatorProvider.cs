@@ -23,7 +23,7 @@ namespace Workshop.Core.Validators
         public Func<string, string> PropertyTypeMaper { get; set; }
         public void Init()
         {
-            var generalOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
+            var generalOne = new Func<ValidatorInfoItem, object, ProcessResult>((c, e) =>
             {
                 var lambdaParser = new LambdaParser();
                 var propName = PropertyTypeMaper?.Invoke(c.PropName);
@@ -72,7 +72,7 @@ namespace Workshop.Core.Validators
 
             });
 
-            var regularOne = new Func<ValidatorInfo, object, ProcessResult>((c, e) =>
+            var regularOne = new Func<ValidatorInfoItem, object, ProcessResult>((c, e) =>
             {
 
 
@@ -136,10 +136,10 @@ namespace Workshop.Core.Validators
             }
         }
 
-        public IEnumerable<ValidatorInfo> GetValidatorInfos()
+        public IEnumerable<ValidatorInfoItem> GetValidatorInfos()
         {
-            var result = new List<ValidatorInfo>();
-            result.Add(new ValidatorInfo()
+            var result = new List<ValidatorInfoItem>();
+            result.Add(new ValidatorInfoItem()
             {
                 Description = "需要满足正则表达式",
                 Expression = @"^ROUND\(Q\d+\+R\d+\+S\d+\+T\d+\+U\d+\+V\d+\+W\d+\+X\d+\+Y\d+\+Z\d+-AA\d+\+AB\d+\+AC\d+\+AD\d+\+AE\d+-AF\d+\+AG\d+\+AH\d+\+AI\d+-AJ\d+\+AK\d+-AL\d+\+AM\d+,2\)$",

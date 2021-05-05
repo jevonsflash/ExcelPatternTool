@@ -8,10 +8,34 @@ namespace Workshop.Core.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Employee",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", nullable: false),
+                    Mounth = table.Column<int>(type: "INTEGER", nullable: false),
+                    Batch = table.Column<string>(type: "TEXT", nullable: true),
+                    SerialNum = table.Column<string>(type: "TEXT", nullable: true),
+                    Dept = table.Column<string>(type: "TEXT", nullable: true),
+                    Proj = table.Column<string>(type: "TEXT", nullable: true),
+                    State = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    IDCard = table.Column<string>(type: "TEXT", nullable: true),
+                    Level = table.Column<string>(type: "TEXT", nullable: true),
+                    JobCate = table.Column<string>(type: "TEXT", nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employee", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeAccount",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AccountNum = table.Column<string>(type: "TEXT", nullable: true),
                     AccountBankAlias = table.Column<string>(type: "TEXT", nullable: true),
                     AccountBankName = table.Column<string>(type: "TEXT", nullable: true),
@@ -22,6 +46,12 @@ namespace Workshop.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeAccount", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeAccount_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -29,6 +59,7 @@ namespace Workshop.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     SocialInsurancePersonal = table.Column<double>(type: "REAL", nullable: false),
                     SupplementarySocialInsurancePersonal = table.Column<double>(type: "REAL", nullable: false),
                     ProvidentFundPersonal = table.Column<double>(type: "REAL", nullable: false),
@@ -44,6 +75,12 @@ namespace Workshop.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeSocialInsuranceAndFund", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeSocialInsuranceAndFund_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,6 +88,7 @@ namespace Workshop.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     BasicOldAgeInsurance = table.Column<double>(type: "REAL", nullable: false),
                     BasicMedicalInsurance = table.Column<double>(type: "REAL", nullable: false),
                     UnemploymentInsurance = table.Column<double>(type: "REAL", nullable: false),
@@ -61,6 +99,12 @@ namespace Workshop.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeSocialInsuranceDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeSocialInsuranceDetail_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,6 +112,7 @@ namespace Workshop.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     SocialInsuranceEnterprise = table.Column<double>(type: "REAL", nullable: false),
                     SupplementarySocialInsuranceEnterprise = table.Column<double>(type: "REAL", nullable: false),
                     ProvidentFundEnterprise = table.Column<double>(type: "REAL", nullable: false),
@@ -80,6 +125,12 @@ namespace Workshop.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EnterpriseSocialInsuranceAndFund", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnterpriseSocialInsuranceAndFund_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,6 +138,7 @@ namespace Workshop.Core.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProbationSalary = table.Column<double>(type: "REAL", nullable: false),
                     BasicSalary = table.Column<double>(type: "REAL", nullable: false),
                     SkillSalary = table.Column<double>(type: "REAL", nullable: false),
@@ -120,97 +172,47 @@ namespace Workshop.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SalayInfo", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employee",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    Mounth = table.Column<int>(type: "INTEGER", nullable: false),
-                    Batch = table.Column<string>(type: "TEXT", nullable: true),
-                    SerialNum = table.Column<string>(type: "TEXT", nullable: true),
-                    Dept = table.Column<string>(type: "TEXT", nullable: true),
-                    Proj = table.Column<string>(type: "TEXT", nullable: true),
-                    State = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    IDCard = table.Column<string>(type: "TEXT", nullable: true),
-                    Level = table.Column<string>(type: "TEXT", nullable: true),
-                    JobCate = table.Column<string>(type: "TEXT", nullable: true),
-                    EmployeeAccountId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EmployeeSalayId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EmployeeSocialInsuranceAndFundId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EnterpriseSocialInsuranceAndFundId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EmployeeSocialInsuranceDetailId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employee_EmployeeAccount_EmployeeAccountId",
-                        column: x => x.EmployeeAccountId,
-                        principalTable: "EmployeeAccount",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employee_EmployeeSocialInsuranceAndFund_EmployeeSocialInsuranceAndFundId",
-                        column: x => x.EmployeeSocialInsuranceAndFundId,
-                        principalTable: "EmployeeSocialInsuranceAndFund",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employee_EmployeeSocialInsuranceDetail_EmployeeSocialInsuranceDetailId",
-                        column: x => x.EmployeeSocialInsuranceDetailId,
-                        principalTable: "EmployeeSocialInsuranceDetail",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employee_EnterpriseSocialInsuranceAndFund_EnterpriseSocialInsuranceAndFundId",
-                        column: x => x.EnterpriseSocialInsuranceAndFundId,
-                        principalTable: "EnterpriseSocialInsuranceAndFund",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employee_SalayInfo_EmployeeSalayId",
-                        column: x => x.EmployeeSalayId,
-                        principalTable: "SalayInfo",
+                        name: "FK_SalayInfo_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_EmployeeAccountId",
-                table: "Employee",
-                column: "EmployeeAccountId");
+                name: "IX_EmployeeAccount_EmployeeId",
+                table: "EmployeeAccount",
+                column: "EmployeeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_EmployeeSalayId",
-                table: "Employee",
-                column: "EmployeeSalayId");
+                name: "IX_EmployeeSocialInsuranceAndFund_EmployeeId",
+                table: "EmployeeSocialInsuranceAndFund",
+                column: "EmployeeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_EmployeeSocialInsuranceAndFundId",
-                table: "Employee",
-                column: "EmployeeSocialInsuranceAndFundId");
+                name: "IX_EmployeeSocialInsuranceDetail_EmployeeId",
+                table: "EmployeeSocialInsuranceDetail",
+                column: "EmployeeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_EmployeeSocialInsuranceDetailId",
-                table: "Employee",
-                column: "EmployeeSocialInsuranceDetailId");
+                name: "IX_EnterpriseSocialInsuranceAndFund_EmployeeId",
+                table: "EnterpriseSocialInsuranceAndFund",
+                column: "EmployeeId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_EnterpriseSocialInsuranceAndFundId",
-                table: "Employee",
-                column: "EnterpriseSocialInsuranceAndFundId");
+                name: "IX_SalayInfo_EmployeeId",
+                table: "SalayInfo",
+                column: "EmployeeId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Employee");
-
             migrationBuilder.DropTable(
                 name: "EmployeeAccount");
 
@@ -225,6 +227,9 @@ namespace Workshop.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "SalayInfo");
+
+            migrationBuilder.DropTable(
+                name: "Employee");
         }
     }
 }

@@ -13,10 +13,10 @@ namespace Workshop.Core.Validators
             
         }
 
-        public ValidateConvention(Func<ValidatorInfo, object, ProcessResult> convention)
+        public ValidateConvention(Func<ValidatorInfoItem, object, ProcessResult> convention)
         {
             this.Convention = convention;
         }
-        public Func<ValidatorInfo, object, ProcessResult> Convention { get; set; }
+        public Func<ValidatorInfoItem, object, ProcessResult> Convention { get; set; }
     }
 }
