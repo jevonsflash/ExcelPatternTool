@@ -11,6 +11,15 @@
             return Value.ToString();
         }
 
+        public FormulatedType()
+        {
+            
+        }
+
+        public FormulatedType(T value)
+        {
+            this.Value = value;
+        }
         public object GetValue()
         {
             return Value;

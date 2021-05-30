@@ -5,6 +5,14 @@
         public T Value { get; set; }
         public string Comment { get; set; }
 
+        public CommentedType()
+        {
+            
+        }
+        public CommentedType(T value)
+        {
+            this.Value = value;
+        }
         public override string ToString()
         {
             return Value.ToString();

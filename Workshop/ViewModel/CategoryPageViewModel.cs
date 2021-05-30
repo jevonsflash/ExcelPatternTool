@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using AutoMapper;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -20,8 +21,12 @@ using Workshop.Common;
 using Workshop.Control;
 using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
+using Workshop.Core.Entites;
 using Workshop.Helper;
+using Workshop.Infrastructure.Core;
 using Workshop.Infrastructure.Helper;
+using Workshop.Infrastructure.Models;
+using Workshop.Infrastructure.Services;
 using Workshop.Model;
 using Workshop.View;
 namespace Workshop.ViewModel
@@ -51,12 +56,12 @@ namespace Workshop.ViewModel
             var task = InvokeHelper.InvokeOnUi<IList<Employee>>(null, () =>
         {
             var result = this._dbContext.Employee.Where(c => true)
-                .Include(c=>c.EmployeeAccount)
-                .Include(c=>c.EmployeeSalay)
-                .Include(c=>c.EmployeeSocialInsuranceAndFund)
-                .Include(c=>c.EnterpriseSocialInsuranceAndFund)
-                .Include(c=>c.EmployeeSocialInsuranceDetail)
-                
+                .Include(c => c.EmployeeAccount)
+                .Include(c => c.EmployeeSalay)
+                .Include(c => c.EmployeeSocialInsuranceAndFund)
+                .Include(c => c.EnterpriseSocialInsuranceAndFund)
+                .Include(c => c.EmployeeSocialInsuranceDetail)
+
                 .ToList();
             return result;
 
@@ -85,7 +90,8 @@ namespace Workshop.ViewModel
         {
             if (e.PropertyName == nameof(this.EmployeeInfos))
             {
-                
+                SubmitCommand.RaiseCanExecuteChanged();
+
             }
         }
 
@@ -178,8 +184,108 @@ namespace Workshop.ViewModel
             if (odInfos.Count > 0)
             {
 
+                var defaultFontName = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontName"];
+                var defaultFontColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontColor"];
+                short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontSize"]);
+                var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
+                var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
 
-                //DocHelper.SaveTo(odInfos);
+                var employeeEntitys = AutoMapperHelper.MapToList<Employee, EmployeeEntity>(this.EmployeeInfos, new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<object, IStyledType>().ConvertUsing((s, d) =>
+                    {
+                        IStyledType result = null;
+                        switch (s)
+                        {
+                            case string stringValue:
+                                result = new StyledType<string>(stringValue);
+                                break;
+                            case short _:
+                            case long _:
+                            case int _:
+                                result = new StyledType<long>((long)s);
+                                break;
+                            case float _:
+                            case double _:
+                            case decimal _:
+                                result = new StyledType<double>(double.Parse(s.ToString()));
+                                break;
+                            case DateTime dateTimeValue:
+                                result = new StyledType<DateTime>(dateTimeValue);
+                                break;
+                            case bool boolValue:
+                                result = new StyledType<bool>(boolValue);
+                                break;
+                        }
+                        return result;
+                    });
+                    cfg.CreateMap<object, ICommentedType>().ConvertUsing((s, d) =>
+                    {
+                        ICommentedType result = null;
+                        switch (s)
+                        {
+                            case string stringValue:
+                                result = new CommentedType<string>(stringValue);
+                                break;
+                            case short _:
+                            case long _:
+                            case int _:
+                                result = new CommentedType<long>((long)s);
+                                break;
+                            case float _:
+                            case double _:
+                            case decimal _:
+                                result = new CommentedType<double>(double.Parse(s.ToString()));
+                                break;
+                            case DateTime dateTimeValue:
+                                result = new CommentedType<DateTime>(dateTimeValue);
+                                break;
+                            case bool boolValue:
+                                result = new CommentedType<bool>(boolValue);
+                                break;
+                        }
+                        return result;
+                    });
+                    cfg.CreateMap<object, IFormulatedType>().ConvertUsing((s, d) =>
+                    {
+                        IFormulatedType result = null;
+                        switch (s)
+                        {
+                            case string stringValue:
+                                result = new FormulatedType<string>(stringValue);
+                                break;
+                            case short _:
+                            case long _:
+                            case int _:
+                                result = new FormulatedType<long>((long)s);
+                                break;
+                            case float _:
+                            case double _:
+                            case decimal _:
+                                result = new FormulatedType<double>(double.Parse(s.ToString()));
+                                break;
+                            case DateTime dateTimeValue:
+                                result = new FormulatedType<DateTime>(dateTimeValue);
+                                break;
+                            case bool boolValue:
+                                result = new FormulatedType<bool>(boolValue);
+                                break;
+                        }
+                        return result;
+                    });
+                }));
+                var aa = employeeEntitys;
+                //var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
+                //{
+
+                //    return employeeEntitys;
+
+
+
+                //}, async (t) =>
+                //{
+
+                //});
             }
 
         }

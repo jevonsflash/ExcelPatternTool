@@ -15,6 +15,16 @@ namespace Workshop.Infrastructure.Core
         {
             return Value.ToString();
         }
+
+        public FullAdvancedType()
+        {
+            
+        }
+        public FullAdvancedType(T value)
+        {
+            this.Value = value;
+        }
+
         public object GetValue()
         {
             return Value;

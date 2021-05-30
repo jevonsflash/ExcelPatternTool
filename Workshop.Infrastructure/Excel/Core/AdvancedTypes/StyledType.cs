@@ -7,6 +7,16 @@ namespace Workshop.Infrastructure.Core
         public T Value { get; set; }
         public string Comment { get; set; }
         public StyleMetadata StyleMetadata { get; set; }
+
+        public StyledType()
+        {
+
+        }
+
+        public StyledType(T value)
+        {
+            this.Value = value;
+        }
         public override string ToString()
         {
             return Value.ToString();

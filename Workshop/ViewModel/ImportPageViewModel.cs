@@ -104,6 +104,7 @@ namespace Workshop.ViewModel
                     Name = c.Name,
                     IDCard = c.IDCard,
                     Level = c.Level,
+                    JobCate = c.JobCate,
                     EmployeeAccount = employeeAccount.FirstOrDefault(d => d.Id == c.Id),
                     EmployeeSalay = employeeSalay.FirstOrDefault(d => d.Id == c.Id),
                     EmployeeSocialInsuranceAndFund = employeeSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
