@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Workshop.Infrastructure.Core;
 using Workshop.Infrastructure.Helper;
+using Workshop.Infrastructure.Interfaces;
 using Workshop.Infrastructure.Models;
 using Workshop.Model;
 using Workshop.Model.Excel;
@@ -21,8 +22,7 @@ namespace Workshop.Helper
 
         public static void SaveTo<T>(IList<T> src, ExportOption exportOption) where T : class
         {
-            Exporter exporter = new Exporter();
-            var buff = exporter.ProcessGetBytes(src, exportOption);
+          
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = CommonHelper.DesktopPath;
@@ -37,15 +37,18 @@ namespace Workshop.Helper
             //点了保存按钮进入
             if (result == true)
             {
-                var aa = saveFileDialog.FileName;
-                FileStream fs = new FileStream(aa, FileMode.Create);
+                var filePath = saveFileDialog.FileName;
+                Exporter exporter = new Exporter();
+                exporter.DumpXlsx(filePath);
+                var buff = exporter.ProcessGetBytes(src, exportOption);
+                FileStream fs = new FileStream(filePath, FileMode.Create);
 
                 fs.Write(buff, 0, buff.Length);
                 fs.Close();
             }
         }
 
-        public static IList<T> ImportFrom<T>(ImportOption importOption = null)
+        public static IList<T> ImportFrom<T>(ImportOption importOption = null) where T : IExcelEntity
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
@@ -66,7 +69,7 @@ namespace Workshop.Helper
         }
 
 
-        public static List<T> ImportFromPath<T>(string filePath, ImportOption importOption)
+        public static List<T> ImportFromPath<T>(string filePath, ImportOption importOption) where T : IExcelEntity
         {
             if (importOption == null)
             {
@@ -171,7 +174,8 @@ namespace Workshop.Helper
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                MessageBox.Show(filePath + " 格式错误");
+                var msg = $"{filePath} 格式错误\n 错误信息：{e.Message}";
+                MessageBox.Show(msg);
             }
 
             return default;

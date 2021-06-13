@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -24,12 +25,21 @@ namespace Workshop.Infrastructure.Core
             base.Document = document;
         }
 
-        public IEnumerable<T> ReadRows<T>(IImportOption importOption)
+        public IEnumerable<T> ReadRows<T>(IImportOption importOption) where T : IExcelEntity
         {
 
             List<T> result = new List<T>();
             var columns = GetTypeDefinition(typeof(T));
-            sheet = Document.GetSheet(importOption.SheetName);
+            try
+            {
+                sheet = Document.GetSheet(importOption.SheetName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("无法获取Sheet" + e.Message);
+            }
+
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
             for (int i = sheet.FirstRowNum + importOption.SkipRows; i <= lastRow; i++)
@@ -38,20 +48,36 @@ namespace Workshop.Infrastructure.Core
                 IRow row = sheet.GetRow(i);
                 if (row != null)
                 {
-                    objectInstance = GetDataToObject<T>(row, columns);
+                    try
+                    {
+                        objectInstance = GetDataToObject<T>(row, columns);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw new Exception($"处理行失败,位置{row.RowNum}:{ e.Message}");
+                    }
                     result.Add(objectInstance);
                 }
-
             }
             return result;
 
         }
 
-        public IEnumerable<T> ReadRows<T>(int sheetNumber, int rowsToSkip)
+        public IEnumerable<T> ReadRows<T>(int sheetNumber, int rowsToSkip) where T : IExcelEntity
         {
             List<T> result = new List<T>();
             var columns = GetTypeDefinition(typeof(T));
-            sheet = Document.GetSheetAt(sheetNumber);
+            try
+            {
+                sheet = Document.GetSheetAt(sheetNumber);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new Exception("无法获取Sheet" + e.Message);
+            }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
             for (int i = firstRow + rowsToSkip; i <= lastRow; i++)
@@ -60,7 +86,18 @@ namespace Workshop.Infrastructure.Core
                 IRow row = sheet.GetRow(i);
                 if (row != null)
                 {
-                    objectInstance = GetDataToObject<T>(row, columns);
+                    try
+                    {
+
+
+                        objectInstance = GetDataToObject<T>(row, columns);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw new Exception($"处理行失败,位置{row.RowNum}:{ e.Message}");
+                    }
                     result.Add(objectInstance);
                 }
 

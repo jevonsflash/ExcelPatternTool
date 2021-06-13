@@ -11,7 +11,7 @@ namespace Workshop.Infrastructure.Models
         {
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
-
+            SheetName = "未命名";
         }
 
         public Type EntityType { get; set; }
@@ -30,6 +30,7 @@ namespace Workshop.Infrastructure.Models
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
             EntityType = typeof(T);
+            SheetName = "未命名";
 
         }
 

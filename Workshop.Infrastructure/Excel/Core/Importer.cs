@@ -32,7 +32,7 @@ namespace Workshop.Infrastructure.Core
             return true;
         }
 
-        public IEnumerable<T> Process<T>(IImportOption importOption)
+        public IEnumerable<T> Process<T>(IImportOption importOption) where T : IExcelEntity
         {
             IEnumerable<T> result;
             if (string.IsNullOrEmpty(importOption.SheetName))

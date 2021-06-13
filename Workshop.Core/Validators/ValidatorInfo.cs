@@ -13,12 +13,13 @@ namespace Workshop.Core.Validators
     public class ValidatorInfoItem
     {
         private string _description;
+        private string _expression;
 
         public ValidatorInfoItem()
         {
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;
-            ProcessResult.Content = Description;
+            ProcessResult.Content = Description + Expression;
             TargetName = "Value";//or Formula
 
         }
@@ -32,7 +33,7 @@ namespace Workshop.Core.Validators
             set
             {
                 _description = value;
-                ProcessResult.Content = _description;
+                ProcessResult.Content = _description + _expression;
             }
         }
 
@@ -40,6 +41,14 @@ namespace Workshop.Core.Validators
 
         public ProcessResult ProcessResult { get; set; }
 
-        public string Expression { get; set; }
+        public string Expression
+        {
+            get => _expression;
+            set
+            {
+                _expression = value;
+                ProcessResult.Content = _description + _expression;
+            }
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace Workshop.Core.Validators
                 var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
                 validator.Expression = ValidateItem(genericType, validator.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
-                currentResult.Column = validator.PropName;
+                currentResult.KeyName = $"{(obj as EmployeeEntity).Name} 的 {validator.PropName}" ;
                 result.Add(currentResult);
             }
 

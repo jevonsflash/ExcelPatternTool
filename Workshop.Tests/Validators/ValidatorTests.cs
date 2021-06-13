@@ -49,7 +49,7 @@ namespace Workshop.Core.Validators.Tests
                         Row = row,
                         Level = level,
                         Content = c.Content,
-                        Column = c.Column,
+                        KeyName = c.KeyName,
                     });
 
 

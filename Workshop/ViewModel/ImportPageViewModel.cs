@@ -121,7 +121,7 @@ namespace Workshop.ViewModel
 
             }, async (t) =>
             {
-              
+
             });
         }
 
@@ -131,7 +131,7 @@ namespace Workshop.ViewModel
             foreach (var item in this.Employees)
             {
 
-                var row = Employees.IndexOf(item);
+                var row =item.RowNumber+1;
                 var id = ProcessResultList.Count + 1;
                 var level = 1;
 
@@ -142,9 +142,10 @@ namespace Workshop.ViewModel
                     {
                         Id = id,
                         Row = row,
+                        Column = c.Column,
                         Level = level,
                         Content = c.Content,
-                        Column = c.Column,
+                        KeyName = c.KeyName,
                     });
 
 
@@ -161,7 +162,7 @@ namespace Workshop.ViewModel
         private void ImportAction()
         {
 
-
+            this.Employees.Clear();
             var task = InvokeHelper.InvokeOnUi<dynamic>(null, () =>
             {
                 var result = DocHelper.ImportFromDelegator((importer) =>
@@ -172,7 +173,7 @@ namespace Workshop.ViewModel
                     var r1 = importer.Process<EmployeeEntity>(op1);
 
 
-                    return new {Employees = r1};
+                    return new { Employees = r1 };
 
                 });
                 return result;
@@ -181,8 +182,13 @@ namespace Workshop.ViewModel
             }, (t) =>
             {
                 var data = t;
-                this.Employees = new ObservableCollection<EmployeeEntity>(data.Employees);
-                this.IsValidSuccess = null;
+                if (data != null)
+                {
+
+
+                    this.Employees = new ObservableCollection<EmployeeEntity>(data.Employees);
+                    this.IsValidSuccess = null;
+                }
             });
 
         }

@@ -190,102 +190,95 @@ namespace Workshop.ViewModel
                 var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
                 var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
 
-                var employeeEntitys = AutoMapperHelper.MapToList<Employee, EmployeeEntity>(this.EmployeeInfos, new MapperConfiguration(cfg =>
+                var employeeEntitys = this.EmployeeInfos.Select(c => new EmployeeEntity
                 {
-                    cfg.CreateMap<object, IStyledType>().ConvertUsing((s, d) =>
-                    {
-                        IStyledType result = null;
-                        switch (s)
-                        {
-                            case string stringValue:
-                                result = new StyledType<string>(stringValue);
-                                break;
-                            case short _:
-                            case long _:
-                            case int _:
-                                result = new StyledType<long>((long)s);
-                                break;
-                            case float _:
-                            case double _:
-                            case decimal _:
-                                result = new StyledType<double>(double.Parse(s.ToString()));
-                                break;
-                            case DateTime dateTimeValue:
-                                result = new StyledType<DateTime>(dateTimeValue);
-                                break;
-                            case bool boolValue:
-                                result = new StyledType<bool>(boolValue);
-                                break;
-                        }
-                        return result;
-                    });
-                    cfg.CreateMap<object, ICommentedType>().ConvertUsing((s, d) =>
-                    {
-                        ICommentedType result = null;
-                        switch (s)
-                        {
-                            case string stringValue:
-                                result = new CommentedType<string>(stringValue);
-                                break;
-                            case short _:
-                            case long _:
-                            case int _:
-                                result = new CommentedType<long>((long)s);
-                                break;
-                            case float _:
-                            case double _:
-                            case decimal _:
-                                result = new CommentedType<double>(double.Parse(s.ToString()));
-                                break;
-                            case DateTime dateTimeValue:
-                                result = new CommentedType<DateTime>(dateTimeValue);
-                                break;
-                            case bool boolValue:
-                                result = new CommentedType<bool>(boolValue);
-                                break;
-                        }
-                        return result;
-                    });
-                    cfg.CreateMap<object, IFormulatedType>().ConvertUsing((s, d) =>
-                    {
-                        IFormulatedType result = null;
-                        switch (s)
-                        {
-                            case string stringValue:
-                                result = new FormulatedType<string>(stringValue);
-                                break;
-                            case short _:
-                            case long _:
-                            case int _:
-                                result = new FormulatedType<long>((long)s);
-                                break;
-                            case float _:
-                            case double _:
-                            case decimal _:
-                                result = new FormulatedType<double>(double.Parse(s.ToString()));
-                                break;
-                            case DateTime dateTimeValue:
-                                result = new FormulatedType<DateTime>(dateTimeValue);
-                                break;
-                            case bool boolValue:
-                                result = new FormulatedType<bool>(boolValue);
-                                break;
-                        }
-                        return result;
-                    });
-                }));
-                var aa = employeeEntitys;
-                //var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
-                //{
+                    Year = c.Year,
+                    Mounth = c.Mounth,
+                    Batch = c.Batch,
+                    SerialNum = c.SerialNum,
+                    Dept = c.Dept,
+                    Proj = c.Proj,
+                    State = c.State,
+                    Name = new StyledType<string>(c.Name),
+                    IDCard = new StyledType<string>(c.IDCard),
+                    Level = c.Level,
+                    JobCate = c.JobCate,
+                    AccountNum = c.EmployeeAccount.AccountNum,
+                    AccountBankAlias = c.EmployeeAccount.AccountBankAlias,
+                    AccountBankName = new FormulatedType<string>(c.EmployeeAccount.AccountBankName),
+                    AccountBankLoc = new FormulatedType<string>(c.EmployeeAccount.AccountBankLoc),
+                    SocialInsuranceNum = c.EmployeeAccount.SocialInsuranceNum,
+                    ProbationSalary = c.EmployeeSalay.ProbationSalary,
+                    BasicSalary = c.EmployeeSalay.BasicSalary,
+                    SkillSalary = c.EmployeeSalay.SkillSalary,
+                    PerformanceBonus = c.EmployeeSalay.PerformanceBonus,
+                    PostAllowance = c.EmployeeSalay.PostAllowance,
+                    OtherAllowances = c.EmployeeSalay.OtherAllowances,
+                    SalesBonus = c.EmployeeSalay.SalesBonus,
+                    Bonus1 = c.EmployeeSalay.Bonus1,
+                    Bonus2 = c.EmployeeSalay.Bonus2,
+                    PerformanceRewards = c.EmployeeSalay.PerformanceRewards,
+                    PerformanceDeduct = c.EmployeeSalay.PerformanceDeduct,
+                    NightAllowances = c.EmployeeSalay.NightAllowances,
+                    OrdinaryOvertime = c.EmployeeSalay.OrdinaryOvertime,
+                    HolidayOvertime = c.EmployeeSalay.HolidayOvertime,
+                    AgeBonus = c.EmployeeSalay.AgeBonus,
+                    AttendanceDeduct = c.EmployeeSalay.AttendanceDeduct,
+                    MonthlyAttendance = c.EmployeeSalay.MonthlyAttendance,
+                    QuarterlyAttendance = c.EmployeeSalay.QuarterlyAttendance,
+                    OtherRewards = c.EmployeeSalay.OtherRewards,
+                    OtherDeduct = c.EmployeeSalay.OtherDeduct,
+                    SupplementaryRewards = c.EmployeeSalay.SupplementaryRewards,
+                    SupplementaryDeduct = c.EmployeeSalay.SupplementaryDeduct,
+                    ParttimeSalary = c.EmployeeSalay.ParttimeSalary,
+                    Sum = new FullAdvancedType<double>(c.EmployeeSalay.Sum),
+                    HostelAllowances = c.EmployeeSalay.HostelAllowances,
+                    MealAllowances = c.EmployeeSalay.MealAllowances,
+                    TemporaryTax = c.EmployeeSalay.TemporaryTax,
+                    SumWithTemporaryTax = new FullAdvancedType<double>(c.EmployeeSalay.SumWithTemporaryTax),
+                    SocialInsurancePersonal = c.EmployeeSocialInsuranceAndFund.SocialInsurancePersonal,
+                    SupplementarySocialInsurancePersonal =
+                        c.EmployeeSocialInsuranceAndFund.SupplementarySocialInsurancePersonal,
+                    ProvidentFundPersonal = c.EmployeeSocialInsuranceAndFund.ProvidentFundPersonal,
+                    SupplementaryProvidentFundPersonal =
+                        c.EmployeeSocialInsuranceAndFund.SupplementaryProvidentFundPersonal,
+                    BeforeFillingOut = c.EmployeeSocialInsuranceAndFund.BeforeFillingOut,
+                    PersonalIncomeTax = c.EmployeeSocialInsuranceAndFund.PersonalIncomeTax,
+                    UnionFeePersonal = c.EmployeeSocialInsuranceAndFund.UnionFeePersonal,
+                    SupplementaryUnionFeeDeductPersonal =
+                        c.EmployeeSocialInsuranceAndFund.SupplementaryUnionFeeDeductPersonal,
+                    SupplementaryCommercialInsuranceDeduct =
+                        c.EmployeeSocialInsuranceAndFund.SupplementaryCommercialInsuranceDeduct,
+                    Sum1 = new FullAdvancedType<double>(c.EmployeeSocialInsuranceAndFund.Sum),
+                    SocialInsuranceEnterprise = c.EnterpriseSocialInsuranceAndFund.SocialInsuranceEnterprise,
+                    SupplementarySocialInsuranceEnterprise =
+                        c.EnterpriseSocialInsuranceAndFund.SupplementarySocialInsuranceEnterprise,
+                    ProvidentFundEnterprise = c.EnterpriseSocialInsuranceAndFund.ProvidentFundEnterprise,
+                    SupplementaryProvidentFundEnterprise =
+                        c.EnterpriseSocialInsuranceAndFund.SupplementaryProvidentFundEnterprise,
+                    UnionFeeEnterprise = c.EnterpriseSocialInsuranceAndFund.UnionFeeEnterprise,
+                    SupplementaryUnionFeeDeductEnterprise =
+                        c.EnterpriseSocialInsuranceAndFund.SupplementaryUnionFeeDeductEnterprise,
+                    Sum2 = new FullAdvancedType<double>(c.EnterpriseSocialInsuranceAndFund.Sum),
+                    BasicOldAgeInsurance = c.EmployeeSocialInsuranceDetail.BasicOldAgeInsurance,
+                    BasicMedicalInsurance = c.EmployeeSocialInsuranceDetail.BasicMedicalInsurance,
+                    UnemploymentInsurance = c.EmployeeSocialInsuranceDetail.UnemploymentInsurance,
+                    Check = new FullAdvancedType<double>(c.EmployeeSocialInsuranceDetail.Check),
+                    ProvidentFund = new FullAdvancedType<double>(c.EmployeeSocialInsuranceDetail.ProvidentFund)
+                }).ToList();
+                var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
+                {
 
-                //    return employeeEntitys;
+                    DocHelper.SaveTo(employeeEntitys, new ExportOption(1,1){SheetName = "全职(生成器生成，需要按需修改)"});
+
+                    return employeeEntitys;
 
 
 
-                //}, async (t) =>
-                //{
+                }, async (t) =>
+                {
 
-                //});
+                });
             }
 
         }

@@ -77,7 +77,13 @@ namespace Workshop.Core.Validators
 
 
                 object val = TryGetValue(c.PropName, e);
+                if (val == null)
+                {
+                    c.ProcessResult.Content += "(值为空)";
+                    c.ProcessResult.IsValidated = false;
+                    return c.ProcessResult;
 
+                }
                 var input = string.Empty;
 
                 if (c.TargetName == "Value")
@@ -108,9 +114,18 @@ namespace Workshop.Core.Validators
 
                 var pattern = c.Expression;
 
-                var regularResult = Regex.IsMatch(input, pattern);
-                c.ProcessResult.IsValidated = (bool)regularResult;
+                if (input == null)
+                {
+                    c.ProcessResult.Content += "(Formula为空)";
+                    c.ProcessResult.IsValidated = false;
 
+                }
+                else
+                {
+                    var regularResult = Regex.IsMatch(input, pattern);
+                    c.ProcessResult.IsValidated = (bool)regularResult;
+
+                }
                 return c.ProcessResult;
 
             });

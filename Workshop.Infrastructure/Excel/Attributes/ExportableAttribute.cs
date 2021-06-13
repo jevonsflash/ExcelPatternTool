@@ -16,13 +16,16 @@ namespace Workshop.Infrastructure.Attributes
 
         public bool Ignore { get; set; }
         
-        public ExportableAttribute(string name,int order, bool ignore = false)
+        public ExportableAttribute(string name,int order)
         {
             Order = order;
             Name = name;
-            Ignore = ignore;
+            Ignore = false;
 
         }
-
+        public ExportableAttribute(bool ignore = false)
+        {
+            Ignore = ignore;
+        }
     }
 }

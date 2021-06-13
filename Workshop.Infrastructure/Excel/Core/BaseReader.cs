@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Workshop.Infrastructure.Attributes;
+using Workshop.Infrastructure.Interfaces;
 using Workshop.Infrastructure.Models;
 
 namespace Workshop.Infrastructure.Core
@@ -12,13 +14,18 @@ namespace Workshop.Infrastructure.Core
     public class BaseReader : BaseHandler
     {
 
-        internal T GetDataToObject<T>(IRow row, List<ColumnMetadata> columns)
+        internal T GetDataToObject<T>(IRow row, List<ColumnMetadata> columns) where T: IExcelEntity
         {
             T result = (T)Activator.CreateInstance(typeof(T));
             Type objType = typeof(T);
             for (int j = 0; j < columns.Count; j++)
             {
                 ICell cell = row.GetCell(columns[j].ColumnOrder);
+                if (cell==null)
+                {
+                    Console.WriteLine($"第 {row.RowNum} 行， 第 {columns[j].ColumnOrder} 列  不符合MetaData定义规范，跳过");
+                    continue;
+                }
                 string colTypeDesc = columns[j].PropType.Name.ToLowerInvariant();
 
                 switch (colTypeDesc)
@@ -63,7 +70,46 @@ namespace Workshop.Infrastructure.Core
                     case "formulatedtype`1":
                         var gType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
                         var tmpFormularted = ExtractAdvancedFromCell(cell, gType, typeof(FormulatedType<>));
-                        (tmpFormularted as IFormulatedType).Formula = cell.CellFormula;
+                        if (cell.CellType != CellType.Formula)
+                        {
+                            switch (colTypeDesc)
+                            {
+                                case "string":
+                                    tmpFormularted.SetValue(ExtractStringFromCell(cell));
+                                    break;
+                                case "datetime":
+                                    tmpFormularted.SetValue(ExtractStringFromCell(cell));
+                                    break;
+                                case "int":
+                                case "int32":
+                                    tmpFormularted.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+
+                                case "decimal":
+                                    tmpFormularted.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "int64":
+                                case "long":
+                                    tmpFormularted.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+
+                                case "double":
+                                    tmpFormularted.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "single":
+                                    tmpFormularted.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "boolean":
+                                case "bool":
+                                    tmpFormularted.SetValue(ExtractBooleanFromCell(cell));
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            (tmpFormularted as IFormulatedType).Formula = cell.CellFormula;
+                        }
+
                         AssignValue(objType, columns[j].PropName, result, tmpFormularted);
                         break;
 
@@ -93,13 +139,53 @@ namespace Workshop.Infrastructure.Core
                     case "fulladvancedtype`1":
                         var fullarmedType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
                         var tmpFullarmed = ExtractAdvancedFromCell(cell, fullarmedType, typeof(FullAdvancedType<>));
-                        (tmpFullarmed as IFullAdvancedType).Formula = cell.CellFormula;
-                        if (cell.CellComment != null)
+                        if (cell.CellType != CellType.Formula)
                         {
-                            (tmpFullarmed as IFullAdvancedType).Comment = cell.CellComment.String.String;
-                        }
+                            switch (colTypeDesc)
+                            {
+                                case "string":
+                                    tmpFullarmed.SetValue(ExtractStringFromCell(cell));
+                                    break;
+                                case "datetime":
+                                    tmpFullarmed.SetValue(ExtractStringFromCell(cell));
+                                    break;
+                                case "int":
+                                case "int32":
+                                    tmpFullarmed.SetValue(ExtractNumericFromCell(cell));
+                                    break;
 
+                                case "decimal":
+                                    tmpFullarmed.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "int64":
+                                case "long":
+                                    tmpFullarmed.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+
+                                case "double":
+                                    tmpFullarmed.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "single":
+                                    tmpFullarmed.SetValue(ExtractNumericFromCell(cell));
+                                    break;
+                                case "boolean":
+                                case "bool":
+                                    tmpFullarmed.SetValue(ExtractBooleanFromCell(cell));
+                                    break;
+                            }
+
+                        }
+                        else
+                        {
+                            (tmpFullarmed as IFullAdvancedType).Formula = cell.CellFormula;
+                            if (cell.CellComment != null)
+                            {
+                                (tmpFullarmed as IFullAdvancedType).Comment = cell.CellComment.String.String;
+                            }
+
+                        }
                         (tmpFullarmed as IFullAdvancedType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
+
                         AssignValue(objType, columns[j].PropName, result, tmpFullarmed);
                         break;
                     default:
@@ -109,6 +195,9 @@ namespace Workshop.Infrastructure.Core
 
                 }
             }
+            
+            AssignValue(objType, "RowNumber", result, row.RowNum);
+
             return result;
         }
 

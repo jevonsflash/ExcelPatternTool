@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using Workshop.Infrastructure.Attributes;
 using Workshop.Infrastructure.Core;
+using Workshop.Infrastructure.Interfaces;
 
 namespace Workshop.Core.Entites
 {
-    public class EmployeeEntity
+    public class EmployeeEntity : IExcelEntity
     {
-
+        [Exportable(ignore:true)]
+        [Importable(ignore:true)]
+        public long RowNumber { get; set; }
         [Exportable("年(Year)",0)]
         [Importable("年", 0)]
         public int Year { get; set; }
