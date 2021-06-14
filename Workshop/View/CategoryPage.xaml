@@ -23,7 +23,8 @@
 			</Grid.ColumnDefinitions>
 
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
-				<Button  Content="添加" Command="{Binding CreateCommand}"  Width="120"></Button>
+                <Button  Content="添加" IsEnabled="False" Command="{Binding CreateCommand}"  Width="120"></Button>
+                <Button  Content="清空数据"  Command="{Binding ClearCommand}"  Width="120"></Button>
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
@@ -89,7 +90,7 @@
 									<ColumnDefinition></ColumnDefinition>
 									<ColumnDefinition></ColumnDefinition>
 								</Grid.ColumnDefinitions>
-								<Button Grid.Column="0" Width="120" Content="修改" Click="ButtonEdit_OnClick"></Button>
+                                <Button Grid.Column="0" Width="120"  IsEnabled="False" Content="修改" Click="ButtonEdit_OnClick"></Button>
 								<Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
 							</Grid>
 						</DataTemplate>

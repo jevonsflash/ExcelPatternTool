@@ -369,6 +369,23 @@ namespace Workshop.Infrastructure.Core
                 var styleMeta = (propValue as IStyledType).StyleMetadata;
                 if (styleMeta != null)
                 {
+                    if (string.IsNullOrEmpty(styleMeta.BackColor))
+                    {
+                        styleMeta.BackColor = bodyFormat.BackColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.BorderColor))
+                    {
+                        styleMeta.BorderColor = bodyFormat.BorderColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.FontColor))
+                    {
+                        styleMeta.FontColor = bodyFormat.FontColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.FontName))
+                    {
+                        styleMeta.FontName = bodyFormat.FontName;
+                    }                
+
                     var specificCellStyle = MetaToCellStyle(styleMeta);
 
                     var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
@@ -400,6 +417,22 @@ namespace Workshop.Infrastructure.Core
                 var styleMeta = (propValue as IFullAdvancedType).StyleMetadata;
                 if (styleMeta != null)
                 {
+                    if (string.IsNullOrEmpty(styleMeta.BackColor))
+                    {
+                        styleMeta.BackColor = bodyFormat.BackColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.BorderColor))
+                    {
+                        styleMeta.BorderColor = bodyFormat.BorderColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.FontColor))
+                    {
+                        styleMeta.FontColor = bodyFormat.FontColor;
+                    }
+                    if (string.IsNullOrEmpty(styleMeta.FontName))
+                    {
+                        styleMeta.FontName = bodyFormat.FontName;
+                    }
                     var specificCellStyle = MetaToCellStyle(styleMeta);
 
                     var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);

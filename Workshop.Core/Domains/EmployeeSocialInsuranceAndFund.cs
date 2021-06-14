@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -26,6 +27,6 @@ namespace Workshop.Core.Domains
         [DisplayName("补扣福利商保")]
         public double SupplementaryCommercialInsuranceDeduct { get; set; }
         [DisplayName("实发薪金")]
-        public double Sum { get; set; }
+        public FullAdvancedType<double> Sum { get; set; }
     }
 }

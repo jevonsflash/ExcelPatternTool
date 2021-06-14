@@ -9,7 +9,7 @@
       xmlns:converters="http://metro.mahapps.com/winfx/xaml/shared"
       xmlns:view="clr-namespace:Workshop.View"
       DataContext="{Binding Source={StaticResource Locator},Path=IndexPage}"
-
+Unloaded="Page_Unloaded"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800"
       Title="IndexPage">
@@ -41,7 +41,7 @@
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
 			<mah:Tile Title="已导入"
 			          Background="#F1F1F1"
-			          Count="28"
+			          Count="{Binding EmployeeInfoCount}"
 			          CountFontSize="42"
 			          HorizontalTitleAlignment="Center"
 			          Style="{StaticResource SmallTileStyle}"

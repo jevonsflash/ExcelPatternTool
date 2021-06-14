@@ -3,50 +3,42 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Workshop.View"
+      Unloaded="Page_Unloaded"  
+      xmlns:local="clr-namespace:Workshop.View"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:control="clr-namespace:Workshop.Control"
+      DataContext="{Binding Source={StaticResource Locator},Path=ToolsPage}"
         mc:Ignorable="d"
 		d:DesignHeight="450" d:DesignWidth="800"
 
         Title="ToolsPage">
-	<Grid>
-		<ScrollViewer>
-			<ItemsControl 
-                
-                  VerticalAlignment="Top"
-                  ItemsSource="{Binding ContentList}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<WrapPanel Orientation="Horizontal" ItemHeight="300"
-                               ItemWidth="180" IsItemsHost="True"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Grid VerticalAlignment="Top" Background="White" Height="300" Margin="10">
-							<Grid.Effect>
-								<DropShadowEffect></DropShadowEffect>
-							</Grid.Effect>
-							
-							<StackPanel >
-								<control:SimpleKeyValueControl
-                                    HorizontalAlignment="Center"
-                                                           TextColor="White"
-                                                           KeyText="批次" ValueText="{Binding Title}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl   HorizontalAlignment="Center"
-                                                           TextColor="White"
-                                                                TextSize="12"
-                                                           KeyText="已扫描" ValueText="{Binding ProductInfos.Count}" UnitText="件"></control:SimpleKeyValueControl>
-							</StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        </Grid>
 
-							
-						</Grid>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</ScrollViewer>
-	</Grid>
+        <DataGrid Grid.Row="1"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding  LogInfos}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="批次" Binding="{Binding Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="类型" Binding="{Binding Type}"></DataGridTextColumn>
+                <DataGridTextColumn Header="结果" Binding="{Binding Result}"></DataGridTextColumn>
+                <DataGridTextColumn Header="数量" Binding="{Binding Count}"></DataGridTextColumn>
+                <DataGridTextColumn Header="时间" Binding="{Binding CreateTime}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
 
 </Page>

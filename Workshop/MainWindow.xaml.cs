@@ -37,21 +37,21 @@ namespace Workshop
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            InvokeHelper.InvokeOnUi("正在检查网络", () =>
-            {
-                var SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
-                if (SettingInfo == null)
-                {
-                    SettingInfo = new SettingInfo()
-                    {
-                        Addr = "172.16.65.22"
-                    };
-                    LocalDataHelper.SaveObjectLocal(SettingInfo);
+            //InvokeHelper.InvokeOnUi("正在检查网络", () =>
+            //{
+            //    var SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
+            //    if (SettingInfo == null)
+            //    {
+            //        SettingInfo = new SettingInfo()
+            //        {
+            //            Addr = "172.16.65.22"
+            //        };
+            //        LocalDataHelper.SaveObjectLocal(SettingInfo);
 
-                }
+            //    }
 
-                Thread.Sleep(2000);
-            });
+            //    Thread.Sleep(2000);
+            //});
 
         }
 

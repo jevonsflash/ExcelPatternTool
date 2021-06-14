@@ -9,5 +9,10 @@ namespace Workshop.Core.Domains
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public Guid Id { get; set; }
         public DateTime CreateTime { get; set; }
+
+        public BaseDomainInfo()
+        {
+            this.CreateTime = DateTime.Now;
+        }
     }
 }

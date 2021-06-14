@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Workshop.ViewModel;
 
 namespace Workshop.View
 {
@@ -29,7 +30,7 @@ namespace Workshop.View
             //var source = (new Uri("pack://application:,,,/View/PackupPage.xaml", UriKind.Absolute));
 
             //NavigationService.GetNavigationService(this).Navigate(source);
-            
+
 
         }
 
@@ -38,6 +39,11 @@ namespace Workshop.View
             var source = (new Uri("pack://application:,,,/View/ImportPage.xaml", UriKind.Absolute));
 
             NavigationService.GetNavigationService(this).Navigate(source);
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ViewModelLocator.Cleanup<ToolsPageViewModel>();
         }
     }
 }

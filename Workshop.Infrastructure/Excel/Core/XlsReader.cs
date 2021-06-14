@@ -43,6 +43,11 @@ namespace Workshop.Infrastructure.Core
                 Console.WriteLine(e);
                 throw new Exception("无法获取Sheet" + e.Message);
             }
+            if (sheet == null)
+            {
+                throw new Exception($"没找到名称为{importOption.SheetName}的Sheet");
+
+            }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
             for (int i = firstRow + importOption.SkipRows; i <= lastRow; i++)
@@ -81,6 +86,11 @@ namespace Workshop.Infrastructure.Core
             {
                 Console.WriteLine(e);
                 throw new Exception("无法获取Sheet" + e.Message);
+            }
+            if (sheet == null)
+            {
+                throw new Exception($"没找到Index为{sheetNumber}的Sheet");
+
             }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;

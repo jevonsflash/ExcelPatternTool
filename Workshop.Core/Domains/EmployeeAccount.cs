@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -15,9 +16,9 @@ namespace Workshop.Core.Domains
         [DisplayName("名称和地点")]
         public string AccountBankAlias { get; set; }
         [DisplayName("银行名称")]
-        public string AccountBankName { get; set; }
+        public FormulatedType<string> AccountBankName { get; set; }
         [DisplayName("银行地点")]
-        public string AccountBankLoc { get; set; }
+        public FormulatedType<string> AccountBankLoc { get; set; }
 
         [DisplayName("个人社保号")]
         public string SocialInsuranceNum { get; set; }

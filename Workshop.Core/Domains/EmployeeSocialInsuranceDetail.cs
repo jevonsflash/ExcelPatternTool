@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -14,8 +15,8 @@ namespace Workshop.Core.Domains
         [DisplayName("失业保险费（个人）")]
         public double UnemploymentInsurance { get; set; }
         [DisplayName("验算（个人）")]
-        public double Check { get; set; }
+        public FullAdvancedType<double> Check { get; set; }
         [DisplayName("公积金（个人）")]
-        public double ProvidentFund { get; set; }
+        public FullAdvancedType<double> ProvidentFund { get; set; }
     }
 }

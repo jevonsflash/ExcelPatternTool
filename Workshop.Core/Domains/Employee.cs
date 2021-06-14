@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -23,9 +24,9 @@ namespace Workshop.Core.Domains
         [DisplayName("状态")]
         public string State { get; set; }
         [DisplayName("姓名")]
-        public string Name { get; set; }
+        public StyledType<string> Name { get; set; }
         [DisplayName("身份证号码")]
-        public string IDCard { get; set; }
+        public StyledType<string> IDCard { get; set; }
         [DisplayName("工资等级")]
         public string Level { get; set; }
         [DisplayName("工作性质")]

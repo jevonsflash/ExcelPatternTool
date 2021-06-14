@@ -20,11 +20,11 @@
 						<ColumnDefinition Width="*"></ColumnDefinition>
 						<ColumnDefinition Width="2*"></ColumnDefinition>
 					</Grid.ColumnDefinitions>
-					<Label Content="使用SyntaxFactory库前缀"></Label>
+					<Label Content="服務ip地址（请勿修改）"></Label>
 
-					<mah:ToggleSwitch Grid.Column="1" 
-		                          IsOn="{Binding SettingInfo.Addr}"></mah:ToggleSwitch>
-				</Grid>
+                    <TextBox Grid.Column="1" 
+		                          Text="{Binding SettingInfo.Addr}"></TextBox>
+                </Grid>
 				<Border>
 					<control:JsonEditor Margin="8" Data="{Binding Document.Data}"  IsEnabled="True" />
 				</Border>

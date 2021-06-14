@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -20,6 +21,6 @@ namespace Workshop.Core.Domains
         [DisplayName("补扣工会费企业")]
         public double SupplementaryUnionFeeDeductEnterprise { get; set; }
         [DisplayName("总支付")]
-        public double Sum { get; set; }
+        public FullAdvancedType<double> Sum { get; set; }
     }
 }

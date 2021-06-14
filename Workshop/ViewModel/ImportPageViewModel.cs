@@ -71,25 +71,25 @@ namespace Workshop.ViewModel
                 var employeeAccount = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeAccount>(this.Employees);
                 var employeeSalay = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSalay>(this.Employees, new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    //cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
                     cfg.CreateMap<EmployeeEntity, EmployeeSalay>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum.Value));
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum));
                 }));
                 var employeeSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    //cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
                     cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceAndFund>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum1.Value));
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum1));
                 }));
                 var enterpriseSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EnterpriseSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    //cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
                     cfg.CreateMap<EmployeeEntity, EnterpriseSocialInsuranceAndFund>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum2.Value));
+                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum2));
                 }));
                 var employeeSocialInsuranceDetail = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceDetail>(this.Employees, new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
+                    //cfg.CreateMap<IAdvancedType, object>().ConvertUsing(s => s.GetValue());
                     cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceDetail>();
                 }));
                 var resultEmployees = AutoMapperHelper.MapToList<EmployeeEntity, Employee>(this.Employees).Select(c => new Employee()
@@ -121,6 +121,12 @@ namespace Workshop.ViewModel
 
             }, async (t) =>
             {
+                _dbContext.Log.Add(new Log(Log.IMPORT, "成功", t.Count()));
+                var result = this._dbContext.SaveChanges();
+
+                this.Employees.Clear();
+
+                MessageBox.Show("已完成导入");
 
             });
         }
@@ -131,7 +137,7 @@ namespace Workshop.ViewModel
             foreach (var item in this.Employees)
             {
 
-                var row =item.RowNumber+1;
+                var row = item.RowNumber + 1;
                 var id = ProcessResultList.Count + 1;
                 var level = 1;
 
@@ -154,7 +160,23 @@ namespace Workshop.ViewModel
                     this.ProcessResultList.Add(processResultDto);
 
                 }
+
+
             }
+            var currentCount = ProcessResultList.Count();
+            if (currentCount > 0)
+            {
+                _dbContext.Log.Add(new Log(Log.CHECK, "失败", currentCount));
+
+            }
+            else
+            {
+                _dbContext.Log.Add(new Log(Log.CHECK, "成功", this.Employees.Count));
+
+            }
+            this._dbContext.SaveChanges();
+
+
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.Core.Domains
 {
@@ -54,7 +55,7 @@ namespace Workshop.Core.Domains
         [DisplayName("兼职工资")]
         public double ParttimeSalary { get; set; }
         [DisplayName("应发合计")]
-        public double Sum { get; set; }
+        public FullAdvancedType<double> Sum { get; set; }
         [DisplayName("税后补扣\r\n(宿舍费) ")]
         public double HostelAllowances { get; set; }
         [DisplayName("税后补扣\r\n(餐费) ")]
@@ -62,6 +63,6 @@ namespace Workshop.Core.Domains
         [DisplayName("临时计税")]
         public double TemporaryTax { get; set; }
         [DisplayName("应发+临时计税项目")]
-        public double SumWithTemporaryTax { get; set; }
+        public FullAdvancedType<double> SumWithTemporaryTax { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Workshop.ViewModel
             SimpleIoc.Default.Register<CategoryPageViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<SettingPageViewModel>();
+            SimpleIoc.Default.Register<ToolsPageViewModel>();
             var connectionString = @"Data Source=mato.db";
             var contextOptions = new DbContextOptionsBuilder<WorkshopDbContext>()
                 .UseSqlite(connectionString)
@@ -32,6 +33,7 @@ namespace Workshop.ViewModel
         public CategoryPageViewModel CategoryPage => SimpleIoc.Default.GetInstance<CategoryPageViewModel>();
         public LoginViewModel Login => SimpleIoc.Default.GetInstance<LoginViewModel>();
         public SettingPageViewModel SettingPage => SimpleIoc.Default.GetInstance<SettingPageViewModel>();
+        public ToolsPageViewModel ToolsPage => SimpleIoc.Default.GetInstance<ToolsPageViewModel>();
 
 
         public static void Cleanup<T>() where T : class

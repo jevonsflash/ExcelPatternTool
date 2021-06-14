@@ -41,12 +41,18 @@ namespace Workshop.ViewModel
         {
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.CreateCommand = new RelayCommand(CreateAction);
+            this.ClearCommand = new RelayCommand(ClearAction);
             this.RemoveCommand = new RelayCommand<Employee>(RemoveAction);
             this.EditCommand = new RelayCommand<Employee>(EditAction);
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
             this._dbContext = dbContext;
             InitData();
 
+        }
+
+        private void ClearAction()
+        {
+            this.EmployeeInfos.Clear();
         }
 
         private void InitData()
@@ -199,14 +205,14 @@ namespace Workshop.ViewModel
                     Dept = c.Dept,
                     Proj = c.Proj,
                     State = c.State,
-                    Name = new StyledType<string>(c.Name),
-                    IDCard = new StyledType<string>(c.IDCard),
+                    Name = c.Name,
+                    IDCard = c.IDCard,
                     Level = c.Level,
                     JobCate = c.JobCate,
                     AccountNum = c.EmployeeAccount.AccountNum,
                     AccountBankAlias = c.EmployeeAccount.AccountBankAlias,
-                    AccountBankName = new FormulatedType<string>(c.EmployeeAccount.AccountBankName) {Formula= },
-                    AccountBankLoc = new FormulatedType<string>(c.EmployeeAccount.AccountBankLoc),
+                    AccountBankName = c.EmployeeAccount.AccountBankName,
+                    AccountBankLoc = c.EmployeeAccount.AccountBankLoc,
                     SocialInsuranceNum = c.EmployeeAccount.SocialInsuranceNum,
                     ProbationSalary = c.EmployeeSalay.ProbationSalary,
                     BasicSalary = c.EmployeeSalay.BasicSalary,
@@ -231,11 +237,11 @@ namespace Workshop.ViewModel
                     SupplementaryRewards = c.EmployeeSalay.SupplementaryRewards,
                     SupplementaryDeduct = c.EmployeeSalay.SupplementaryDeduct,
                     ParttimeSalary = c.EmployeeSalay.ParttimeSalary,
-                    Sum = new FullAdvancedType<double>(c.EmployeeSalay.Sum),
+                    Sum = c.EmployeeSalay.Sum,
                     HostelAllowances = c.EmployeeSalay.HostelAllowances,
                     MealAllowances = c.EmployeeSalay.MealAllowances,
                     TemporaryTax = c.EmployeeSalay.TemporaryTax,
-                    SumWithTemporaryTax = new FullAdvancedType<double>(c.EmployeeSalay.SumWithTemporaryTax),
+                    SumWithTemporaryTax = c.EmployeeSalay.SumWithTemporaryTax,
                     SocialInsurancePersonal = c.EmployeeSocialInsuranceAndFund.SocialInsurancePersonal,
                     SupplementarySocialInsurancePersonal =
                         c.EmployeeSocialInsuranceAndFund.SupplementarySocialInsurancePersonal,
@@ -249,7 +255,7 @@ namespace Workshop.ViewModel
                         c.EmployeeSocialInsuranceAndFund.SupplementaryUnionFeeDeductPersonal,
                     SupplementaryCommercialInsuranceDeduct =
                         c.EmployeeSocialInsuranceAndFund.SupplementaryCommercialInsuranceDeduct,
-                    Sum1 = new FullAdvancedType<double>(c.EmployeeSocialInsuranceAndFund.Sum),
+                    Sum1 = c.EmployeeSocialInsuranceAndFund.Sum,
                     SocialInsuranceEnterprise = c.EnterpriseSocialInsuranceAndFund.SocialInsuranceEnterprise,
                     SupplementarySocialInsuranceEnterprise =
                         c.EnterpriseSocialInsuranceAndFund.SupplementarySocialInsuranceEnterprise,
@@ -259,12 +265,12 @@ namespace Workshop.ViewModel
                     UnionFeeEnterprise = c.EnterpriseSocialInsuranceAndFund.UnionFeeEnterprise,
                     SupplementaryUnionFeeDeductEnterprise =
                         c.EnterpriseSocialInsuranceAndFund.SupplementaryUnionFeeDeductEnterprise,
-                    Sum2 = new FullAdvancedType<double>(c.EnterpriseSocialInsuranceAndFund.Sum),
+                    Sum2 = c.EnterpriseSocialInsuranceAndFund.Sum,
                     BasicOldAgeInsurance = c.EmployeeSocialInsuranceDetail.BasicOldAgeInsurance,
                     BasicMedicalInsurance = c.EmployeeSocialInsuranceDetail.BasicMedicalInsurance,
                     UnemploymentInsurance = c.EmployeeSocialInsuranceDetail.UnemploymentInsurance,
-                    Check = new FullAdvancedType<double>(c.EmployeeSocialInsuranceDetail.Check),
-                    ProvidentFund = new FullAdvancedType<double>(c.EmployeeSocialInsuranceDetail.ProvidentFund)
+                    Check = c.EmployeeSocialInsuranceDetail.Check,
+                    ProvidentFund = c.EmployeeSocialInsuranceDetail.ProvidentFund
                 }).ToList();
                 var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
                 {
@@ -277,6 +283,9 @@ namespace Workshop.ViewModel
 
                 }, async (t) =>
                 {
+                    _dbContext.Log.Add(new Log(Log.OUTPUT, "成功", t.Count()));
+                    var result = this._dbContext.SaveChanges();
+                    MessageBox.Show("已完成导出");
 
                 });
             }
@@ -333,6 +342,7 @@ namespace Workshop.ViewModel
 
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
+        public RelayCommand ClearCommand { get; set; }
         public RelayCommand<Employee> EditCommand { get; set; }
         public RelayCommand<Employee> RemoveCommand { get; set; }
 
