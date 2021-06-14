@@ -11,9 +11,10 @@ namespace Workshop.Infrastructure.Helper
 
         //const string local = "local_";
         const string _filePrefix = "_";
+        private readonly static string basePath = CommonHelper.AppBasePath;
+
         public static IList<T> ReadCollectionLocal<T>() where T : class
         {
-            var basePath = CommonHelper.AppBasePath;
             var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
@@ -32,7 +33,6 @@ namespace Workshop.Infrastructure.Helper
 
         public static void SaveCollectionLocal<T>(IList<T> source) where T : class
         {
-            var basePath = CommonHelper.AppBasePath;
             var dirPath = Path.Combine(basePath, _dirPrefix);
             DirFileHelper.CreateDir(dirPath);
             var serializedstr = JsonConvert.SerializeObject(source);
@@ -43,7 +43,7 @@ namespace Workshop.Infrastructure.Helper
 
         public static T ReadObjectLocal<T>() where T : class
         {
-            var basePath = CommonHelper.ExePath;
+
             var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
@@ -61,7 +61,6 @@ namespace Workshop.Infrastructure.Helper
 
         public static void SaveObjectLocal<T>(T source) where T : class
         {
-            var basePath = CommonHelper.ExePath;
             var dirPath = Path.Combine(basePath, _dirPrefix);
             DirFileHelper.CreateDir(dirPath);
             var serializedstr = JsonConvert.SerializeObject(source);
@@ -73,7 +72,6 @@ namespace Workshop.Infrastructure.Helper
 
         public static void InitLocalPath()
         {
-            var basePath = CommonHelper.ExePath;
             var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
