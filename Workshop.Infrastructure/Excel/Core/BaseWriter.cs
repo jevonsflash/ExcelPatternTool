@@ -348,7 +348,9 @@ namespace Workshop.Infrastructure.Core
                 var formula = (propValue as IFormulatedType).Formula;
 
                 cell.SetCellFormula(formula);
+                SetFormulatedValue(cell, formulatedValue);
                 cell.SetCellType(CellType.Formula);
+
             }
             else if (propValue is ICommentedType)
             {
@@ -357,16 +359,26 @@ namespace Workshop.Infrastructure.Core
                 {
                     cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
                 }
+                SetFormulatedValue(cell, formulatedValue);
+
             }
 
             else if (propValue is IStyledType)
             {
 
                 var styleMeta = (propValue as IStyledType).StyleMetadata;
-                var specificCellStyle = MetaToCellStyle(styleMeta);
+                if (styleMeta != null)
+                {
+                    var specificCellStyle = MetaToCellStyle(styleMeta);
 
-                var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
-                cell.CellStyle = specificBodyCellStyle;
+                    var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
+                    cell.CellStyle = specificBodyCellStyle;
+                }
+                else
+                {
+                    cell.CellStyle = bodyCellStyle;
+
+                }
 
 
                 var comment = (propValue as IStyledType).Comment;
@@ -374,6 +386,8 @@ namespace Workshop.Infrastructure.Core
                 {
                     cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
                 }
+                SetFormulatedValue(cell, formulatedValue);
+
             }
 
             else if (propValue is IFullAdvancedType)
@@ -384,20 +398,53 @@ namespace Workshop.Infrastructure.Core
                 cell.SetCellType(CellType.Formula);
 
                 var styleMeta = (propValue as IFullAdvancedType).StyleMetadata;
-                var specificCellStyle = MetaToCellStyle(styleMeta);
+                if (styleMeta != null)
+                {
+                    var specificCellStyle = MetaToCellStyle(styleMeta);
 
-                var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
-                cell.CellStyle = specificBodyCellStyle;
+                    var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
+                    cell.CellStyle = specificBodyCellStyle;
+                }
+                else
+                {
+                    cell.CellStyle = bodyCellStyle;
 
+                }
 
                 var comment = (propValue as IFullAdvancedType).Comment;
                 if (!string.IsNullOrEmpty(comment))
                 {
                     cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
                 }
+
             }
 
 
+        }
+
+        private static void SetFormulatedValue(ICell cell, object formulatedValue)
+        {
+            if (formulatedValue is string)
+            {
+                cell.SetCellValue(formulatedValue as string);
+
+            }
+            else if (formulatedValue is DateTime)
+            {
+                cell.SetCellValue((DateTime)formulatedValue);
+
+            }
+            else if (formulatedValue is bool)
+            {
+                cell.SetCellValue((bool)formulatedValue);
+
+            }
+            else if (formulatedValue is int || formulatedValue is decimal ||
+                 formulatedValue is long || formulatedValue is double || formulatedValue is float)
+            {
+                cell.SetCellValue((double)formulatedValue);
+
+            }
         }
     }
 }

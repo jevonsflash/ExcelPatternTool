@@ -30,7 +30,7 @@ namespace Workshop.Control
         public static void StaticShowDialog(string title)
         {
             Instance = new ProgressWindow();
-            Instance.Show(title);
+            Instance.ShowDialog(title);
         }
 
         public static void StaticUnShowDialog()

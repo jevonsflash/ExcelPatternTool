@@ -26,7 +26,7 @@ namespace Workshop.Helper
                 {
                     if (string.IsNullOrEmpty(title))
                     {
-                        title = "获取数据中";
+                        title = "请稍候..";
                     }
                     ProgressWindow.StaticShowDialog(title);
                 });
@@ -60,7 +60,7 @@ namespace Workshop.Helper
                 {
                     if (string.IsNullOrEmpty(title))
                     {
-                        title = "获取数据中";
+                        title = "请稍候..";
                     }
                     ProgressWindow.StaticShowDialog(title);
                 });

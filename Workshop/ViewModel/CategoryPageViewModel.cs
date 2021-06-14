@@ -205,7 +205,7 @@ namespace Workshop.ViewModel
                     JobCate = c.JobCate,
                     AccountNum = c.EmployeeAccount.AccountNum,
                     AccountBankAlias = c.EmployeeAccount.AccountBankAlias,
-                    AccountBankName = new FormulatedType<string>(c.EmployeeAccount.AccountBankName),
+                    AccountBankName = new FormulatedType<string>(c.EmployeeAccount.AccountBankName) {Formula= },
                     AccountBankLoc = new FormulatedType<string>(c.EmployeeAccount.AccountBankLoc),
                     SocialInsuranceNum = c.EmployeeAccount.SocialInsuranceNum,
                     ProbationSalary = c.EmployeeSalay.ProbationSalary,
@@ -269,7 +269,7 @@ namespace Workshop.ViewModel
                 var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
                 {
 
-                    DocHelper.SaveTo(employeeEntitys, new ExportOption(1,1){SheetName = "全职(生成器生成，需要按需修改)"});
+                    DocHelper.SaveTo(employeeEntitys, new ExportOption(1, 1) { SheetName = "全职(生成器生成，请按需修改)", GenHeaderRow = true });
 
                     return employeeEntitys;
 

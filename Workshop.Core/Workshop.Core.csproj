@@ -35,6 +35,6 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties data_4_3validatorinfos_1schema_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
