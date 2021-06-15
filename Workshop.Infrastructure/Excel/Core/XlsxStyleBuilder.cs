@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
@@ -24,6 +25,39 @@ namespace Workshop.Infrastructure.Core
 
             }
         }
+
+        private List<ICellStyle> _cellStyles = new List<ICellStyle>();
+
+        public ICellStyle GetStyle(IColor backColor)
+        {
+            ICellStyle result = null;
+            foreach (var toStyle in this._cellStyles)
+            {
+                if((toStyle.FillForegroundColorColor as XSSFColor).ARGBHex 
+                    == (backColor as XSSFColor).ARGBHex)
+
+                {
+                    result = toStyle;
+                }
+            }
+            if (result == null)
+            {
+                var newStyle = this.Workbook.CreateCellStyle();
+                newStyle.Alignment = HorizontalAlignment.Center;
+                newStyle.BorderBottom = BorderStyle.Thin;
+                newStyle.BorderLeft = BorderStyle.Thin;
+                newStyle.BorderRight = BorderStyle.Thin;
+                newStyle.BorderTop = BorderStyle.Thin;
+                newStyle.FillPattern = FillPattern.SolidForeground;
+                newStyle.VerticalAlignment = VerticalAlignment.Center;
+                ((XSSFCellStyle)newStyle).SetFillForegroundColor((XSSFColor)backColor);
+                this._cellStyles.Add(newStyle);
+                result = newStyle;
+            }
+            return result;
+
+        }
+
         public short GetBuiltIndDataFormat(string dataFormat)
         {
             var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
@@ -31,12 +65,7 @@ namespace Workshop.Infrastructure.Core
         }
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
-            var cell = Workbook.CreateCellStyle();
-            if (backColor != null)
-            {
-                ((XSSFCellStyle)cell).SetFillForegroundColor((XSSFColor)backColor);
-
-            }
+            var cell = this.GetStyle(backColor);
             if (borderColor != null)
             {
                 ((XSSFCellStyle)cell).SetLeftBorderColor((XSSFColor)borderColor);
@@ -45,13 +74,7 @@ namespace Workshop.Infrastructure.Core
                 ((XSSFCellStyle)cell).SetBottomBorderColor((XSSFColor)borderColor);
             }
 
-            cell.Alignment = HorizontalAlignment.Center;
-            cell.BorderBottom = BorderStyle.Thin;
-            cell.BorderLeft = BorderStyle.Thin;
-            cell.BorderRight = BorderStyle.Thin;
-            cell.BorderTop = BorderStyle.Thin;
-            cell.FillPattern = FillPattern.SolidForeground;
-            cell.VerticalAlignment = VerticalAlignment.Center;
+
             if (font != null)
             {
                 cell.SetFont(font);
@@ -81,7 +104,7 @@ namespace Workshop.Infrastructure.Core
             {
                 return new XSSFColor(IndexedColors.Automatic);
             }
-           var result = new XSSFColor(ColorTranslator.FromHtml(htmlColor));
+            var result = new XSSFColor(ColorTranslator.FromHtml(htmlColor));
             return result;
         }
 

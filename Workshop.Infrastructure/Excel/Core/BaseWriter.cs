@@ -52,22 +52,35 @@ namespace Workshop.Infrastructure.Core
 
         internal ICellStyle GetStyleWithFormat(ICellStyle baseStyle, string dataFormat)
         {
-            var cellStyle = this.Document.CreateCellStyle();
+            var cellStyle = StyleBuilderProvider.GetStyleBuilder(this.Document).GetStyle(baseStyle.FillForegroundColorColor);
             cellStyle.CloneStyleFrom(baseStyle);
 
             if (string.IsNullOrWhiteSpace(dataFormat))
                 return cellStyle;
 
             short builtIndDataFormat = StyleBuilderProvider.GetStyleBuilder(this.Document).GetBuiltIndDataFormat(dataFormat);
-            if (builtIndDataFormat != -1)
+            var type = StyleBuilderProvider.GetWorkbookType(this.Document);
+            if (type == "xls")
             {
-                cellStyle.DataFormat = builtIndDataFormat;
+                if (builtIndDataFormat != -1)
+                {
+                    cellStyle.DataFormat = builtIndDataFormat;
+                }
+                else
+                {
+                    IDataFormat dataFormat2 = this.Document.CreateDataFormat();
+                    cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
+                }
             }
             else
             {
+
                 IDataFormat dataFormat2 = this.Document.CreateDataFormat();
                 cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
+
             }
+
+
             return cellStyle;
 
 
@@ -175,10 +188,9 @@ namespace Workshop.Infrastructure.Core
 
                     var headerFormat = GetClassStyleDefinition(typeof(T));
                     ICellStyle headerCellStyle = MetaToCellStyle(headerFormat);
-                    cell.CellStyle.CloneStyleFrom(headerCellStyle);
+                    cell.CellStyle = headerCellStyle;
                     cell.SetCellValue(columnMeta.ColumnName);
                     cellCount += 1;
-                    StyleBuilderProvider.DisposeCurrent();
                 }
             }
         }
@@ -186,7 +198,7 @@ namespace Workshop.Infrastructure.Core
         internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data)
         {
             var ws2 = Stopwatch.StartNew();
-            
+
             //cells
             int cellCount = 0;
 
@@ -314,8 +326,7 @@ namespace Workshop.Infrastructure.Core
 
                 cellCount += 1;
 
-                StyleBuilderProvider.DisposeCurrent();
-                Debug.WriteLine($"当前列循环{columnMeta.PropName}耗时{stage1span+stage2_1span + stage2_2span + stage2_3span + stage3span}ms|stage1:{stage1span}|stage2.1:{stage2_1span}|stage2.2:{stage2_2span}|stage2.3:{stage2_3span}|stage3:{stage3span}");
+                Debug.WriteLine($"当前列循环{columnMeta.PropName}耗时{stage1span + stage2_1span + stage2_2span + stage2_3span + stage3span}ms|stage1:{stage1span}|stage2.1:{stage2_1span}|stage2.2:{stage2_2span}|stage2.3:{stage2_3span}|stage3:{stage3span}");
                 ws2.Reset();
             }
 
@@ -404,7 +415,7 @@ namespace Workshop.Infrastructure.Core
                     if (string.IsNullOrEmpty(styleMeta.FontName))
                     {
                         styleMeta.FontName = bodyFormat.FontName;
-                    }                
+                    }
 
                     var specificCellStyle = MetaToCellStyle(styleMeta);
 

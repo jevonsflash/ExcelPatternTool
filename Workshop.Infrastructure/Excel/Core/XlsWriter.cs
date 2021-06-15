@@ -69,12 +69,15 @@ namespace Workshop.Infrastructure.Core
             {
                 MemoryStream newMemoryStream = new MemoryStream(memoryStream.ToArray());
                 newMemoryStream.Position = 0;
+
+                StyleBuilderProvider.DisposeCurrent();
                 return newMemoryStream;
 
             }
             else
             {
                 memoryStream.Position = 0;
+                StyleBuilderProvider.DisposeCurrent();
                 return memoryStream;
 
             }

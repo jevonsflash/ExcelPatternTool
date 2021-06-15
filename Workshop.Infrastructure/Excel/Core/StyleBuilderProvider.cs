@@ -16,18 +16,32 @@ namespace Workshop.Infrastructure.Core
         {
             if (_xlsStyleBuilder != null)
             {
-                //_xlsStyleBuilder.Dispose();
+                _xlsStyleBuilder.Dispose();
                 _xlsStyleBuilder = null;
             }
 
             if (_xlsxStyleBuilder != null)
             {
-                //_xlsxStyleBuilder.Dispose();
+                _xlsxStyleBuilder.Dispose();
                 _xlsxStyleBuilder = null;
             }
             GC.Collect();
         }
+        public static string GetWorkbookType(IWorkbook workbook)
+        {
+            if (workbook is HSSFWorkbook)
+            {
+                return "xls";
+            }
 
+            else if (workbook is XSSFWorkbook)
+            {
+                return "xlsx";
+
+
+            }
+            return default;
+        }
 
         public static IStyleBuilder GetStyleBuilder(IWorkbook workbook)
         {
@@ -52,7 +66,7 @@ namespace Workshop.Infrastructure.Core
                 if (_xlsxStyleBuilder != null)
                 {
                     _xlsxStyleBuilder.SetWorkbook(workbook);
-                    
+
                 }
                 else
                 {

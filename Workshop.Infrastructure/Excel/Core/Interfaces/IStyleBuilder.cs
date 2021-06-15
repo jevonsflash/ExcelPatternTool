@@ -4,6 +4,7 @@ namespace Workshop.Infrastructure.Core
 {
     public interface IStyleBuilder
     {
+
         /// <summary>
         /// 获取CellStyle
         /// </summary>
@@ -41,6 +42,6 @@ namespace Workshop.Infrastructure.Core
         IColor GetBoarderColor(ICellStyle cellStyle);
 
         void SetWorkbook(IWorkbook workbook);
-
+        ICellStyle GetStyle(IColor backColor);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
@@ -29,6 +30,39 @@ namespace Workshop.Infrastructure.Core
             }
         }
 
+        private List<ICellStyle> _cellStyles = new List<ICellStyle>();
+
+        public ICellStyle GetStyle(IColor backColor)
+        {
+            ICellStyle result = null;
+            foreach (var toStyle in this._cellStyles)
+            {
+                if ((toStyle.FillForegroundColorColor as HSSFColor).GetHexString()
+                    == (backColor  as HSSFColor).GetHexString())
+                {
+                    result = toStyle;
+                }
+            }
+            if (result == null)
+            {
+                var newStyle = this.Workbook.CreateCellStyle();
+                newStyle.Alignment = HorizontalAlignment.Center;
+                newStyle.BorderBottom = BorderStyle.Thin;
+                newStyle.BorderLeft = BorderStyle.Thin;
+                newStyle.BorderRight = BorderStyle.Thin;
+                newStyle.BorderTop = BorderStyle.Thin;
+                newStyle.FillPattern = FillPattern.SolidForeground;
+                newStyle.VerticalAlignment = VerticalAlignment.Center;
+                ((HSSFCellStyle)newStyle).FillForegroundColor = ((HSSFColor)backColor).Indexed;
+                this._cellStyles.Add(newStyle);
+                result = newStyle;
+            }
+            return result;
+
+        }
+
+
+
         public short GetBuiltIndDataFormat(string dataFormat)
         {
             var result = HSSFDataFormat.GetBuiltinFormat(dataFormat);
@@ -37,11 +71,7 @@ namespace Workshop.Infrastructure.Core
 
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
-            var cell = Workbook.CreateCellStyle();
-            if (backColor != null)
-            {
-                ((HSSFCellStyle)cell).FillForegroundColor = ((HSSFColor)backColor).Indexed;
-            }
+            var cell = this.GetStyle(backColor);
             if (borderColor != null)
             {
                 ((HSSFCellStyle)cell).LeftBorderColor = ((HSSFColor)borderColor).Indexed;
@@ -49,13 +79,6 @@ namespace Workshop.Infrastructure.Core
                 ((HSSFCellStyle)cell).TopBorderColor = ((HSSFColor)borderColor).Indexed;
                 ((HSSFCellStyle)cell).BottomBorderColor = ((HSSFColor)borderColor).Indexed;
             }
-            cell.Alignment = HorizontalAlignment.Center;
-            cell.BorderBottom = BorderStyle.Thin;
-            cell.BorderLeft = BorderStyle.Thin;
-            cell.BorderRight = BorderStyle.Thin;
-            cell.BorderTop = BorderStyle.Thin;
-            cell.FillPattern = FillPattern.SolidForeground;
-            cell.VerticalAlignment = VerticalAlignment.Center;
             if (font != null)
             {
                 cell.SetFont(font);
