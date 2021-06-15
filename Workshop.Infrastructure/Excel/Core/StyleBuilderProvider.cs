@@ -9,18 +9,63 @@ namespace Workshop.Infrastructure.Core
 {
     public class StyleBuilderProvider
     {
+        private static XlsStyleBuilder _xlsStyleBuilder = null;
+        private static XlsxStyleBuilder _xlsxStyleBuilder = null;
+
+        public static void DisposeCurrent()
+        {
+            if (_xlsStyleBuilder != null)
+            {
+                //_xlsStyleBuilder.Dispose();
+                _xlsStyleBuilder = null;
+            }
+
+            if (_xlsxStyleBuilder != null)
+            {
+                //_xlsxStyleBuilder.Dispose();
+                _xlsxStyleBuilder = null;
+            }
+            GC.Collect();
+        }
+
+
         public static IStyleBuilder GetStyleBuilder(IWorkbook workbook)
         {
+            IStyleBuilder result;
             if (workbook is HSSFWorkbook)
             {
-                return new XlsStyleBuilder(workbook);
+                if (_xlsStyleBuilder != null)
+                {
+                    _xlsStyleBuilder.SetWorkbook(workbook);
+                }
+                else
+                {
+                    _xlsStyleBuilder = new XlsStyleBuilder(workbook); ;
+
+
+                }
+                result = _xlsStyleBuilder;
+
             }
             else if (workbook is XSSFWorkbook)
             {
-                return new XlsxStyleBuilder(workbook);
-            }
+                if (_xlsxStyleBuilder != null)
+                {
+                    _xlsxStyleBuilder.SetWorkbook(workbook);
+                    
+                }
+                else
+                {
+                    _xlsxStyleBuilder = new XlsxStyleBuilder(workbook);
 
-            return default;
+                }
+                result = _xlsxStyleBuilder;
+            }
+            else
+            {
+                result = default;
+            }
+            return result;
 
         }
     }

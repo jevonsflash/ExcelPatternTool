@@ -39,5 +39,8 @@ namespace Workshop.Infrastructure.Core
         string GetARGBFromIColor(IColor fontColor);
         IColor GetBackgroundColor(ICellStyle cellStyle);
         IColor GetBoarderColor(ICellStyle cellStyle);
+
+        void SetWorkbook(IWorkbook workbook);
+
     }
 }

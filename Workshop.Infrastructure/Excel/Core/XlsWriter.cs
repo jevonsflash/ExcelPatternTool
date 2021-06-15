@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,13 +15,11 @@ namespace Workshop.Infrastructure.Core
     public class XlsWriter : BaseWriter, IWriter
     {
         MemoryStream memoryStream;
-        public HSSFWorkbook document;
         private ISheet sheet;
         public XlsWriter()
         {
             memoryStream = new MemoryStream();
-            document = new HSSFWorkbook(memoryStream);
-            base.Document = document;
+            base.Document = new HSSFWorkbook();
 
         }
 
@@ -28,7 +27,7 @@ namespace Workshop.Infrastructure.Core
 
         public Stream WriteRows<T>(IEnumerable<T> dataCollection, string SheetName, int rowsToSkip, bool genHeader)
         {
-            sheet = this.document.CreateSheet(SheetName);
+            sheet = this.Document.CreateSheet(SheetName);
             var columnMetas = GetTypeDefinition(typeof(T));
 
             int firstRow = sheet.FirstRowNum;
@@ -44,9 +43,14 @@ namespace Workshop.Infrastructure.Core
             }
             foreach (var data in dataCollection)
             {
+                var ws = Stopwatch.StartNew();
+                ws.Start(); 
                 var newRow = sheet.CreateRow(row);
                 SetDataToRow(columnMetas, newRow, data);
                 row += 1;
+                ws.Stop();
+                Debug.WriteLine($"当前行循环{newRow.RowNum}耗时{ws.ElapsedMilliseconds}ms");
+                ws.Reset();
             }
 
             int col = 0;
@@ -59,19 +63,22 @@ namespace Workshop.Infrastructure.Core
 
 
 
-            document.Write(memoryStream);
+            Document.Write(memoryStream);
 
             if (!memoryStream.CanRead)
             {
                 MemoryStream newMemoryStream = new MemoryStream(memoryStream.ToArray());
                 newMemoryStream.Position = 0;
+                return newMemoryStream;
+
             }
             else
             {
                 memoryStream.Position = 0;
+                return memoryStream;
+
             }
 
-            return memoryStream;
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -174,26 +175,32 @@ namespace Workshop.Infrastructure.Core
 
                     var headerFormat = GetClassStyleDefinition(typeof(T));
                     ICellStyle headerCellStyle = MetaToCellStyle(headerFormat);
-                    cell.CellStyle = headerCellStyle;
+                    cell.CellStyle.CloneStyleFrom(headerCellStyle);
                     cell.SetCellValue(columnMeta.ColumnName);
                     cellCount += 1;
+                    StyleBuilderProvider.DisposeCurrent();
                 }
             }
         }
 
         internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data)
         {
+            var ws2 = Stopwatch.StartNew();
+            
             //cells
             int cellCount = 0;
 
             foreach (var columnMeta in columnMetas)
             {
+                ws2.Start();
                 var cell = row.CreateCell(cellCount);
 
                 var propertyInfo = data.GetType().GetProperty(columnMeta.PropName);
                 var propValue = propertyInfo.GetValue(data, null);
                 var propType = propertyInfo.PropertyType;
-
+                ws2.Stop();
+                var stage1span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
                 if (propValue == null)
                 {
                     cell.SetCellValue("");
@@ -203,10 +210,17 @@ namespace Workshop.Infrastructure.Core
 
 
                 var bodyFormat = GetPropStyleDefinition(propertyInfo);
+                ws2.Stop();
+                var stage2_1span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
                 var bodyBaseCellStyle = MetaToCellStyle(bodyFormat);
-
+                ws2.Stop();
+                var stage2_2span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
                 var bodyCellStyle = GetStyleWithFormat(bodyBaseCellStyle, columnMeta.Format);
-
+                ws2.Stop();
+                var stage2_3span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
 
                 if (string.IsNullOrEmpty(columnMeta.FieldValueType))
                 {
@@ -295,10 +309,16 @@ namespace Workshop.Infrastructure.Core
                     }
                 }
 
+                ws2.Stop();
+                var stage3span = ws2.ElapsedMilliseconds;
 
                 cellCount += 1;
 
+                StyleBuilderProvider.DisposeCurrent();
+                Debug.WriteLine($"当前列循环{columnMeta.PropName}耗时{stage1span+stage2_1span + stage2_2span + stage2_3span + stage3span}ms|stage1:{stage1span}|stage2.1:{stage2_1span}|stage2.2:{stage2_2span}|stage2.3:{stage2_3span}|stage3:{stage3span}");
+                ws2.Reset();
             }
+
         }
 
         private void HandleAdvancedType(ICell cell, IAdvancedType propValue, Type propType, StyleMetadata bodyFormat, ColumnMetadata columnMeta)
@@ -348,8 +368,8 @@ namespace Workshop.Infrastructure.Core
                 var formula = (propValue as IFormulatedType).Formula;
 
                 cell.SetCellFormula(formula);
-                SetFormulatedValue(cell, formulatedValue);
                 cell.SetCellType(CellType.Formula);
+                SetFormulatedValue(cell, formulatedValue);
 
             }
             else if (propValue is ICommentedType)

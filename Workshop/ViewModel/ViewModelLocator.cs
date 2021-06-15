@@ -2,7 +2,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.EntityFrameworkCore;
 using Workshop.Core.DataBase;
 using Workshop.Core.Validators;
-using Workshop.View;
+using Workshop.Infrastructure.Core;
 
 namespace Workshop.ViewModel
 {

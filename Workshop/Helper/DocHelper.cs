@@ -22,13 +22,15 @@ namespace Workshop.Helper
 
         public static void SaveTo<T>(IList<T> src, ExportOption exportOption) where T : class
         {
-          
+
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = CommonHelper.DesktopPath;
             saveFileDialog.Filter = _excelFilesXlsxXls;
             saveFileDialog.FileName = _fileName;
-            saveFileDialog.DefaultExt = "xlsx";
+            //saveFileDialog.DefaultExt = "xlsx";
+            //xlsx导出太慢了，故改用xls
+            saveFileDialog.DefaultExt = "xls";
             saveFileDialog.AddExtension = true;
             saveFileDialog.RestoreDirectory = true;
 
@@ -38,13 +40,33 @@ namespace Workshop.Helper
             if (result == true)
             {
                 var filePath = saveFileDialog.FileName;
+                var extension = Path.GetExtension(filePath);
                 Exporter exporter = new Exporter();
-                exporter.DumpXlsx(filePath);
-                var buff = exporter.ProcessGetBytes(src, exportOption);
-                FileStream fs = new FileStream(filePath, FileMode.Create);
+                if (extension.EndsWith("xls"))
+                {
+                    exporter.DumpXls(filePath);
 
-                fs.Write(buff, 0, buff.Length);
-                fs.Close();
+                }
+                else
+                {
+                    exporter.DumpXlsx(filePath);
+
+                }
+                var buff = exporter.ProcessGetBytes(src, exportOption);
+                FileStream fs;
+                try
+                {
+                    fs = new FileStream(filePath, FileMode.Create);
+                    fs.Write(buff, 0, buff.Length);
+                    fs.Close();
+
+
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(filePath + " 此文件正被其他程序占用");
+                }
+
             }
         }
 

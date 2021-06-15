@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,13 +18,11 @@ namespace Workshop.Infrastructure.Core
     public class XlsxWriter : BaseWriter, IWriter
     {
         MemoryStream memoryStream;
-        public XSSFWorkbook document;
         private ISheet sheet;
         public XlsxWriter()
         {
             memoryStream = new MemoryStream();
-            document = new XSSFWorkbook();
-            base.Document = document;
+            base.Document = new XSSFWorkbook();
 
         }
 
@@ -31,7 +30,7 @@ namespace Workshop.Infrastructure.Core
 
         public Stream WriteRows<T>(IEnumerable<T> dataCollection, string SheetName, int rowsToSkip, bool genHeader)
         {
-            sheet = this.document.CreateSheet(SheetName);
+            sheet = this.Document.CreateSheet(SheetName);
             var columnMetas = GetTypeDefinition(typeof(T));
 
             int firstRow = sheet.FirstRowNum;
@@ -47,9 +46,16 @@ namespace Workshop.Infrastructure.Core
             }
             foreach (var data in dataCollection)
             {
+                var ws = Stopwatch.StartNew();
+                ws.Start();
+
                 var newRow = sheet.CreateRow(row);
                 SetDataToRow(columnMetas, newRow, data);
                 row += 1;
+
+                ws.Stop();
+                Debug.WriteLine($"当前行循环{newRow.RowNum}耗时{ws.ElapsedMilliseconds}ms");
+                ws.Reset();
             }
 
             int col = 0;
@@ -62,7 +68,7 @@ namespace Workshop.Infrastructure.Core
 
 
 
-            document.Write(memoryStream);
+            Document.Write(memoryStream);
 
             if (!memoryStream.CanRead)
             {

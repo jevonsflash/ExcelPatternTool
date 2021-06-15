@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
@@ -7,7 +8,7 @@ using Workshop.Infrastructure.Services;
 
 namespace Workshop.Infrastructure.Core
 {
-    internal class XlsxStyleBuilder : IStyleBuilder
+    public class XlsxStyleBuilder : IStyleBuilder, IDisposable
     {
         private IWorkbook Workbook;
 
@@ -15,7 +16,14 @@ namespace Workshop.Infrastructure.Core
         {
             Workbook = workbook;
         }
+        public void SetWorkbook(IWorkbook workbook)
+        {
+            if (this.Workbook != workbook)
+            {
+                this.Workbook = workbook;
 
+            }
+        }
         public short GetBuiltIndDataFormat(string dataFormat)
         {
             var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
@@ -24,11 +32,19 @@ namespace Workshop.Infrastructure.Core
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
             var cell = Workbook.CreateCellStyle();
-            ((XSSFCellStyle)cell).SetFillForegroundColor((XSSFColor)backColor);
-            ((XSSFCellStyle)cell).SetLeftBorderColor((XSSFColor)borderColor);
-            ((XSSFCellStyle)cell).SetRightBorderColor((XSSFColor)borderColor);
-            ((XSSFCellStyle)cell).SetTopBorderColor((XSSFColor)borderColor);
-            ((XSSFCellStyle)cell).SetBottomBorderColor((XSSFColor)borderColor);
+            if (backColor != null)
+            {
+                ((XSSFCellStyle)cell).SetFillForegroundColor((XSSFColor)backColor);
+
+            }
+            if (borderColor != null)
+            {
+                ((XSSFCellStyle)cell).SetLeftBorderColor((XSSFColor)borderColor);
+                ((XSSFCellStyle)cell).SetRightBorderColor((XSSFColor)borderColor);
+                ((XSSFCellStyle)cell).SetTopBorderColor((XSSFColor)borderColor);
+                ((XSSFCellStyle)cell).SetBottomBorderColor((XSSFColor)borderColor);
+            }
+
             cell.Alignment = HorizontalAlignment.Center;
             cell.BorderBottom = BorderStyle.Thin;
             cell.BorderLeft = BorderStyle.Thin;
@@ -36,7 +52,11 @@ namespace Workshop.Infrastructure.Core
             cell.BorderTop = BorderStyle.Thin;
             cell.FillPattern = FillPattern.SolidForeground;
             cell.VerticalAlignment = VerticalAlignment.Center;
-            cell.SetFont(font);
+            if (font != null)
+            {
+                cell.SetFont(font);
+
+            }
             return cell;
         }
 
@@ -61,16 +81,7 @@ namespace Workshop.Infrastructure.Core
             {
                 return new XSSFColor(IndexedColors.Automatic);
             }
-
-            Color color = ColorTranslator.FromHtml(htmlColor);
-            byte[] array = new byte[]
-            {
-                color.R,
-                color.G,
-                color.B
-            };
-            IColor result;
-            result = new XSSFColor(color);
+           var result = new XSSFColor(ColorTranslator.FromHtml(htmlColor));
             return result;
         }
 
@@ -123,6 +134,12 @@ namespace Workshop.Infrastructure.Core
                 return result;
             }
             return null;
+        }
+
+        public void Dispose()
+        {
+            this.Workbook.Close();
+            this.Workbook = null;
         }
     }
 }

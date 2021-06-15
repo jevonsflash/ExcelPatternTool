@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
@@ -6,7 +7,7 @@ using Workshop.Infrastructure.Services;
 
 namespace Workshop.Infrastructure.Core
 {
-    internal class XlsStyleBuilder : IStyleBuilder
+    public class XlsStyleBuilder : IStyleBuilder, IDisposable
     {
 
         private IWorkbook Workbook;
@@ -19,6 +20,15 @@ namespace Workshop.Infrastructure.Core
             Workbook = workbook;
         }
 
+        public void SetWorkbook(IWorkbook workbook)
+        {
+            if (this.Workbook != workbook)
+            {
+                this.Workbook = workbook;
+
+            }
+        }
+
         public short GetBuiltIndDataFormat(string dataFormat)
         {
             var result = HSSFDataFormat.GetBuiltinFormat(dataFormat);
@@ -28,11 +38,17 @@ namespace Workshop.Infrastructure.Core
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
             var cell = Workbook.CreateCellStyle();
-            ((HSSFCellStyle)cell).FillForegroundColor = ((HSSFColor)backColor).Indexed;
-            ((HSSFCellStyle)cell).LeftBorderColor = ((HSSFColor)borderColor).Indexed;
-            ((HSSFCellStyle)cell).RightBorderColor = ((HSSFColor)borderColor).Indexed;
-            ((HSSFCellStyle)cell).TopBorderColor = ((HSSFColor)borderColor).Indexed;
-            ((HSSFCellStyle)cell).BottomBorderColor = ((HSSFColor)borderColor).Indexed;
+            if (backColor != null)
+            {
+                ((HSSFCellStyle)cell).FillForegroundColor = ((HSSFColor)backColor).Indexed;
+            }
+            if (borderColor != null)
+            {
+                ((HSSFCellStyle)cell).LeftBorderColor = ((HSSFColor)borderColor).Indexed;
+                ((HSSFCellStyle)cell).RightBorderColor = ((HSSFColor)borderColor).Indexed;
+                ((HSSFCellStyle)cell).TopBorderColor = ((HSSFColor)borderColor).Indexed;
+                ((HSSFCellStyle)cell).BottomBorderColor = ((HSSFColor)borderColor).Indexed;
+            }
             cell.Alignment = HorizontalAlignment.Center;
             cell.BorderBottom = BorderStyle.Thin;
             cell.BorderLeft = BorderStyle.Thin;
@@ -40,7 +56,10 @@ namespace Workshop.Infrastructure.Core
             cell.BorderTop = BorderStyle.Thin;
             cell.FillPattern = FillPattern.SolidForeground;
             cell.VerticalAlignment = VerticalAlignment.Center;
-            cell.SetFont(font);
+            if (font != null)
+            {
+                cell.SetFont(font);
+            }
             return cell;
         }
         public IColor GetFontColor(ICellStyle cellStyle)
@@ -81,12 +100,7 @@ namespace Workshop.Infrastructure.Core
                 return new HSSFColor.Automatic();
             }
             Color color = ColorTranslator.FromHtml(htmlColor);
-            byte[] array = new byte[]
-            {
-                color.R,
-                color.G,
-                color.B
-            };
+
             IColor result;
             HSSFPalette customPalette = (this.Workbook as HSSFWorkbook).GetCustomPalette();
             if (this._palleteColorSize >= 63)
@@ -159,5 +173,10 @@ namespace Workshop.Infrastructure.Core
             return null;
         }
 
+        public void Dispose()
+        {
+            this.Workbook.Close();
+            this.Workbook = null;
+        }
     }
 }

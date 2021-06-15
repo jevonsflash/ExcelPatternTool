@@ -14,12 +14,13 @@ namespace Workshop.Infrastructure.Core
         }
         internal ICellStyle MetaToCellStyle(StyleMetadata rowStyle)
         {
-            var borderColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BorderColor);
-            var backColor = StyleBuilderProvider.GetStyleBuilder(this.Document).GetColor(rowStyle.BackColor);
-            var font = this.CreateFont(rowStyle);
-            ICellStyle cellStyle;
             var styleBuilder = StyleBuilderProvider.GetStyleBuilder(this.Document);
-            cellStyle = styleBuilder.GetCellStyle(backColor, borderColor, font);
+            var borderColor = styleBuilder.GetColor(rowStyle.BorderColor);
+            var backColor = styleBuilder.GetColor(rowStyle.BackColor);
+            var font = this.CreateFont(rowStyle);
+
+            var cellStyle = styleBuilder.GetCellStyle(backColor, borderColor, font);
+            //var cellStyle = styleBuilder.GetCellStyle(backColor, null, null);
 
             return cellStyle;
         }

@@ -52,7 +52,24 @@ namespace Workshop.ViewModel
 
         private void ClearAction()
         {
-            this.EmployeeInfos.Clear();
+            foreach (var item in this.EmployeeInfos)
+            {
+                this._dbContext.Employee.Remove(item);
+
+            }
+            var result = _dbContext.SaveChanges();
+            if (result == 0)
+            {
+                MessageBox.Show("清空失败");
+
+            }
+            else
+            {
+                this.EmployeeInfos.Clear();
+
+                MessageBox.Show("清空成功");
+
+            }
         }
 
         private void InitData()
