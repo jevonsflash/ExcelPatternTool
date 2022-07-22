@@ -39,7 +39,7 @@ namespace Workshop.Core.Validators
                 {
                     object input = null;
                     object val = TryGetValue(varName, e);
-                    if (c.TargetName == "Value")
+                    if (c.Target ==Target.Value)
                     {
                         if (val is IFormulatedType formulatedType)
                         {
@@ -51,7 +51,7 @@ namespace Workshop.Core.Validators
                         }
                     }
 
-                    else if (c.TargetName == "Formula")
+                    else if (c.Target == Target.Formula)
                     {
                         if (val is IFormulatedType formulatedType)
                         {
@@ -97,14 +97,14 @@ namespace Workshop.Core.Validators
                 }
                 var input = string.Empty;
 
-                if (c.TargetName == "Value")
+                if (c.Target == Target.Value)
                 {
                     var propValue = val.ToString();
                     input = propValue;
 
                 }
 
-                else if (c.TargetName == "Formula")
+                else if (c.Target == Target.Formula)
                 {
                     if (val is IFormulatedType)
                     {
@@ -119,7 +119,7 @@ namespace Workshop.Core.Validators
 
                 else
                 {
-                    throw new ArgumentException($"未知的TargetName类型{c.TargetName}");
+                    throw new ArgumentException($"未知的TargetName类型{c.Target}");
 
                 }
 
@@ -141,8 +141,8 @@ namespace Workshop.Core.Validators
 
             });
 
-            Conventions.Add("DefaultGeneral", new ValidateConvention(generalOne));
-            Conventions.Add("DefaultRegular", new ValidateConvention(regularOne));
+            Conventions.Add("JudgmentExpression", new ValidateConvention(generalOne));
+            Conventions.Add("RegularExpression", new ValidateConvention(regularOne));
         }
 
         private object TryGetValue(string varName, object e)

@@ -21,8 +21,8 @@ namespace Workshop.Core.Validators.Implements
             {
                 Description = "需要满足正则表达式",
                 Expression = @"^ROUND\(Q\d+\+R\d+\+S\d+\+T\d+\+U\d+\+V\d+\+W\d+\+X\d+\+Y\d+\+Z\d+-AA\d+\+AB\d+\+AC\d+\+AD\d+\+AE\d+-AF\d+\+AG\d+\+AH\d+\+AI\d+-AJ\d+\+AK\d+-AL\d+\+AM\d+,2\)$",
-                Convention = "DefaultRegular",
-                TargetName = "Formula"
+                Convention = Convention.RegularExpression,
+                Target = Target.Formula
 
             };
             result.Add(new PatternItem()

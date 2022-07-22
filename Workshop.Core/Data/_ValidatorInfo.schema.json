@@ -38,7 +38,7 @@
           },
           "Convention": {
             "type": "string",
-            "enum": [ "DefaultGeneral", "DefaultRegular" ],
+            "enum": [ "JudgmentExpression", "RegularExpression" ],
             "x-enumNames": [ "普通表达式", "正则表达式" ]
           },
           "Expression": {

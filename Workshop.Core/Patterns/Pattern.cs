@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Workshop.Core.Patterns
@@ -16,6 +19,7 @@ namespace Workshop.Core.Patterns
         public string PropName { get; set; }
         public string HeaderName { get; set; }
         public bool Ignore { get; set; }
+        [Range(0, int.MaxValue)]
         public int Order { get; set; }
         public ValidationPattern ValidationPattern { get; set; }
         public ExportablePattern ExportablePattern { get; set; }

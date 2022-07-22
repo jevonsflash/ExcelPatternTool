@@ -4,7 +4,7 @@
       "PropName": "应发合计",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression":
         "^ROUND\\(Q\\d+\\+R\\d+\\+S\\d+\\+T\\d+\\+U\\d+\\+V\\d+\\+W\\d+\\+X\\d+\\+Y\\d+\\+Z\\d+-AA\\d+\\+AB\\d+\\+AC\\d+\\+AD\\d+\\+AE\\d+-AF\\d+\\+AG\\d+\\+AH\\d+\\+AI\\d+-AJ\\d+\\+AK\\d+-AL\\d+\\+AM\\d+,2\\)$"
     },
@@ -12,14 +12,14 @@
       "PropName": "应发+临时计税项目",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression": "^ROUND\\(AN\\d+\\+AQ\\d+,2\\)$"
     },
     {
       "PropName": "实发薪金",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression":
         "^ROUND\\(AN\\d+-AS\\d+-AT\\d+-AU\\d+-AV\\d+\\+AW\\d+-AX\\d+-AY\\d+-AZ\\d+-AO\\d+-AP\\d+-BA\\d+,2\\)$"
     },
@@ -27,49 +27,49 @@
       "PropName": "总支付",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression": "^ROUND\\(AN\\d+\\+BC\\d+\\+BD\\d+\\+BE\\d+\\+BF\\d+\\+BG\\d+\\+BH\\d+,2\\)$"
     },
     {
       "PropName": "验算（个人）",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression": "^ROUND\\(AS\\d+\\+AT\\d+-BJ\\d+-BK\\d+-BL\\d+,2\\)$"
     },
     {
       "PropName": "验算（个人）",
       "TargetName": "Value",
       "Description": "验算和应为0",
-      "Convention": "DefaultGeneral",
+      "Convention": "JudgmentExpression",
       "Expression": "{value}==0"
     },
     {
       "PropName": "公积金（个人）",
       "TargetName": "Formula",
       "Description": "需要满足正则表达式",
-      "Convention": "DefaultRegular",
+      "Convention": "RegularExpression",
       "Expression": "^AU\\d+\\+AV\\d+$"
     },
     {
       "PropName": "培训试用期工资",
       "TargetName": "Value",
       "Description": "此值需满足大于等于0",
-      "Convention": "DefaultGeneral",
+      "Convention": "JudgmentExpression",
       "Expression": "{value}>=0"
     },
     {
       "PropName": "基本工资",
       "TargetName": "Value",
       "Description": "此值需满足大于等于0",
-      "Convention": "DefaultGeneral",
+      "Convention": "JudgmentExpression",
       "Expression": "基本工资>=0"
     },
     {
       "PropName": "技能工资",
       "TargetName": "Value",
       "Description": "此值需满足大于等于0",
-      "Convention": "DefaultGeneral",
+      "Convention": "JudgmentExpression",
       "Expression": "技能工资>=0"
     }
   ]

@@ -31,7 +31,7 @@ namespace Workshop.Core.Validators
                 {
                     continue;
                 }
-                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention).Convention;
+                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention.ToString()).Convention;
                 var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
                 validator.ValidationPattern.Expression = ValidateItem(genericType, validator.ValidationPattern.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);

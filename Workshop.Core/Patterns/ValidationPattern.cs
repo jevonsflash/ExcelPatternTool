@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using NJsonSchema.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Workshop.Core.Linq.Models;
 
 namespace Workshop.Core.Patterns
 {
-
     public class ValidationPattern
     {
         private string _description;
@@ -16,12 +18,13 @@ namespace Workshop.Core.Patterns
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;
             ProcessResult.Content = Description + Expression;
-            TargetName = "Value";//or Formula
+            Target = Target.Value;//or Formula
 
         }
 
 
-        public string TargetName { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Target Target { get; set; }
         public string Description
         {
             get => _description;
@@ -32,8 +35,10 @@ namespace Workshop.Core.Patterns
             }
         }
 
-        public string Convention { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))] 
+        public Convention Convention { get; set; }
 
+        [JsonSchemaIgnore]
         public ProcessResult ProcessResult { get; set; }
 
         public string Expression

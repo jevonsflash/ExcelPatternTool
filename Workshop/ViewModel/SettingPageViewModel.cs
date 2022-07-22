@@ -18,6 +18,7 @@ using NJsonSchema;
 using Workshop.Helper;
 using Workshop.Core.Patterns;
 using System.Windows;
+using NJsonSchema.Generation;
 
 namespace Workshop.ViewModel
 {
@@ -50,7 +51,11 @@ namespace Workshop.ViewModel
 
             if (!LocalDataHelper.IsExist<PatternSchema>())
             {
-                var schema = JsonSchema.FromType<Pattern>();
+                var settings = new JsonSchemaGeneratorSettings();
+                settings.AllowReferencesWithProperties = false;
+                settings.DefaultReferenceTypeNullHandling=ReferenceTypeNullHandling.NotNull;
+                var generator = new JsonSchemaGenerator(settings);
+                var schema = generator.Generate(typeof(Pattern));
                 DirFileHelper.CreateFile(LocalDataHelper.GetPath<PatternSchema>(), schema.ToJson());
             }
 

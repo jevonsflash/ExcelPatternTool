@@ -11,7 +11,7 @@ namespace Workshop.Core.Validators
 
         public ValidateConvention()
         {
-            
+           
         }
 
         public ValidateConvention(Func<PatternItem, object, ProcessResult> convention)
