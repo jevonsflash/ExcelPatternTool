@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using Workshop.Infrastructure.Core;
+using Workshop.Core;
 
 namespace Workshop.Core.Domains
 {

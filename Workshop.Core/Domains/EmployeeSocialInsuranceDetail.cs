@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using Workshop.Infrastructure.Core;
+using Workshop.Core.Excel.Core.AdvancedTypes;
 
 namespace Workshop.Core.Domains
 {

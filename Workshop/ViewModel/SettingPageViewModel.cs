@@ -10,18 +10,25 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Workshop.Core.Domains;
-using Workshop.Infrastructure.Helper;
 using Workshop.Model;
 using Workshop.Core.Validators;
-using Workshop.Helper;
+using Workshop.Core.Helper;
 using Workshop.Model.JsonEditor;
+using NJsonSchema;
+using Workshop.Helper;
+using Workshop.Core.Patterns;
+using System.Windows;
 
 namespace Workshop.ViewModel
 {
     public class SettingPageViewModel : ObservableObject
     {
+
+        //const string local = "local_";
         public SettingPageViewModel()
         {
+
+
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.RefreshCommand = new RelayCommand(RefreshAction);
             this.PropertyChanged += SettingPageViewModel_PropertyChanged;
@@ -33,29 +40,37 @@ namespace Workshop.ViewModel
 
         private async void RefreshAction()
         {
+
+
             await Init();
         }
 
         private async Task Init()
         {
-            const string _dirPrefix = "Data";
 
-            //const string local = "local_";
-            const string _filePrefix = "_";
-            var basePath = CommonHelper.AppBasePath;
-            var dirPath = Path.Combine(basePath, _dirPrefix);
-            if (DirFileHelper.IsExistDirectory(dirPath))
+            if (!LocalDataHelper.IsExist<PatternSchema>())
             {
-                var fileName = string.Format("{1}{0}.json", nameof(ValidatorInfo), _filePrefix);
-                var filePath = Path.Combine(dirPath, fileName);
-                var schemaPropertyName = string.Format("{1}{0}.schema.json", nameof(ValidatorInfo), _filePrefix);
-                var schemaPropertyPath = Path.Combine(dirPath, schemaPropertyName);
-                var data = await JsonDocumentModel.LoadAsync(filePath, schemaPropertyPath);
-                this.Document = data;
-
+                var schema = JsonSchema.FromType<Pattern>();
+                DirFileHelper.CreateFile(LocalDataHelper.GetPath<PatternSchema>(), schema.ToJson());
             }
 
+            if (!LocalDataHelper.IsExist<Pattern>())
+            {
+                MessageBox.Show("未找到Pattern文件");
+                return;
+            }
 
+            var filePath = LocalDataHelper.GetPath<Pattern>();
+
+            if (!LocalDataHelper.IsExist<PatternSchema>())
+            {
+                MessageBox.Show("未找到PatternSchema文件");
+                return;
+            }
+            var schemaPropertyPath = LocalDataHelper.GetPath<PatternSchema>();
+
+            var data = await JsonDocumentModel.LoadAsync(filePath, schemaPropertyPath);
+            this.Document = data;
         }
 
         private bool _hasChanged;
@@ -116,7 +131,7 @@ namespace Workshop.ViewModel
         private void SubmitAction()
         {
             LocalDataHelper.SaveObjectLocal(SettingInfo);
-            SaveDocument(this.Document,false);
+            SaveDocument(this.Document, false);
             //HasChanged = false;
 
 
@@ -138,6 +153,7 @@ namespace Workshop.ViewModel
                 OnPropertyChanged(nameof(SettingInfo));
             }
         }
+
 
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand RefreshCommand { get; set; }

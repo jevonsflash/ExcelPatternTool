@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Workshop.Infrastructure.Linq.Core;
+using Workshop.Core.Linq.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;

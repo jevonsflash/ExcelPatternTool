@@ -5,8 +5,8 @@ using System.Text;
 using System.IO;
 using System.Linq;
 using Workshop.Core.Entites;
-using Workshop.Infrastructure.Core;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Excel.Core;
+using Workshop.Core.Excel.Models;
 
 namespace Workshop.Infrastructure.Tests
 {

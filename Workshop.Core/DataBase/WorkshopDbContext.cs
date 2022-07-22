@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Workshop.Core.Domains;
-using Workshop.Infrastructure.Core;
+using Workshop.Core.Excel.Core.AdvancedTypes;
 
 namespace Workshop.Core.DataBase
 {

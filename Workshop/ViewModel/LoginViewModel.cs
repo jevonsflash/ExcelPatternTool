@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Workshop.Common;
 using Workshop.Control;
+using Workshop.Core.Helper;
 using Workshop.Helper;
 
 namespace Workshop.ViewModel

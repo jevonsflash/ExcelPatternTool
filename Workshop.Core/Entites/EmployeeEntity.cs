@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Workshop.Infrastructure.Attributes;
-using Workshop.Infrastructure.Core;
-using Workshop.Infrastructure.Interfaces;
+using Workshop.Core.Excel.Attributes;
+using Workshop.Core.Excel.Core.AdvancedTypes;
+using Workshop.Core.Excel.Models.Interfaces;
 
 namespace Workshop.Core.Entites
 {

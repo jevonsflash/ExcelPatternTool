@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Workshop.Core.DataBase;
 using Workshop.Core.Validators;
-using Workshop.Infrastructure.Core;
+using Workshop.Core;
 
 namespace Workshop.ViewModel
 {

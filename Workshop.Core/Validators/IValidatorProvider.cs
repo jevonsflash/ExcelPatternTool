@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Patterns;
 
 namespace Workshop.Core.Validators
 {
     public interface IValidatorProvider
     {
         Func<string, string> PropertyTypeMaper { get; set; }
-        IEnumerable<ValidatorInfoItem> GetValidatorInfos();
+        IEnumerable<PatternItem> GetPatternItems();
         ValidateConvention GetConvention(string type);
     }
 }

@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Workshop.Core\Workshop.Core.csproj" />
-    <ProjectReference Include="..\Workshop.Infrastructure\Workshop.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Workshop.Infrastructure.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Workshop.Core.Entites;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Excel.Core;
+using Workshop.Core.Excel.Models;
 
 namespace Workshop.Infrastructure.Tests
 {

@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Workshop.Core.Entites;
-using Workshop.Infrastructure.Attributes;
-using Workshop.Infrastructure.Linq.Core;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Excel.Attributes;
+using Workshop.Core.Linq.Models;
+using Workshop.Core.Patterns;
+using Workshop.Core.Linq.Core;
 
 namespace Workshop.Core.Validators
 {
@@ -16,21 +17,25 @@ namespace Workshop.Core.Validators
         private IValidatorProvider validatorProvider;
         private Dictionary<string, string> aliasDictionary;
 
-        public IEnumerable<ValidatorInfoItem> ValidatorInfos { get; set; }
+        public IEnumerable<PatternItem> ValidatorInfos { get; set; }
         public IEnumerable<ProcessResult> Validate(object obj)
         {
 
-            ValidatorInfos = validatorProvider.GetValidatorInfos();
+            ValidatorInfos = validatorProvider.GetPatternItems();
 
             var result = new List<ProcessResult>();
 
             foreach (var validator in ValidatorInfos)
             {
-                var currentConvention = validatorProvider.GetConvention(validator.Convention).Convention;
+                if (validator.ValidationPattern==null)
+                {
+                    continue;
+                }
+                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention).Convention;
                 var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
-                validator.Expression = ValidateItem(genericType, validator.Expression);
+                validator.ValidationPattern.Expression = ValidateItem(genericType, validator.ValidationPattern.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
-                currentResult.KeyName = $"{(obj as EmployeeEntity).Name} 的 {validator.PropName}" ;
+                currentResult.KeyName = $"{(obj as EmployeeEntity).Name} 的 {validator.PropName}";
                 result.Add(currentResult);
             }
 
@@ -90,7 +95,7 @@ namespace Workshop.Core.Validators
             return result;
         }
 
-        public Validator(IValidatorProvider validatorProvider):this()
+        public Validator(IValidatorProvider validatorProvider) : this()
         {
             SetValidatorProvider(validatorProvider);
 

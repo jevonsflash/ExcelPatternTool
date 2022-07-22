@@ -17,8 +17,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using Workshop.Common;
 using Workshop.Control;
-using Workshop.Helper;
-using Workshop.Infrastructure.Helper;
+using Workshop.Core.Helper;
+using Workshop.Core.Helper;
 using Workshop.Model;
 using Workshop.View;
 

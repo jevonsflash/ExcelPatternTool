@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Linq.Models;
+using Workshop.Core.Patterns;
 
 namespace Workshop.Core.Validators
 {
@@ -13,10 +14,10 @@ namespace Workshop.Core.Validators
             
         }
 
-        public ValidateConvention(Func<ValidatorInfoItem, object, ProcessResult> convention)
+        public ValidateConvention(Func<PatternItem, object, ProcessResult> convention)
         {
             this.Convention = convention;
         }
-        public Func<ValidatorInfoItem, object, ProcessResult> Convention { get; set; }
+        public Func<PatternItem, object, ProcessResult> Convention { get; set; }
     }
 }

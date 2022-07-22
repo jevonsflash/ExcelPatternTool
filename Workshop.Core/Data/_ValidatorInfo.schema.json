@@ -1,4 +1,4 @@
-{
+ï»¿{
   "type": "object",
   "title": "Person",
   "required": [
@@ -31,7 +31,7 @@
           "TargetName": {
             "type": "string",
             "enum": [ "Formula", "Value" ],
-            "x-enumNames": [ "¹«Ê½", "Öµ" ]
+            "x-enumNames": [ "å…¬å¼", "å€¼" ]
           },
           "Description": {
             "type": "string"
@@ -39,7 +39,7 @@
           "Convention": {
             "type": "string",
             "enum": [ "DefaultGeneral", "DefaultRegular" ],
-            "x-enumNames": [ "ÆÕÍ¨±í´ïÊ½", "ÕıÔò±í´ïÊ½" ]
+            "x-enumNames": [ "æ™®é€šè¡¨è¾¾å¼", "æ­£åˆ™è¡¨è¾¾å¼" ]
           },
           "Expression": {
             "type": "string"

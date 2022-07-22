@@ -8,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Workshop.Core.Entites;
-using Workshop.Infrastructure.Core;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Linq.Models;
+using Workshop.Core.Excel.Core;
+using Workshop.Core.Excel.Models;
+using Workshop.Core.Validators.Implements;
 
 namespace Workshop.Core.Validators.Tests
 {

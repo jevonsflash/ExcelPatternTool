@@ -6,12 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Workshop.Infrastructure.Core;
-using Workshop.Infrastructure.Helper;
-using Workshop.Infrastructure.Interfaces;
-using Workshop.Infrastructure.Models;
+using Workshop.Core.Excel.Core;
+using Workshop.Core.Excel.Models;
+using Workshop.Core.Excel.Models.Interfaces;
+using Workshop.Core.Helper;
 using Workshop.Model;
-using Workshop.Model.Excel;
 
 namespace Workshop.Helper
 {

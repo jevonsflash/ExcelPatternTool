@@ -8,8 +8,7 @@ using System.Windows.Threading;
 
 using Workshop.Common;
 using Workshop.Core.Domains;
-using Workshop.Helper;
-using Workshop.Infrastructure.Helper;
+using Workshop.Core.Helper;
 using Workshop.Model;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +17,7 @@ using Workshop.Core.DataBase;
 using Workshop.ViewModel;
 using Workshop.Core.Validators;
 using CommunityToolkit.Mvvm.Messaging;
+using Workshop.Core.Helper;
 
 namespace Workshop
 {
