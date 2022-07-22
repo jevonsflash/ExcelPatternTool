@@ -1,5 +1,5 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
+
 using Newtonsoft.Json;
 using Workshop.Core.Domains;
 using Workshop.Infrastructure.Helper;
@@ -18,7 +18,7 @@ using Workshop.Model.JsonEditor;
 
 namespace Workshop.ViewModel
 {
-    public class SettingPageViewModel : ViewModelBase
+    public class SettingPageViewModel : ObservableObject
     {
         public SettingPageViewModel()
         {
@@ -66,7 +66,7 @@ namespace Workshop.ViewModel
             set
             {
                 _hasChanged = value;
-                RaisePropertyChanged(nameof(HasChanged));
+                OnPropertyChanged(nameof(HasChanged));
             }
         }
 
@@ -79,7 +79,7 @@ namespace Workshop.ViewModel
             {
                 _document = value;
 
-                RaisePropertyChanged(nameof(Document));
+                OnPropertyChanged(nameof(Document));
 
             }
         }
@@ -92,7 +92,7 @@ namespace Workshop.ViewModel
         public void RaiseSettingChanged()
         {
             HasChanged = true;
-            SubmitCommand.RaiseCanExecuteChanged();
+            SubmitCommand.NotifyCanExecuteChanged();
         }
 
         private void SettingPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -135,7 +135,7 @@ namespace Workshop.ViewModel
             set
             {
                 _settingInfo = value;
-                RaisePropertyChanged(nameof(SettingInfo));
+                OnPropertyChanged(nameof(SettingInfo));
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using Workshop.Helper;
 
 namespace Workshop.ViewModel
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : ObservableObject
     {
         public LoginViewModel()
         {
@@ -52,7 +52,7 @@ namespace Workshop.ViewModel
             //}
             //else
             //{
-            //    Messenger.Default.Send("", MessengerToken.CLOSEWINDOW);
+            //    WeakReferenceMessenger.Default.Send("", MessengerToken.CLOSEWINDOW);
             //    App.Session = result.Session;
             //}
         }
@@ -69,7 +69,7 @@ namespace Workshop.ViewModel
             set
             {
                 _userName = value;
-                RaisePropertyChanged(nameof(UserName));
+                OnPropertyChanged(nameof(UserName));
             }
         }
 

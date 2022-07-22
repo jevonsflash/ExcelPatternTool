@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
@@ -50,9 +50,9 @@ namespace Workshop.Control
         public ProgressWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<string>(this, MessengerToken.UPDATEPROGRESS, HandleMessage);
-            Messenger.Default.Register<string>(this, MessengerToken.CLOSEPROGRESS, HandleClose);
-            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            WeakReferenceMessenger.Default.Register<string,string>(this,MessengerToken.UPDATEPROGRESS, HandleMessage);
+            WeakReferenceMessenger.Default.Register<string,string>(this, MessengerToken.CLOSEPROGRESS, HandleClose);
+            this.Unloaded += (sender, e) => WeakReferenceMessenger.Default.UnregisterAll(this);
 
         }
 
@@ -69,13 +69,13 @@ namespace Workshop.Control
             base.ShowDialog();
         }
 
-        private void HandleClose(string obj)
+        private void HandleClose(object recipient, string obj)
         {
             Debug.WriteLine("ProgressWindow close by" +obj);
             this.Close();
         }
 
-        private void HandleMessage(string obj)
+        private void HandleMessage(object recipient, string obj)
         {
             this.MainProgress.IsIndeterminate = false;
             this.CancelButton.Visibility = Visibility.Visible;

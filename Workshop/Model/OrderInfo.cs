@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,7 +23,7 @@ namespace Workshop.Model
             set
             {
                 _orderNumber = value;
-                RaisePropertyChanged(nameof(OrderNumber));
+                OnPropertyChanged(nameof(OrderNumber));
             }
         }
 
@@ -35,7 +35,7 @@ namespace Workshop.Model
             set
             {
                 _productModelNumber = value;
-                RaisePropertyChanged(nameof(ProductModelNumber));
+                OnPropertyChanged(nameof(ProductModelNumber));
             }
         }
 
@@ -46,7 +46,7 @@ namespace Workshop.Model
             set
             {
                 _productDetail = value;
-                RaisePropertyChanged(nameof(ProductDetail));
+                OnPropertyChanged(nameof(ProductDetail));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Workshop.Model
             set
             {
                 _note = value;
-                RaisePropertyChanged(nameof(Note));
+                OnPropertyChanged(nameof(Note));
             }
         }
     }

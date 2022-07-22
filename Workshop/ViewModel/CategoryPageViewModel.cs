@@ -11,10 +11,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using AutoMapper;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Workshop.Common;
@@ -31,7 +30,7 @@ using Workshop.Model;
 using Workshop.View;
 namespace Workshop.ViewModel
 {
-    public class CategoryPageViewModel : ViewModelBase
+    public class CategoryPageViewModel : ObservableObject
     {
 
         private string filePath;
@@ -113,7 +112,7 @@ namespace Workshop.ViewModel
         {
             if (e.PropertyName == nameof(this.EmployeeInfos))
             {
-                SubmitCommand.RaiseCanExecuteChanged();
+                SubmitCommand.NotifyCanExecuteChanged();
 
             }
         }
@@ -121,7 +120,7 @@ namespace Workshop.ViewModel
         private void CategoryInfos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
 
-            SubmitCommand.RaiseCanExecuteChanged();
+            SubmitCommand.NotifyCanExecuteChanged();
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 var result = 0;
@@ -182,7 +181,7 @@ namespace Workshop.ViewModel
                 return;
 
             }
-            var childvm = SimpleIoc.Default.GetInstance<CreateCategoryViewModel>();
+            var childvm = Ioc.Default.GetRequiredService<CreateCategoryViewModel>();
             childvm.CurrentEmployee = obj;
 
             var cpwindow = new CreateCategoryWindow();
@@ -325,7 +324,7 @@ namespace Workshop.ViewModel
             set
             {
                 _categoryTypeInfos = value;
-                RaisePropertyChanged(nameof(EmployeeInfos));
+                OnPropertyChanged(nameof(EmployeeInfos));
             }
         }
 

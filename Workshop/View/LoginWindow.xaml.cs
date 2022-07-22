@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
+using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Workshop.View
         {
             InitializeComponent();
             Loaded += LoginWindow_Loaded;
-            Messenger.Default.Register<String>(this, MessengerToken.CLOSEWINDOW, HandleMessage);
+            WeakReferenceMessenger.Default.Register<string,string>(this,MessengerToken.CLOSEWINDOW, HandleMessage);
 
         }
 
@@ -46,7 +47,7 @@ namespace Workshop.View
             }
         }
 
-        private void HandleMessage(string obj)
+        private void HandleMessage(object reci, string obj)
         {
             this.Close();
         }

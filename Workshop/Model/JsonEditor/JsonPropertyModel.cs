@@ -7,8 +7,9 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using System.Text;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using NJsonSchema;
 
 namespace Workshop.Model.JsonEditor
@@ -26,7 +27,7 @@ namespace Workshop.Model.JsonEditor
             Parent = parent;
             Schema = schema;
 
-            Parent.PropertyChanged += (sender, args) => RaisePropertyChanged(() => Value);
+            Parent.PropertyChanged += (sender, args) => OnPropertyChanged(nameof(Value));
         }
 
         /// <summary>Gets the property name. </summary>
@@ -60,7 +61,7 @@ namespace Workshop.Model.JsonEditor
         {
             get
             {
-                return Schema.Type == JsonObjectType.String && 
+                return Schema.Type == JsonObjectType.String &&
                     (GetContentEncoding == "base64"
                      || Schema.Format == JsonFormatStrings.Byte);
             }
@@ -84,12 +85,12 @@ namespace Workshop.Model.JsonEditor
             }
             set
             {
-                Parent[Name] = IsBase64String 
-                    ? Base64Encode(value.ToString()) 
+                Parent[Name] = IsBase64String
+                    ? Base64Encode(value.ToString())
                     : value;
 
-                RaisePropertyChanged(() => Value);
-                RaisePropertyChanged(() => HasValue);
+                OnPropertyChanged(nameof(Value));
+                OnPropertyChanged(nameof(HasValue));
             }
         }
 
@@ -114,11 +115,16 @@ namespace Workshop.Model.JsonEditor
                 var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
                 return Encoding.UTF8.GetString(base64EncodedBytes);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // Hide any decode error
                 return "";
             }
+        }
+
+        public new void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
         }
     }
 }

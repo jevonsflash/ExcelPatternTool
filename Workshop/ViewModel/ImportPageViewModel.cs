@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using AutoMapper;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
+using CommunityToolkit.Mvvm.Input;
 using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
 using Workshop.Core.Entites;
@@ -24,18 +23,19 @@ using Workshop.Infrastructure.Core;
 using Workshop.Infrastructure.Helper;
 using Workshop.Infrastructure.Models;
 using Workshop.Model.Dto;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Workshop.ViewModel
 {
-    public class ImportPageViewModel : ViewModelBase
+    public class ImportPageViewModel : ObservableObject
     {
         private readonly WorkshopDbContext _dbContext;
         private Validator validator;
         public ImportPageViewModel(WorkshopDbContext dbContext)
         {
-            validator = SimpleIoc.Default.GetInstance<Validator>();
+            validator = Ioc.Default.GetRequiredService<Validator>();
             validator.SetValidatorProvider(new DefaultValidatorProvider<EmployeeEntity>());
-            this.ImportCommand = new RelayCommand(ImportAction, true);
+            this.ImportCommand = new RelayCommand(ImportAction, ()=>true);
             this.ValidDataCommand = new RelayCommand(GetDataAction, CanValidate);
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.Employees = new ObservableCollection<EmployeeEntity>();
@@ -49,12 +49,12 @@ namespace Workshop.ViewModel
         {
             if (e.PropertyName == nameof(this.IsValidSuccess))
             {
-                SubmitCommand.RaiseCanExecuteChanged();
+                SubmitCommand.NotifyCanExecuteChanged();
             }
             else if (e.PropertyName == nameof(this.Employees))
             {
-                SubmitCommand.RaiseCanExecuteChanged();
-                ValidDataCommand.RaiseCanExecuteChanged();
+                SubmitCommand.NotifyCanExecuteChanged();
+                ValidDataCommand.NotifyCanExecuteChanged();
 
             }
         }
@@ -224,7 +224,7 @@ namespace Workshop.ViewModel
             set
             {
                 _processResultList = value;
-                RaisePropertyChanged(nameof(ProcessResultList));
+                OnPropertyChanged(nameof(ProcessResultList));
             }
         }
         private ObservableCollection<EmployeeEntity> _employees;
@@ -235,7 +235,7 @@ namespace Workshop.ViewModel
             set
             {
                 _employees = value;
-                RaisePropertyChanged(nameof(Employees));
+                OnPropertyChanged(nameof(Employees));
             }
         }
 
@@ -249,7 +249,7 @@ namespace Workshop.ViewModel
             {
                 _isValidSuccess = value;
 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

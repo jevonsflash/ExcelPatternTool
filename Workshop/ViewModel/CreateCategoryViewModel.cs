@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
+
 using Workshop.Core.Domains;
 using Workshop.Model;
 
 namespace Workshop.ViewModel
 {
-    public class CreateCategoryViewModel : ViewModelBase
+    public class CreateCategoryViewModel : ObservableObject
     {
         public CreateCategoryViewModel()
         {
@@ -26,8 +27,8 @@ namespace Workshop.ViewModel
         {
             if (e.PropertyName == nameof(this.CurrentEmployee))
             {
-                this.SubmitCommand.RaiseCanExecuteChanged();
-                this.RemoveCommand.RaiseCanExecuteChanged();
+                this.SubmitCommand.NotifyCanExecuteChanged();
+                this.RemoveCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -58,12 +59,12 @@ namespace Workshop.ViewModel
             set
             {
                 _currentEmployee = value;
-                RaisePropertyChanged(nameof(CurrentEmployee));
+                OnPropertyChanged(nameof(CurrentEmployee));
             }
         }
 
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand RemoveCommand { get; set; }
-        public CategoryPageViewModel basevm => SimpleIoc.Default.GetInstance<CategoryPageViewModel>();
+        public CategoryPageViewModel basevm => Ioc.Default.GetRequiredService<CategoryPageViewModel>();
     }
 }

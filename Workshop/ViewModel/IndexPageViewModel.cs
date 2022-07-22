@@ -6,8 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
@@ -18,7 +18,7 @@ using Workshop.Model.Excel;
 
 namespace Workshop.ViewModel
 {
-    public class IndexPageViewModel : ViewModelBase
+    public class IndexPageViewModel : ObservableObject
     {
 
         private readonly WorkshopDbContext _dbContext;
@@ -31,7 +31,7 @@ namespace Workshop.ViewModel
 
         private void ContentList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            SubmitCommand.RaiseCanExecuteChanged();
+            SubmitCommand.NotifyCanExecuteChanged();
         }
 
 
@@ -71,7 +71,7 @@ namespace Workshop.ViewModel
             set
             {
                 _employeeInfoCount = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Workshop.Core.DataBase;
 using Workshop.Core.Domains;
 using Workshop.Helper;
 
 namespace Workshop.ViewModel
 {
-    public class ToolsPageViewModel : ViewModelBase
+    public class ToolsPageViewModel : ObservableObject
     {
         private readonly WorkshopDbContext _dbContext;
         public ToolsPageViewModel(WorkshopDbContext dbContext)
@@ -44,7 +44,7 @@ namespace Workshop.ViewModel
             set
             {
                 _logInfos = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

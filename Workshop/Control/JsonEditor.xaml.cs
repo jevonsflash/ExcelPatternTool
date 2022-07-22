@@ -67,7 +67,7 @@ namespace Workshop.Control
             if (property.Parent[property.Name] == null)
             {
                 property.Parent[property.Name] = JsonObjectModel.FromSchema(property.Schema.ActualSchema);
-                property.RaisePropertyChanged($"HasValue");
+                property.OnPropertyChanged(nameof(property.HasValue));
             }
         }
 
@@ -77,7 +77,7 @@ namespace Workshop.Control
             if (property.Parent.ContainsKey(property.Name) && property.Parent[property.Name] != null)
             {
                 property.Parent[property.Name] = null;
-                property.RaisePropertyChanged($"HasValue");
+                property.OnPropertyChanged(nameof(property.HasValue));
             }
         }
 
@@ -87,7 +87,7 @@ namespace Workshop.Control
             if (property.Parent[property.Name] == null)
             {
                 property.Parent[property.Name] = new ObservableCollection<JsonTokenModel>();
-                property.RaisePropertyChanged($"HasValue");
+                property.OnPropertyChanged(nameof(property.HasValue));
             }
         }
 
@@ -97,7 +97,7 @@ namespace Workshop.Control
             if (property.Parent.ContainsKey(property.Name) && property.Parent[property.Name] != null)
             {
                 property.Parent[property.Name] = null;
-                property.RaisePropertyChanged($"HasValue");
+                property.OnPropertyChanged(nameof(property.HasValue));
             }
         }
     }

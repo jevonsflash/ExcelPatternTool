@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Workshop.ViewModel
 {
@@ -14,7 +14,7 @@ namespace Workshop.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ObservableObject
     {
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Workshop.Model
 {
-    public class SettingInfo : ViewModelBase
+    public class SettingInfo : ObservableObject
     {
         private string _addr;
 
@@ -16,7 +17,7 @@ namespace Workshop.Model
             set
             {
                 _addr = value;
-                RaisePropertyChanged(nameof(Addr));
+                OnPropertyChanged(nameof(Addr));
             }
         }
 
@@ -28,7 +29,7 @@ namespace Workshop.Model
             set
             {
                 _port = value;
-                RaisePropertyChanged(nameof(Port));
+                OnPropertyChanged(nameof(Port));
 
             }
         }

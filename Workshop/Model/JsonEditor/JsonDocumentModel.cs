@@ -9,7 +9,7 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using NJsonSchema;
 
 namespace Workshop.Model.JsonEditor
@@ -30,11 +30,11 @@ namespace Workshop.Model.JsonEditor
             get { return _filePath; }
             set
             {
-                if (Set(ref _filePath, value))
-                {
-                    RaisePropertyChanged(() => HasFileLocation);
-                    RaisePropertyChanged(() => DisplayTitle);
-                }
+                _filePath = value;
+
+                OnPropertyChanged(nameof(HasFileLocation));
+                OnPropertyChanged(nameof(DisplayTitle));
+
             }
         }
 
@@ -59,20 +59,14 @@ namespace Workshop.Model.JsonEditor
         }
 
         /// <summary>Gets the JSON data. </summary>
-        public JsonObjectModel Data
-        {
-            get { return _data; }
-            private set { Set(ref _data, value); }
-        }
+        public JsonObjectModel Data { get; set; }
+
 
         /// <summary>Gets or sets the undo/redo manager. </summary>
 
         /// <summary>Gets a value indicating whether the document is read only. </summary>
-        public bool IsReadOnly
-        {
-            get { return _isReadOnly; }
-            set { Set(ref _isReadOnly, value); }
-        }
+        public bool IsReadOnly { get; set; }
+
 
         /// <summary>Initializes the document. </summary>
         /// <param name="data">The JSON data. </param>
@@ -97,7 +91,7 @@ namespace Workshop.Model.JsonEditor
         /// <param name="filePath">The file path. </param>
         /// <param name="dispatcher">The UI dispatcher. </param>
         /// <returns>The <see cref="JsonDocumentModel"/>. </returns>
-        public static Task<JsonDocumentModel> LoadAsync(string filePath )
+        public static Task<JsonDocumentModel> LoadAsync(string filePath)
         {
             var schemaPath = GetDefaultSchemaPath(filePath);
             return LoadAsync(filePath, schemaPath);
@@ -108,12 +102,12 @@ namespace Workshop.Model.JsonEditor
         /// <param name="schemaPath">The schema path. </param>
         /// <param name="dispatcher">The UI dispatcher. </param>
         /// <returns>The <see cref="JsonDocumentModel"/>. </returns>
-        public static Task<JsonDocumentModel> LoadAsync(string filePath, string schemaPath )
+        public static Task<JsonDocumentModel> LoadAsync(string filePath, string schemaPath)
         {
             return Task.Run(() =>
             {
                 var schema = JsonSchema.FromFileAsync(schemaPath).GetAwaiter().GetResult();
-                var data = JsonObjectModel.FromJson(File.ReadAllText(filePath, Encoding.UTF8), schema); 
+                var data = JsonObjectModel.FromJson(File.ReadAllText(filePath, Encoding.UTF8), schema);
 
                 var document = new JsonDocumentModel();
                 document.Initialize(data);
@@ -127,7 +121,7 @@ namespace Workshop.Model.JsonEditor
         /// <param name="schemaPath">The schema file path. </param>
         /// <param name="dispatcher">The UI dispatcher. </param>
         /// <returns>The <see cref="JsonDocumentModel"/>. </returns>
-        public static Task<JsonDocumentModel> CreateAsync(string schemaPath )
+        public static Task<JsonDocumentModel> CreateAsync(string schemaPath)
         {
             return Task.Run(() =>
             {
