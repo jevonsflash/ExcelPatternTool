@@ -141,7 +141,7 @@ namespace Workshop.Core.Validators
 
             });
 
-            Conventions.Add("JudgmentExpression", new ValidateConvention(generalOne));
+            Conventions.Add("LambdaExpression", new ValidateConvention(generalOne));
             Conventions.Add("RegularExpression", new ValidateConvention(regularOne));
         }
 

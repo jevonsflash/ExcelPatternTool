@@ -119,7 +119,6 @@
                     </Expander.HeaderTemplate>
                     <StackPanel>
                         <CheckBox IsChecked="{Binding HasValue, Mode=OneWay}" 
-                                  mah:VisibilityHelper.IsVisible ="{Binding IsRequired}"
                                   Margin="4,8,4,4" Content="Specify values" 
                                   Checked="OnCreateObject" Unchecked="OnRemoveObject" Tag="{Binding}" />
 
@@ -146,8 +145,8 @@
                                   Margin="4,0,4,4" Content="Specify values" 
                                   Checked="OnCreateArray" Unchecked="OnRemoveArray" Tag="{Binding}" />
 
-                        <StackPanel Visibility="{Binding HasValue, Converter={StaticResource Bool2VisibilityConverter}}">
-                            <ItemsControl ItemsSource="{Binding Value}" Focusable="False">
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding Value}" Focusable="False" Visibility="{Binding HasValue, Converter={StaticResource Bool2VisibilityConverter}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="4,0,4,0">

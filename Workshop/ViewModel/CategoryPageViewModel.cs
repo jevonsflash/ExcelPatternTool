@@ -42,8 +42,8 @@ namespace Workshop.ViewModel
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
             this.CreateCommand = new RelayCommand(CreateAction);
             this.ClearCommand = new RelayCommand(ClearAction);
-            this.RemoveCommand = new RelayCommand<Employee>(RemoveAction);
-            this.EditCommand = new RelayCommand<Employee>(EditAction);
+            this.RemoveCommand = new RelayCommand<EmployeeEntity>(RemoveAction);
+            this.EditCommand = new RelayCommand<EmployeeEntity>(EditAction);
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
             this._dbContext = dbContext;
             InitData();
@@ -74,16 +74,12 @@ namespace Workshop.ViewModel
 
         private void InitData()
         {
-            IList<Employee> data = null;
+            IList<EmployeeEntity> data = null;
 
-            var task = InvokeHelper.InvokeOnUi<IList<Employee>>(null, () =>
+            var task = InvokeHelper.InvokeOnUi<IList<EmployeeEntity>>(null, () =>
         {
             var result = this._dbContext.Employee.Where(c => true)
-                .Include(c => c.EmployeeAccount)
-                .Include(c => c.EmployeeSalay)
-                .Include(c => c.EmployeeSocialInsuranceAndFund)
-                .Include(c => c.EnterpriseSocialInsuranceAndFund)
-                .Include(c => c.EmployeeSocialInsuranceDetail)
+               
 
                 .ToList();
             return result;
@@ -94,7 +90,7 @@ namespace Workshop.ViewModel
                  data = t;
                  try
                  {
-                     this.EmployeeInfos = new ObservableCollection<Employee>(data);
+                     this.EmployeeInfos = new ObservableCollection<EmployeeEntity>(data);
                      this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
 
 
@@ -125,7 +121,7 @@ namespace Workshop.ViewModel
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 var result = 0;
-                _dbContext.Employee.Update(e.NewItems[0] as Employee);
+                _dbContext.Employee.Update(e.NewItems[0] as EmployeeEntity);
                 result = _dbContext.SaveChanges();
                 if (result == 0)
                 {
@@ -136,7 +132,7 @@ namespace Workshop.ViewModel
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var result = 0;
-                _dbContext.Employee.Remove(e.OldItems[0] as Employee);
+                _dbContext.Employee.Remove(e.OldItems[0] as EmployeeEntity);
                 result = _dbContext.SaveChanges();
                 if (result == 0)
                 {
@@ -150,7 +146,7 @@ namespace Workshop.ViewModel
 
         }
 
-        private void RemoveAction(Employee obj)
+        private void RemoveAction(EmployeeEntity obj)
         {
             if (obj == null)
             {
@@ -161,7 +157,7 @@ namespace Workshop.ViewModel
         }
 
 
-        internal void RemoveCategory(Employee CategoryInfo)
+        internal void RemoveCategory(EmployeeEntity CategoryInfo)
         {
             if (EmployeeInfos.Any(c => c.Id == CategoryInfo.Id))
             {
@@ -175,7 +171,7 @@ namespace Workshop.ViewModel
             }
         }
 
-        private void EditAction(Employee obj)
+        private void EditAction(EmployeeEntity obj)
         {
             if (obj == null)
             {
@@ -183,7 +179,7 @@ namespace Workshop.ViewModel
 
             }
             var childvm = Ioc.Default.GetRequiredService<CreateCategoryViewModel>();
-            childvm.CurrentEmployee = obj;
+            childvm.CurrentEmployeeEntity = obj;
 
             var cpwindow = new CreateCategoryWindow();
             cpwindow.ShowDialog();
@@ -213,88 +209,12 @@ namespace Workshop.ViewModel
                 var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
                 var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
 
-                var employeeEntitys = this.EmployeeInfos.Select(c => new EmployeeEntity
-                {
-                    Year = c.Year,
-                    Mounth = c.Mounth,
-                    Batch = c.Batch,
-                    SerialNum = c.SerialNum,
-                    Dept = c.Dept,
-                    Proj = c.Proj,
-                    State = c.State,
-                    Name = c.Name,
-                    IDCard = c.IDCard,
-                    Level = c.Level,
-                    JobCate = c.JobCate,
-                    AccountNum = c.EmployeeAccount.AccountNum,
-                    AccountBankAlias = c.EmployeeAccount.AccountBankAlias,
-                    AccountBankName = c.EmployeeAccount.AccountBankName,
-                    AccountBankLoc = c.EmployeeAccount.AccountBankLoc,
-                    SocialInsuranceNum = c.EmployeeAccount.SocialInsuranceNum,
-                    ProbationSalary = c.EmployeeSalay.ProbationSalary,
-                    BasicSalary = c.EmployeeSalay.BasicSalary,
-                    SkillSalary = c.EmployeeSalay.SkillSalary,
-                    PerformanceBonus = c.EmployeeSalay.PerformanceBonus,
-                    PostAllowance = c.EmployeeSalay.PostAllowance,
-                    OtherAllowances = c.EmployeeSalay.OtherAllowances,
-                    SalesBonus = c.EmployeeSalay.SalesBonus,
-                    Bonus1 = c.EmployeeSalay.Bonus1,
-                    Bonus2 = c.EmployeeSalay.Bonus2,
-                    PerformanceRewards = c.EmployeeSalay.PerformanceRewards,
-                    PerformanceDeduct = c.EmployeeSalay.PerformanceDeduct,
-                    NightAllowances = c.EmployeeSalay.NightAllowances,
-                    OrdinaryOvertime = c.EmployeeSalay.OrdinaryOvertime,
-                    HolidayOvertime = c.EmployeeSalay.HolidayOvertime,
-                    AgeBonus = c.EmployeeSalay.AgeBonus,
-                    AttendanceDeduct = c.EmployeeSalay.AttendanceDeduct,
-                    MonthlyAttendance = c.EmployeeSalay.MonthlyAttendance,
-                    QuarterlyAttendance = c.EmployeeSalay.QuarterlyAttendance,
-                    OtherRewards = c.EmployeeSalay.OtherRewards,
-                    OtherDeduct = c.EmployeeSalay.OtherDeduct,
-                    SupplementaryRewards = c.EmployeeSalay.SupplementaryRewards,
-                    SupplementaryDeduct = c.EmployeeSalay.SupplementaryDeduct,
-                    ParttimeSalary = c.EmployeeSalay.ParttimeSalary,
-                    Sum = c.EmployeeSalay.Sum,
-                    HostelAllowances = c.EmployeeSalay.HostelAllowances,
-                    MealAllowances = c.EmployeeSalay.MealAllowances,
-                    TemporaryTax = c.EmployeeSalay.TemporaryTax,
-                    SumWithTemporaryTax = c.EmployeeSalay.SumWithTemporaryTax,
-                    SocialInsurancePersonal = c.EmployeeSocialInsuranceAndFund.SocialInsurancePersonal,
-                    SupplementarySocialInsurancePersonal =
-                        c.EmployeeSocialInsuranceAndFund.SupplementarySocialInsurancePersonal,
-                    ProvidentFundPersonal = c.EmployeeSocialInsuranceAndFund.ProvidentFundPersonal,
-                    SupplementaryProvidentFundPersonal =
-                        c.EmployeeSocialInsuranceAndFund.SupplementaryProvidentFundPersonal,
-                    BeforeFillingOut = c.EmployeeSocialInsuranceAndFund.BeforeFillingOut,
-                    PersonalIncomeTax = c.EmployeeSocialInsuranceAndFund.PersonalIncomeTax,
-                    UnionFeePersonal = c.EmployeeSocialInsuranceAndFund.UnionFeePersonal,
-                    SupplementaryUnionFeeDeductPersonal =
-                        c.EmployeeSocialInsuranceAndFund.SupplementaryUnionFeeDeductPersonal,
-                    SupplementaryCommercialInsuranceDeduct =
-                        c.EmployeeSocialInsuranceAndFund.SupplementaryCommercialInsuranceDeduct,
-                    Sum1 = c.EmployeeSocialInsuranceAndFund.Sum,
-                    SocialInsuranceEnterprise = c.EnterpriseSocialInsuranceAndFund.SocialInsuranceEnterprise,
-                    SupplementarySocialInsuranceEnterprise =
-                        c.EnterpriseSocialInsuranceAndFund.SupplementarySocialInsuranceEnterprise,
-                    ProvidentFundEnterprise = c.EnterpriseSocialInsuranceAndFund.ProvidentFundEnterprise,
-                    SupplementaryProvidentFundEnterprise =
-                        c.EnterpriseSocialInsuranceAndFund.SupplementaryProvidentFundEnterprise,
-                    UnionFeeEnterprise = c.EnterpriseSocialInsuranceAndFund.UnionFeeEnterprise,
-                    SupplementaryUnionFeeDeductEnterprise =
-                        c.EnterpriseSocialInsuranceAndFund.SupplementaryUnionFeeDeductEnterprise,
-                    Sum2 = c.EnterpriseSocialInsuranceAndFund.Sum,
-                    BasicOldAgeInsurance = c.EmployeeSocialInsuranceDetail.BasicOldAgeInsurance,
-                    BasicMedicalInsurance = c.EmployeeSocialInsuranceDetail.BasicMedicalInsurance,
-                    UnemploymentInsurance = c.EmployeeSocialInsuranceDetail.UnemploymentInsurance,
-                    Check = c.EmployeeSocialInsuranceDetail.Check,
-                    ProvidentFund = c.EmployeeSocialInsuranceDetail.ProvidentFund
-                }).ToList();
                 var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
                 {
 
-                    DocHelper.SaveTo(employeeEntitys, new ExportOption(1, 1) { SheetName = "全职(生成器生成，请按需修改)", GenHeaderRow = true });
+                    DocHelper.SaveTo(this.EmployeeInfos, new ExportOption(1, 1) { SheetName = "全职(生成器生成，请按需修改)", GenHeaderRow = true });
 
-                    return employeeEntitys;
+                    return this.EmployeeInfos;
 
 
 
@@ -310,15 +230,15 @@ namespace Workshop.ViewModel
         }
 
 
-        private ObservableCollection<Employee> _categoryTypeInfos;
+        private ObservableCollection<EmployeeEntity> _categoryTypeInfos;
 
-        public ObservableCollection<Employee> EmployeeInfos
+        public ObservableCollection<EmployeeEntity> EmployeeInfos
         {
             get
             {
                 if (_categoryTypeInfos == null)
                 {
-                    _categoryTypeInfos = new ObservableCollection<Employee>();
+                    _categoryTypeInfos = new ObservableCollection<EmployeeEntity>();
                 }
                 return _categoryTypeInfos;
             }
@@ -329,12 +249,10 @@ namespace Workshop.ViewModel
             }
         }
 
-        public void CreateCategory(Employee model)
+        public void CreateCategory(EmployeeEntity model)
         {
             var id = Guid.NewGuid();
-            var createtime = DateTime.Now;
             model.Id = id;
-            model.CreateTime = createtime;
             if (EmployeeInfos.Any(c => c.Id == model.Id))
             {
                 var current = EmployeeInfos.FirstOrDefault(c => c.Id == model.Id);
@@ -360,8 +278,8 @@ namespace Workshop.ViewModel
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
-        public RelayCommand<Employee> EditCommand { get; set; }
-        public RelayCommand<Employee> RemoveCommand { get; set; }
+        public RelayCommand<EmployeeEntity> EditCommand { get; set; }
+        public RelayCommand<EmployeeEntity> RemoveCommand { get; set; }
 
     }
 

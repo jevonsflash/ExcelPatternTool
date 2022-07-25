@@ -35,7 +35,7 @@ namespace Workshop.Core.Validators
                 var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
                 validator.ValidationPattern.Expression = ValidateItem(genericType, validator.ValidationPattern.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
-                currentResult.KeyName = $"{(obj as EmployeeEntity).Name} 的 {validator.PropName}";
+                currentResult.KeyName = $"{(obj as EmployeeEntity).Id} 的 {validator.PropName}";
                 result.Add(currentResult);
             }
 

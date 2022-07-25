@@ -41,47 +41,8 @@
                   ItemsSource="{Binding  EmployeeInfos}">
 
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="批次" Binding="{Binding Batch}"></DataGridTextColumn>
-				<DataGridTextColumn Header="序号" Binding="{Binding SerialNum}"></DataGridTextColumn>
-				<DataGridTextColumn Header="部门" Binding="{Binding Dept}"></DataGridTextColumn>
-				<DataGridTextColumn Header="项目" Binding="{Binding Proj}"></DataGridTextColumn>
-				<DataGridTextColumn Header="状态" Binding="{Binding State}"></DataGridTextColumn>
-				<DataGridTextColumn Header="姓名" Binding="{Binding Name}"></DataGridTextColumn>
-				<DataGridTextColumn Header="身份证号码" Binding="{Binding IDCard}"></DataGridTextColumn>
+				<DataGridTextColumn Header="批次" Binding="{Binding Year}"></DataGridTextColumn>
 
-				<DataGridTemplateColumn Header="员工银行信息"  Width="300">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<ItemsControl DataContext="{Binding EmployeeAccount}">
-								<control:SimpleKeyValueControl KeyText="账号" ValueText="{Binding AccountNum}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="名称和地点" ValueText="{Binding AccountBankAlias}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="银行名称" ValueText="{Binding AccountBankName}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="银行地点" ValueText="{Binding AccountBankLoc}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="个人社保号" ValueText="{Binding SocialInsuranceNum}"></control:SimpleKeyValueControl>
-							</ItemsControl>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="员工薪酬信息"  Width="300">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<ItemsControl DataContext="{Binding EmployeeSalay}">
-								<control:SimpleKeyValueControl KeyText="基本工资" ValueText="{Binding BasicSalary}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="应发合计" ValueText="{Binding Sum}"></control:SimpleKeyValueControl>
-							</ItemsControl>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="员工薪酬信息"  Width="300">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<ItemsControl DataContext="{Binding EmployeeSocialInsuranceAndFund}">
-								<control:SimpleKeyValueControl KeyText="社保个人" ValueText="{Binding SocialInsurancePersonal}"></control:SimpleKeyValueControl>
-								<control:SimpleKeyValueControl KeyText="公积金个人" ValueText="{Binding ProvidentFundPersonal}"></control:SimpleKeyValueControl>
-							</ItemsControl>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="操作"  Width="300">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>

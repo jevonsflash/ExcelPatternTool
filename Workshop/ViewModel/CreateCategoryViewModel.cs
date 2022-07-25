@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 
 using Workshop.Core.Domains;
+using Workshop.Core.Entites;
 using Workshop.Model;
 
 namespace Workshop.ViewModel
@@ -16,7 +17,7 @@ namespace Workshop.ViewModel
     {
         public CreateCategoryViewModel()
         {
-            this.CurrentEmployee = new Employee();
+            this.CurrentEmployeeEntity = new EmployeeEntity();
             this.SubmitCommand = new RelayCommand(SubmitAction);
             this.RemoveCommand = new RelayCommand(RemoveAction, CanSubmit);
             this.PropertyChanged += CreateProductPageViewModel_PropertyChanged;
@@ -25,7 +26,7 @@ namespace Workshop.ViewModel
 
         private void CreateProductPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(this.CurrentEmployee))
+            if (e.PropertyName == nameof(this.CurrentEmployeeEntity))
             {
                 this.SubmitCommand.NotifyCanExecuteChanged();
                 this.RemoveCommand.NotifyCanExecuteChanged();
@@ -34,32 +35,32 @@ namespace Workshop.ViewModel
 
         private void RemoveAction()
         {
-            basevm.RemoveCategory(this.CurrentEmployee);
-            this.CurrentEmployee = new Employee();
+            basevm.RemoveCategory(this.CurrentEmployeeEntity);
+            this.CurrentEmployeeEntity = new EmployeeEntity();
 
         }
 
         private void SubmitAction()
         {
-            basevm.CreateCategory(this.CurrentEmployee);
-            this.CurrentEmployee = new Employee();
+            basevm.CreateCategory(this.CurrentEmployeeEntity);
+            this.CurrentEmployeeEntity = new EmployeeEntity();
 
         }
 
         private bool CanSubmit()
         {
-            return this.CurrentEmployee != null && CurrentEmployee.Id!=Guid.Empty;
+            return this.CurrentEmployeeEntity != null && CurrentEmployeeEntity.Id!=Guid.Empty;
         }
 
-        private Employee _currentEmployee;
+        private EmployeeEntity _currentEmployeeEntity;
 
-        public Employee CurrentEmployee
+        public EmployeeEntity CurrentEmployeeEntity
         {
-            get { return _currentEmployee; }
+            get { return _currentEmployeeEntity; }
             set
             {
-                _currentEmployee = value;
-                OnPropertyChanged(nameof(CurrentEmployee));
+                _currentEmployeeEntity = value;
+                OnPropertyChanged(nameof(CurrentEmployeeEntity));
             }
         }
 

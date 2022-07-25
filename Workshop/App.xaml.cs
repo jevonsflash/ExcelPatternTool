@@ -26,9 +26,10 @@ namespace Workshop
     /// </summary>
     public partial class App : Application
     {
-        public static List<Employee> GolobelCategorys;
         public static string Session;
         private bool _initialized;
+        private readonly WorkshopDbContext _dataContext;
+
         public App()
         {
             if (!_initialized)
@@ -40,7 +41,9 @@ namespace Workshop
                     .UseSqlite(connectionString)
                     .Options;
 
+                _dataContext= new WorkshopDbContext(contextOptions);
 
+                _dataContext.Database.Migrate();
                 Ioc.Default.ConfigureServices(
                     new ServiceCollection()
 
@@ -53,7 +56,7 @@ namespace Workshop
             .AddSingleton<SettingPageViewModel>()
             .AddSingleton<ToolsPageViewModel>()
 
-            .AddSingleton<WorkshopDbContext>((c) => new WorkshopDbContext(contextOptions))
+            .AddSingleton<WorkshopDbContext>((c) => _dataContext)
             .AddSingleton<Validator>((c) => new Validator())
                     .BuildServiceProvider());
                 App.Current.Startup += Current_Startup;

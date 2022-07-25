@@ -17,10 +17,11 @@ namespace Workshop.Core.Helper
         public static string GetPath<T>()
         {
             var dirPath = Path.Combine(basePath, _dirPrefix);
-            var fileName = string.Format("{1}{0}s.json", typeof(T).Name, _filePrefix);
+            var fileName = string.Format("{1}{0}.json", typeof(T).Name, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             return filePath;
         }
+
         public static string GetBasePath()
         {
             var dirPath = Path.Combine(basePath, _dirPrefix);
@@ -30,7 +31,7 @@ namespace Workshop.Core.Helper
         public static string GetPath(Type type)
         {
             var dirPath = Path.Combine(basePath, _dirPrefix);
-            var fileName = string.Format("{1}{0}s.json", type.Name, _filePrefix);
+            var fileName = string.Format("{1}{0}.json", type.Name, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             return filePath;
         }
@@ -39,7 +40,7 @@ namespace Workshop.Core.Helper
         public static string GetPath(string typeName)
         {
             var dirPath = Path.Combine(basePath, _dirPrefix);
-            var fileName = string.Format("{1}{0}s.json", typeName, _filePrefix);
+            var fileName = string.Format("{1}{0}.json", typeName, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             return filePath;
         }
@@ -70,7 +71,7 @@ namespace Workshop.Core.Helper
             var dirPath = Path.Combine(basePath, _dirPrefix);
             if (DirFileHelper.IsExistDirectory(dirPath))
             {
-                var fileName = string.Format("{1}{0}s.json", typeof(T).Name, _filePrefix);
+                var fileName = string.Format("{1}{0}.json", typeof(T).Name, _filePrefix);
                 var filePath = Path.Combine(dirPath, fileName);
                 if (DirFileHelper.IsExistFile(filePath))
                 {
@@ -88,7 +89,7 @@ namespace Workshop.Core.Helper
             var dirPath = Path.Combine(basePath, _dirPrefix);
             DirFileHelper.CreateDir(dirPath);
             var serializedstr = JsonConvert.SerializeObject(source);
-            var fileName = string.Format("{1}{0}s.json", typeof(T).Name, _filePrefix);
+            var fileName = string.Format("{1}{0}.json", typeof(T).Name, _filePrefix);
             var filePath = Path.Combine(dirPath, fileName);
             DirFileHelper.CreateFile(filePath, serializedstr);
         }

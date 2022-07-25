@@ -16,14 +16,7 @@
 		<ScrollViewer Grid.Column="0" Focusable="False">
 			<StackPanel Margin="20,0">
 				<Grid Margin="0,10">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"></ColumnDefinition>
-						<ColumnDefinition Width="2*"></ColumnDefinition>
-					</Grid.ColumnDefinitions>
-					<Label Content="服務ip地址（请勿修改）"></Label>
-
-                    <TextBox Grid.Column="1" 
-		                          Text="{Binding SettingInfo.Addr}"></TextBox>
+					
                 </Grid>
 				<Border>
 					<control:JsonEditor Margin="8" Data="{Binding Document.Data}"  IsEnabled="True" />

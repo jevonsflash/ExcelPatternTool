@@ -19,6 +19,7 @@ using Workshop.Helper;
 using Workshop.Core.Patterns;
 using System.Windows;
 using NJsonSchema.Generation;
+using System.Collections.ObjectModel;
 
 namespace Workshop.ViewModel
 {
@@ -30,7 +31,7 @@ namespace Workshop.ViewModel
         {
 
 
-            this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
+            this.SubmitCommand = new RelayCommand(SubmitAction, ()=>true);
             this.RefreshCommand = new RelayCommand(RefreshAction);
             this.PropertyChanged += SettingPageViewModel_PropertyChanged;
             SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
@@ -59,22 +60,26 @@ namespace Workshop.ViewModel
                 DirFileHelper.CreateFile(LocalDataHelper.GetPath<PatternSchema>(), schema.ToJson());
             }
 
+
+            var schemaPropertyPath = LocalDataHelper.GetPath<PatternSchema>();
+            JsonDocumentModel data = null;
             if (!LocalDataHelper.IsExist<Pattern>())
             {
-                MessageBox.Show("未找到Pattern文件");
-                return;
+                LocalDataHelper.SaveObjectLocal<Pattern>(new Pattern());
+                var filePath = LocalDataHelper.GetPath<Pattern>();
+
+                data = await JsonDocumentModel.LoadAsync(filePath, schemaPropertyPath);
+
+
             }
-
-            var filePath = LocalDataHelper.GetPath<Pattern>();
-
-            if (!LocalDataHelper.IsExist<PatternSchema>())
+            else
             {
-                MessageBox.Show("未找到PatternSchema文件");
-                return;
-            }
-            var schemaPropertyPath = LocalDataHelper.GetPath<PatternSchema>();
+                var filePath = LocalDataHelper.GetPath<Pattern>();
 
-            var data = await JsonDocumentModel.LoadAsync(filePath, schemaPropertyPath);
+                data = await JsonDocumentModel.LoadAsync(filePath, schemaPropertyPath);
+
+            }
+
             this.Document = data;
         }
 

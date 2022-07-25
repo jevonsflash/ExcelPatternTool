@@ -12,7 +12,6 @@ namespace Workshop.Control
     {
         public CategoryComboBox()
         {
-            ItemsSource = App.GolobelCategorys;
             Loaded += CategoryComboBox_Loaded;
             DisplayMemberPath = "Name";
             

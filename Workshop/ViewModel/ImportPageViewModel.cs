@@ -66,56 +66,13 @@ namespace Workshop.ViewModel
 
         private async void SubmitAction()
         {
-            var task = InvokeHelper.InvokeOnUi<IEnumerable<Employee>>(null, () =>
+            var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
             {
-                var employeeAccount = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeAccount>(this.Employees);
-                var employeeSalay = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSalay>(this.Employees, new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<double, double>().ConvertUsing(s => Math.Round(s, 2));
-                    cfg.CreateMap<EmployeeEntity, EmployeeSalay>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum));
-                }));
-                var employeeSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<double, double>().ConvertUsing(s => Math.Round(s, 2));
-                    cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceAndFund>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum1));
-                }));
-                var enterpriseSocialInsuranceAndFund = AutoMapperHelper.MapToList<EmployeeEntity, EnterpriseSocialInsuranceAndFund>(this.Employees, new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<double, double>().ConvertUsing(s => Math.Round(s, 2));
-                    cfg.CreateMap<EmployeeEntity, EnterpriseSocialInsuranceAndFund>()
-                        .ForMember(dest => dest.Sum, opt => opt.MapFrom(src => src.Sum2));
-                }));
-                var employeeSocialInsuranceDetail = AutoMapperHelper.MapToList<EmployeeEntity, EmployeeSocialInsuranceDetail>(this.Employees, new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<double, double>().ConvertUsing(s => Math.Round(s, 2));
-                    cfg.CreateMap<EmployeeEntity, EmployeeSocialInsuranceDetail>();
-                }));
-                var resultEmployees = AutoMapperHelper.MapToList<EmployeeEntity, Employee>(this.Employees).Select(c => new Employee()
-                {
-                    Year = c.Year,
-                    Mounth = c.Mounth,
-                    Batch = c.Batch,
-                    SerialNum = c.SerialNum,
-                    Dept = c.Dept,
-                    Proj = c.Proj,
-                    State = c.State,
-                    Name = c.Name,
-                    IDCard = c.IDCard,
-                    Level = c.Level,
-                    JobCate = c.JobCate,
-                    EmployeeAccount = employeeAccount.FirstOrDefault(d => d.Id == c.Id),
-                    EmployeeSalay = employeeSalay.FirstOrDefault(d => d.Id == c.Id),
-                    EmployeeSocialInsuranceAndFund = employeeSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
-                    EnterpriseSocialInsuranceAndFund = enterpriseSocialInsuranceAndFund.FirstOrDefault(d => d.Id == c.Id),
-                    EmployeeSocialInsuranceDetail = employeeSocialInsuranceDetail.FirstOrDefault(d => d.Id == c.Id)
 
-                });
-                this._dbContext.Employee.AddRangeAsync(resultEmployees);
+                this._dbContext.Employee.AddRangeAsync(Employees);
                 var result = this._dbContext.SaveChanges();
 
-                return resultEmployees;
+                return Employees;
 
 
 
@@ -191,7 +148,6 @@ namespace Workshop.ViewModel
                 {
 
                     var op1 = new ImportOption<EmployeeEntity>(0, 2);
-                    op1.SheetName = "全职";
                     var r1 = importer.Process<EmployeeEntity>(op1);
 
 

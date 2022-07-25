@@ -24,15 +24,7 @@ namespace Workshop.Infrastructure.Tests
             import.LoadXlsx(data1);
             var importOption = new ImportOption<EmployeeEntity>(0, 2);
             importOption.SheetName = "全职";
-            var output = import.Process<EmployeeEntity>(importOption).ToList();
-            foreach (var empoyeeEntity in output)
-            {
-                if (empoyeeEntity.AgeBonus < 0 )
-                {
-                    Console.WriteLine(empoyeeEntity.Name);
-                }
-
-            }
+            var output = import.Process<EmployeeEntity>(importOption).ToList();           
             Assert.IsNotNull(output);
         }
     }

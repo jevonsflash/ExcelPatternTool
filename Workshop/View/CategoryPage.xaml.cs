@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Workshop.Core.Domains;
+using Workshop.Core.Entites;
 using Workshop.Model;
 using Workshop.ViewModel;
 
@@ -31,14 +32,14 @@ namespace Workshop.View
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.EditCommand.Execute(item.DataContext as Employee);
+            vm.EditCommand.Execute(item.DataContext as EmployeeEntity);
         }
 
         private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.RemoveCommand.Execute(item.DataContext as Employee);
+            vm.RemoveCommand.Execute(item.DataContext as EmployeeEntity);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
