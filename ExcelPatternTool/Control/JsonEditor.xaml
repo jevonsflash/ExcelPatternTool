@@ -1,0 +1,193 @@
+﻿<UserControl x:Class="ExcelPatternTool.Control.JsonEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:jsonEditorConverter="clr-namespace:ExcelPatternTool.Converter.JsonEditorConverter"
+             xmlns:control="clr-namespace:ExcelPatternTool.Control"
+             Focusable="False" mc:Ignorable="d" x:Name="Self" d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <jsonEditorConverter:NumberConverter x:Key="NumberConverter" />
+        <jsonEditorConverter:IntegerConverter x:Key="IntegerConverter" />
+        <jsonEditorConverter:IndexConverter x:Key="IndexConverter" />
+        <jsonEditorConverter:TimeConverter x:Key="TimeConverter" />
+        <jsonEditorConverter:DateConverter x:Key="DateConverter" />
+        <jsonEditorConverter:DateTimeConverter x:Key="DateTimeConverter" />
+        <jsonEditorConverter:DecimalUpDownRangeConverter x:Key="DecimalUpDownRangeConverter" />
+        <jsonEditorConverter:IntegerUpDownRangeConverter x:Key="IntegerUpDownRangeConverter" />
+    </UserControl.Resources>
+
+    <ContentPresenter x:Name="Presenter">
+        <ContentPresenter.Resources>
+            <DataTemplate x:Key="RootTemplate">
+				<ItemsControl  
+				               ItemsSource="{Binding Properties}" Focusable="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:JsonEditor Data="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DataTemplate>
+            <DataTemplate x:Key="StringTemplate">
+                <StackPanel >
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <TextBox Margin="0,0,0,8"
+                             Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="DateTimeTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <mah:DateTimePicker Margin="0,0,0,8"    
+                                        SelectedDateTime="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="DateTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <mah:DateTimePicker Margin="0,0,0,8"              
+                                        SelectedDateTime="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="TimeTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <mah:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch" 
+                                    SelectedDateTime="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="NumberTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <mah:NumericUpDown Margin="0,0,0,8"   
+                                       Minimum="{Binding Schema.Minimum, Converter={StaticResource DecimalUpDownRangeConverter}, ConverterParameter=min}"
+                                       Maximum="{Binding Schema.Maximum, Converter={StaticResource DecimalUpDownRangeConverter}, ConverterParameter=max}"
+                                        Value ="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NumberConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="IntegerTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                                           Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+					<mah:NumericUpDown Margin="0,0,0,8"  
+					                    Minimum="{Binding Schema.Minimum, Converter={StaticResource IntegerUpDownRangeConverter}, ConverterParameter=min}"
+					                    Maximum="{Binding Schema.Maximum, Converter={StaticResource IntegerUpDownRangeConverter}, ConverterParameter=max}"
+					                    Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntegerConverter}}" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="EnumTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource Bool2VisibilityConverter}}" />
+                    <ComboBox Margin="0,0,0,8" ItemsSource="{Binding Schema.ActualSchema.Enumeration}"
+                              SelectedValue="{Binding Value, Mode=TwoWay}"   />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="BooleanTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <CheckBox Content="{Binding Schema.Description}" IsThreeState="False"
+                              IsChecked="{Binding Value, Mode=TwoWay, FallbackValue=false}" Margin="0,0,0,8" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="ObjectTemplate">
+				<Expander IsExpanded="True"
+                                            Header="{Binding}" Margin="0,0,0,8" MinHeight="36"
+                                            BorderBrush="Black">
+                    <Expander.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" />
+                                <Run Text="{Binding Schema.Description}" /><Run Text=" (Object) " />
+                            </TextBlock>
+                        </DataTemplate>
+                    </Expander.HeaderTemplate>
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding HasValue, Mode=OneWay}" 
+                                  Margin="4,8,4,4" Content="Specify values" 
+                                  Checked="OnCreateObject" Unchecked="OnRemoveObject" Tag="{Binding}" />
+
+                        <control:JsonEditor Visibility="{Binding HasValue, Converter={StaticResource Bool2VisibilityConverter}}" 
+                                             Data="{Binding Value}" Margin="4" />
+                    </StackPanel>
+                </Expander>
+            </DataTemplate>
+            <DataTemplate x:Key="ArrayTemplate">
+                <Expander IsExpanded="True"
+                                            Header="{Binding}" Margin="0,0,0,8" MinHeight="36" 
+                                            BorderBrush="Black" >
+                    <Expander.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" />
+                                <Run Text="{Binding Schema.Description}" /><Run Text=" (Array)" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </Expander.HeaderTemplate>
+                    <StackPanel Margin="0,8,0,0">
+                        <CheckBox IsChecked="{Binding HasValue, Mode=OneWay}" 
+                                  mah:VisibilityHelper.IsVisible ="{Binding IsRequired}"
+                                  Margin="4,0,4,4" Content="Specify values" 
+                                  Checked="OnCreateArray" Unchecked="OnRemoveArray" Tag="{Binding}" />
+
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding Value}" Focusable="False" Visibility="{Binding HasValue, Converter={StaticResource Bool2VisibilityConverter}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="4,0,4,0">
+                                            <Expander BorderBrush="Black" Margin="0,0,0,8" 
+                                                                        Header="{Binding}"
+                                                                        IsExpanded="True"
+                                                                        MinHeight="36">
+                                                <Expander.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock>
+                                                            <Run FontWeight="Bold">
+                                                                <Run.Text>
+                                                                    <MultiBinding Converter="{StaticResource IndexConverter}" Mode="OneWay">
+                                                                        <Binding />
+                                                                        <Binding Path="ItemsSource" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                                                                        <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                                                                    </MultiBinding>
+                                                                </Run.Text>
+                                                            </Run> (<Run Text="{Binding Schema.Type, Mode=OneWay}" />)
+                                                        </TextBlock>
+                                                    </DataTemplate>
+                                                </Expander.HeaderTemplate>
+                                                <control:JsonEditor Data="{Binding}" Margin="4,8,4,0" />
+                                            </Expander>
+
+                                            <Button Content="删除" HorizontalAlignment="Right" 
+                                                    Padding="8,4,8,4" VerticalAlignment="Top"
+                                                    Click="OnRemoveArrayObject" Tag="{Binding}" Margin="4,0,12,4" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button Content="添加" HorizontalAlignment="Left" Padding="8,4,8,4" 
+                                    Click="OnAddArrayObject" Tag="{Binding}" Margin="4,8,4,4" />
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+            </DataTemplate>
+        </ContentPresenter.Resources>
+        <ContentPresenter.ContentTemplateSelector>
+            <control:JsonObjectTypeTemplateSelector />
+        </ContentPresenter.ContentTemplateSelector>
+    </ContentPresenter>
+</UserControl>

@@ -1,0 +1,27 @@
+<Application x:Class="ExcelPatternTool.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:local="clr-namespace:ExcelPatternTool" 
+             StartupUri="MainWindow.xaml" 
+             xmlns:vm="clr-namespace:ExcelPatternTool.ViewModel"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             d1p1:Ignorable="d" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime">
+	<Application.Resources>
+		<ResourceDictionary>
+			<system:Double x:Key="LargeFontSize">22</system:Double>
+			<system:Double x:Key="MiddleFontSize">18</system:Double>
+			<system:Double x:Key="SmallFontSize">12</system:Double>
+			<vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+				<ResourceDictionary Source="Style/DefaultDictionary.xaml" />
+				<ResourceDictionary Source="Style/ConvertersDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+</Application>
