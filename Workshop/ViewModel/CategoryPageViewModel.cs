@@ -19,8 +19,7 @@ using Microsoft.Win32;
 using Workshop.Common;
 using Workshop.Control;
 using Workshop.Core.DataBase;
-using Workshop.Core.Domains;
-using Workshop.Core.Entites;
+
 using Workshop.Core.Excel.Services;
 using Workshop.Core.Helper;
 using Workshop.Core;
@@ -28,6 +27,7 @@ using Workshop.Model;
 using Workshop.View;
 using Workshop.Helper;
 using Workshop.Core.Excel.Models;
+using Workshop.Core.Excel.Models.Interfaces;
 
 namespace Workshop.ViewModel
 {
@@ -40,10 +40,8 @@ namespace Workshop.ViewModel
         public CategoryPageViewModel(WorkshopDbContext dbContext)
         {
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
-            this.CreateCommand = new RelayCommand(CreateAction);
             this.ClearCommand = new RelayCommand(ClearAction);
-            this.RemoveCommand = new RelayCommand<EmployeeEntity>(RemoveAction);
-            this.EditCommand = new RelayCommand<EmployeeEntity>(EditAction);
+            this.RemoveCommand = new RelayCommand<IExcelEntity>(RemoveAction);
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
             this._dbContext = dbContext;
             InitData();
@@ -52,36 +50,17 @@ namespace Workshop.ViewModel
 
         private void ClearAction()
         {
-            foreach (var item in this.EmployeeInfos)
-            {
-                this._dbContext.Employee.Remove(item);
-
-            }
-            var result = _dbContext.SaveChanges();
-            if (result == 0)
-            {
-                MessageBox.Show("清空失败");
-
-            }
-            else
-            {
-                this.EmployeeInfos.Clear();
-
-                MessageBox.Show("清空成功");
-
-            }
+            this.EmployeeInfos.Clear();
+            MessageBox.Show("清空成功");
         }
 
         private void InitData()
         {
-            IList<EmployeeEntity> data = null;
+            IList<IExcelEntity> data = null;
 
-            var task = InvokeHelper.InvokeOnUi<IList<EmployeeEntity>>(null, () =>
+            var task = InvokeHelper.InvokeOnUi<IList<IExcelEntity>>(null, () =>
         {
-            var result = this._dbContext.Employee.Where(c => true)
-               
-
-                .ToList();
+            var result = new List<IExcelEntity>();
             return result;
 
 
@@ -90,7 +69,7 @@ namespace Workshop.ViewModel
                  data = t;
                  try
                  {
-                     this.EmployeeInfos = new ObservableCollection<EmployeeEntity>(data);
+                     this.EmployeeInfos = new ObservableCollection<IExcelEntity>(data);
                      this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
 
 
@@ -118,35 +97,9 @@ namespace Workshop.ViewModel
         {
 
             SubmitCommand.NotifyCanExecuteChanged();
-            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                var result = 0;
-                _dbContext.Employee.Update(e.NewItems[0] as EmployeeEntity);
-                result = _dbContext.SaveChanges();
-                if (result == 0)
-                {
-                    MessageBox.Show("更新失败");
-
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                var result = 0;
-                _dbContext.Employee.Remove(e.OldItems[0] as EmployeeEntity);
-                result = _dbContext.SaveChanges();
-                if (result == 0)
-                {
-                    MessageBox.Show("删除失败");
-
-                }
-
-
-            }
-
-
         }
 
-        private void RemoveAction(EmployeeEntity obj)
+        private void RemoveAction(IExcelEntity obj)
         {
             if (obj == null)
             {
@@ -157,11 +110,11 @@ namespace Workshop.ViewModel
         }
 
 
-        internal void RemoveCategory(EmployeeEntity CategoryInfo)
+        internal void RemoveCategory(IExcelEntity CategoryInfo)
         {
-            if (EmployeeInfos.Any(c => c.Id == CategoryInfo.Id))
+            if (EmployeeInfos.Any(c => c.RowNumber == CategoryInfo.RowNumber))
             {
-                var current = EmployeeInfos.FirstOrDefault(c => c.Id == CategoryInfo.Id);
+                var current = EmployeeInfos.FirstOrDefault(c => c.RowNumber == CategoryInfo.RowNumber);
                 EmployeeInfos.RemoveAt(EmployeeInfos.IndexOf(current));
             }
             else
@@ -171,28 +124,9 @@ namespace Workshop.ViewModel
             }
         }
 
-        private void EditAction(EmployeeEntity obj)
-        {
-            if (obj == null)
-            {
-                return;
-
-            }
-            var childvm = Ioc.Default.GetRequiredService<CreateCategoryViewModel>();
-            childvm.CurrentEmployeeEntity = obj;
-
-            var cpwindow = new CreateCategoryWindow();
-            cpwindow.ShowDialog();
-
-        }
 
 
 
-        private void CreateAction()
-        {
-            var cpwindow = new CreateCategoryWindow();
-            cpwindow.ShowDialog();
-        }
 
         private void SubmitAction()
         {
@@ -209,7 +143,7 @@ namespace Workshop.ViewModel
                 var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
                 var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
 
-                var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
+                var task = InvokeHelper.InvokeOnUi<IEnumerable<IExcelEntity>>(null, () =>
                 {
 
                     DocHelper.SaveTo(this.EmployeeInfos, new ExportOption(1, 1) { SheetName = "全职(生成器生成，请按需修改)", GenHeaderRow = true });
@@ -220,7 +154,6 @@ namespace Workshop.ViewModel
 
                 }, async (t) =>
                 {
-                    _dbContext.Log.Add(new Log(Log.OUTPUT, "成功", t.Count()));
                     var result = this._dbContext.SaveChanges();
                     MessageBox.Show("已完成导出");
 
@@ -230,15 +163,15 @@ namespace Workshop.ViewModel
         }
 
 
-        private ObservableCollection<EmployeeEntity> _categoryTypeInfos;
+        private ObservableCollection<IExcelEntity> _categoryTypeInfos;
 
-        public ObservableCollection<EmployeeEntity> EmployeeInfos
+        public ObservableCollection<IExcelEntity> EmployeeInfos
         {
             get
             {
                 if (_categoryTypeInfos == null)
                 {
-                    _categoryTypeInfos = new ObservableCollection<EmployeeEntity>();
+                    _categoryTypeInfos = new ObservableCollection<IExcelEntity>();
                 }
                 return _categoryTypeInfos;
             }
@@ -246,22 +179,6 @@ namespace Workshop.ViewModel
             {
                 _categoryTypeInfos = value;
                 OnPropertyChanged(nameof(EmployeeInfos));
-            }
-        }
-
-        public void CreateCategory(EmployeeEntity model)
-        {
-            var id = Guid.NewGuid();
-            model.Id = id;
-            if (EmployeeInfos.Any(c => c.Id == model.Id))
-            {
-                var current = EmployeeInfos.FirstOrDefault(c => c.Id == model.Id);
-                EmployeeInfos[EmployeeInfos.IndexOf(current)] = model;
-            }
-            else
-            {
-                EmployeeInfos.Add(model);
-
             }
         }
 
@@ -276,10 +193,8 @@ namespace Workshop.ViewModel
         public RelayCommand GetDataCommand { get; set; }
 
         public RelayCommand SubmitCommand { get; set; }
-        public RelayCommand CreateCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
-        public RelayCommand<EmployeeEntity> EditCommand { get; set; }
-        public RelayCommand<EmployeeEntity> RemoveCommand { get; set; }
+        public RelayCommand<IExcelEntity> RemoveCommand { get; set; }
 
     }
 

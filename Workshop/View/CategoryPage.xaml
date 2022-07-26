@@ -49,9 +49,7 @@
 							<Grid>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition></ColumnDefinition>
-									<ColumnDefinition></ColumnDefinition>
 								</Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Width="120"  IsEnabled="False" Content="修改" Click="ButtonEdit_OnClick"></Button>
 								<Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
 							</Grid>
 						</DataTemplate>

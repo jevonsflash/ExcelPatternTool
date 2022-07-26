@@ -6,7 +6,7 @@ using Workshop.Core.Patterns;
 
 namespace Workshop.Core.Validators.Implements
 {
-    public class DefaultValidatorProvider<T> : ValidatorProvider<T>
+    public class DefaultValidatorProvider : ValidatorProvider
     {
         public override IEnumerable<PatternItem> GetPatternItems()
         {

@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Workshop.Core.Domains;
-using Workshop.Core.Entites;
+
+
+using Workshop.Core.Excel.Models.Interfaces;
 using Workshop.Model;
 using Workshop.ViewModel;
 
@@ -28,18 +29,12 @@ namespace Workshop.View
         {
             InitializeComponent();
         }
-        private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
-        {
-            var item = sender as FrameworkElement;
-            var vm = this.DataContext as CategoryPageViewModel;
-            vm.EditCommand.Execute(item.DataContext as EmployeeEntity);
-        }
 
         private void ButtonRemove_OnClick(object sender, RoutedEventArgs e)
         {
             var item = sender as FrameworkElement;
             var vm = this.DataContext as CategoryPageViewModel;
-            vm.RemoveCommand.Execute(item.DataContext as EmployeeEntity);
+            vm.RemoveCommand.Execute(item.DataContext as IExcelEntity);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

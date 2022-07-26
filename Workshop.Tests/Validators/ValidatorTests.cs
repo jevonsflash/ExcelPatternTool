@@ -7,11 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Workshop.Core.Entites;
+
 using Workshop.Core.Linq.Models;
 using Workshop.Core.Excel.Core;
 using Workshop.Core.Excel.Models;
 using Workshop.Core.Validators.Implements;
+using Workshop.Core.Entites;
 
 namespace Workshop.Core.Validators.Tests
 {
@@ -33,7 +34,7 @@ namespace Workshop.Core.Validators.Tests
             importOption.SheetName = "全职";
             this.Employees = import.Process<EmployeeEntity>(importOption).ToList();
 
-            var validator = new Validator(new DefaultValidatorProvider<EmployeeEntity>());
+            var validator = new Validator(new DefaultValidatorProvider());
 
             foreach (var item in this.Employees)
             {

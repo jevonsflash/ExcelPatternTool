@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-using Workshop.Core.Domains;
+
 using Workshop.Model;
 using Workshop.Core.Validators;
 using Workshop.Core.Helper;

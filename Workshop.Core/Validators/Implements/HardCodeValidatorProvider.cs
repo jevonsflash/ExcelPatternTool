@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using Workshop.Core.Entites;
 using Workshop.Core.Excel.Core.AdvancedTypes;
 using Workshop.Core.Linq.Models;
 using Workshop.Core.Patterns;
@@ -11,7 +10,7 @@ using Workshop.Core.Linq.Core;
 
 namespace Workshop.Core.Validators.Implements
 {
-    public class HardCodeValidatorProvider<T> : ValidatorProvider<T>
+    public class HardCodeValidatorProvider : ValidatorProvider
     {
         public override IEnumerable<PatternItem> GetPatternItems()
         {

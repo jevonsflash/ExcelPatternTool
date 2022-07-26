@@ -15,12 +15,9 @@ namespace Workshop.ViewModel
         }
 
         public MainViewModel Main => Ioc.Default.GetRequiredService<MainViewModel>();
-        public IndexPageViewModel IndexPage => Ioc.Default.GetRequiredService<IndexPageViewModel>();
         public ImportPageViewModel ImportPage => Ioc.Default.GetRequiredService<ImportPageViewModel>();
-        public CreateCategoryViewModel CreateCategory => Ioc.Default.GetRequiredService<CreateCategoryViewModel>();
         public CategoryPageViewModel CategoryPage => Ioc.Default.GetRequiredService<CategoryPageViewModel>();
         public SettingPageViewModel SettingPage => Ioc.Default.GetRequiredService<SettingPageViewModel>();
-        public ToolsPageViewModel ToolsPage => Ioc.Default.GetRequiredService<ToolsPageViewModel>();
 
 
         public static void Cleanup<T>() where T : class

@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 
 using Workshop.Common;
-using Workshop.Core.Domains;
+
 using Workshop.Core.Helper;
 using Workshop.Model;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -48,13 +48,9 @@ namespace Workshop
                     new ServiceCollection()
 
             .AddSingleton<MainViewModel>()
-            .AddSingleton<IndexPageViewModel>()
             .AddSingleton<ImportPageViewModel>()
-            .AddSingleton<CreateCategoryViewModel>()
             .AddSingleton<CategoryPageViewModel>()
             .AddSingleton<SettingPageViewModel>()
-            .AddSingleton<ToolsPageViewModel>()
-
             .AddSingleton<WorkshopDbContext>((c) => _dataContext)
             .AddSingleton<Validator>((c) => new Validator())
                     .BuildServiceProvider());

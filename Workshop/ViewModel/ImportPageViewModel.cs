@@ -13,8 +13,6 @@ using System.Windows;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using Workshop.Core.DataBase;
-using Workshop.Core.Domains;
-using Workshop.Core.Entites;
 using Workshop.Core.Validators;
 using Workshop.Model;
 using Workshop.Core.Helper;
@@ -24,6 +22,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Workshop.Core.Validators.Implements;
 using Workshop.Helper;
 using Workshop.Core.Excel.Models;
+using Workshop.Core.Excel.Models.Interfaces;
 
 namespace Workshop.ViewModel
 {
@@ -34,11 +33,11 @@ namespace Workshop.ViewModel
         public ImportPageViewModel(WorkshopDbContext dbContext)
         {
             validator = Ioc.Default.GetRequiredService<Validator>();
-            validator.SetValidatorProvider(new DefaultValidatorProvider<EmployeeEntity>());
-            this.ImportCommand = new RelayCommand(ImportAction, ()=>true);
+            validator.SetValidatorProvider(new DefaultValidatorProvider());
+            this.ImportCommand = new RelayCommand(ImportAction, () => true);
             this.ValidDataCommand = new RelayCommand(GetDataAction, CanValidate);
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
-            this.Employees = new ObservableCollection<EmployeeEntity>();
+            this.Employees = new ObservableCollection<IExcelEntity>();
             this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
             this.ProcessResultList.CollectionChanged += ProcessResultList_CollectionChanged;
             this.PropertyChanged += ImportPageViewModel_PropertyChanged;
@@ -66,11 +65,14 @@ namespace Workshop.ViewModel
 
         private async void SubmitAction()
         {
-            var task = InvokeHelper.InvokeOnUi<IEnumerable<EmployeeEntity>>(null, () =>
+            var task = InvokeHelper.InvokeOnUi<IEnumerable<IExcelEntity>>(null, () =>
             {
 
-                this._dbContext.Employee.AddRangeAsync(Employees);
-                var result = this._dbContext.SaveChanges();
+                foreach (var employee in Employees)
+                {
+                    Ioc.Default.GetRequiredService<CategoryPageViewModel>().EmployeeInfos.Add(employee);
+                }
+
 
                 return Employees;
 
@@ -78,8 +80,6 @@ namespace Workshop.ViewModel
 
             }, async (t) =>
             {
-                _dbContext.Log.Add(new Log(Log.IMPORT, "成功", t.Count()));
-                var result = this._dbContext.SaveChanges();
 
                 this.Employees.Clear();
 
@@ -121,19 +121,7 @@ namespace Workshop.ViewModel
 
             }
             var currentCount = ProcessResultList.Count();
-            if (currentCount > 0)
-            {
-                _dbContext.Log.Add(new Log(Log.CHECK, "失败", currentCount));
-
-            }
-            else
-            {
-                _dbContext.Log.Add(new Log(Log.CHECK, "成功", this.Employees.Count));
-
-            }
-            this._dbContext.SaveChanges();
-
-
+         
         }
 
 
@@ -144,8 +132,13 @@ namespace Workshop.ViewModel
             this.Employees.Clear();
             var task = InvokeHelper.InvokeOnUi<dynamic>(null, () =>
             {
+
+                var type=
+
                 var result = DocHelper.ImportFromDelegator((importer) =>
                 {
+
+
 
                     var op1 = new ImportOption<EmployeeEntity>(0, 2);
                     var r1 = importer.Process<EmployeeEntity>(op1);
@@ -164,7 +157,7 @@ namespace Workshop.ViewModel
                 {
 
 
-                    this.Employees = new ObservableCollection<EmployeeEntity>(data.Employees);
+                    this.Employees = new ObservableCollection<IExcelEntity>(data.Employees);
                     this.IsValidSuccess = null;
                 }
             });
@@ -183,9 +176,9 @@ namespace Workshop.ViewModel
                 OnPropertyChanged(nameof(ProcessResultList));
             }
         }
-        private ObservableCollection<EmployeeEntity> _employees;
+        private ObservableCollection<IExcelEntity> _employees;
 
-        public ObservableCollection<EmployeeEntity> Employees
+        public ObservableCollection<IExcelEntity> Employees
         {
             get { return _employees; }
             set

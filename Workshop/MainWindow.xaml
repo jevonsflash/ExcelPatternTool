@@ -86,14 +86,6 @@
                 <!--  Items  -->
                 <mah:HamburgerMenu.ItemsSource>
                     <mah:HamburgerMenuItemCollection>
-                        <mah:HamburgerMenuIconItem  Label="概览" Tag="../View/IndexPage.xaml">
-                            <mah:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial  Margin="12" Kind="Home"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center" 
-                                                   VerticalAlignment="Center"></iconPacks:PackIconMaterial>
-                            </mah:HamburgerMenuIconItem.Icon>
-                        </mah:HamburgerMenuIconItem>
                         <mah:HamburgerMenuIconItem Label="工作表" Tag="../View/CategoryPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconMaterial  Margin="12" Kind="Orbit"
@@ -110,14 +102,7 @@
                                                              VerticalAlignment="Center"></iconPacks:PackIconMaterial>
                             </mah:HamburgerMenuIconItem.Icon>
                         </mah:HamburgerMenuIconItem>
-                        <mah:HamburgerMenuIconItem Label="记录" Tag="../View/ToolsPage.xaml">
-                            <mah:HamburgerMenuIconItem.Icon>
-                                <iconPacks:PackIconMaterial  Margin="12" Kind="Apps"
-                                                             Foreground="White"
-                                                             HorizontalAlignment="Center" 
-                                                             VerticalAlignment="Center"></iconPacks:PackIconMaterial>
-                            </mah:HamburgerMenuIconItem.Icon>
-                        </mah:HamburgerMenuIconItem>
+                       
                         <mah:HamburgerMenuIconItem Label="设置" Tag="../View/SettingPage.xaml">
                             <mah:HamburgerMenuIconItem.Icon>
                                 <iconPacks:PackIconModern  Margin="12" Kind="Tools"

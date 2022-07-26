@@ -1,17 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Workshop.Core.Domains;
 using Workshop.Core.Excel.Attributes;
 
 namespace Workshop.Core.Excel.Core.AdvancedTypes
 {
-    public class CommentedType<T> : ICommentedType, IEntity<Guid>
+    public class CommentedType<T> : ICommentedType
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Exportable(ignore: true)]
-        public Guid Id { get; set; }
-    
+  
         public T Value { get; set; }
         public string Comment { get; set; }
 

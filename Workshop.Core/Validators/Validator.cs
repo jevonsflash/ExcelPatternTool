@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Workshop.Core.Entites;
+
 using Workshop.Core.Excel.Attributes;
 using Workshop.Core.Linq.Models;
 using Workshop.Core.Patterns;

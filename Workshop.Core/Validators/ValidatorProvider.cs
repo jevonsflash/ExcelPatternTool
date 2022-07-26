@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Workshop.Core.Entites;
 using Workshop.Core.Excel.Core.AdvancedTypes;
 using Workshop.Core.Helper;
 using Workshop.Core.Linq.Core;
@@ -12,7 +11,7 @@ using Workshop.Core.Patterns;
 
 namespace Workshop.Core.Validators
 {
-    public abstract class ValidatorProvider<T> : IValidatorProvider
+    public abstract class ValidatorProvider : IValidatorProvider
     {
         public Dictionary<string, ValidateConvention> Conventions { get; set; }
         public ValidatorProvider()
