@@ -24,7 +24,7 @@ namespace Workshop.Helper
 
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = CommonHelper.DesktopPath;
+            //saveFileDialog.InitialDirectory = CommonHelper.DesktopPath;
             saveFileDialog.Filter = _excelFilesXlsxXls;
             saveFileDialog.FileName = _fileName;
             //saveFileDialog.DefaultExt = "xlsx";
@@ -72,7 +72,7 @@ namespace Workshop.Helper
         public static IList<T> ImportFrom<T>(ImportOption importOption = null) where T : IExcelEntity
         {
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
+            //openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
             openFileDialog.Filter = _excelFilesXlsxXls;
             openFileDialog.FileName = _fileName;
             openFileDialog.AddExtension = true;
@@ -142,7 +142,7 @@ namespace Workshop.Helper
         public static dynamic ImportFromDelegator(Func<Importer, dynamic> action)
         {
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
+            //openFileDialog.InitialDirectory = CommonHelper.DesktopPath;
             openFileDialog.Filter = _excelFilesXlsxXls;
             openFileDialog.FileName = _fileName;
             openFileDialog.AddExtension = true;

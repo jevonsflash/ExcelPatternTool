@@ -1,12 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Workshop.Core.Domains;
+using Workshop.Core.Excel.Attributes;
 using Workshop.Core.Excel.Models;
 
 namespace Workshop.Core.Excel.Core.AdvancedTypes
 {
-    public class FullAdvancedType<T> : IFullAdvancedType
+    public class FullAdvancedType<T> : IFullAdvancedType, IEntity<Guid>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Exportable(ignore: true)]
+        public Guid Id { get; set; }
         public T Value { get; set; }
         public string Comment { get; set; }
         public string Formula { get; set; }

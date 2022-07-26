@@ -20,6 +20,7 @@ using Workshop.Core.Patterns;
 using System.Windows;
 using NJsonSchema.Generation;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Workshop.ViewModel
 {
@@ -31,7 +32,7 @@ namespace Workshop.ViewModel
         {
 
 
-            this.SubmitCommand = new RelayCommand(SubmitAction, ()=>true);
+            this.SubmitCommand = new RelayCommand(SubmitAction, () => true);
             this.RefreshCommand = new RelayCommand(RefreshAction);
             this.PropertyChanged += SettingPageViewModel_PropertyChanged;
             SettingInfo = LocalDataHelper.ReadObjectLocal<SettingInfo>();
@@ -142,6 +143,8 @@ namespace Workshop.ViewModel
         {
             LocalDataHelper.SaveObjectLocal(SettingInfo);
             SaveDocument(this.Document, false);
+
+            Ioc.Default.GetRequiredService<Validator>().ValidatorInfos=null;
             //HasChanged = false;
 
 

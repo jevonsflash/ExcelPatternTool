@@ -1,8 +1,17 @@
-﻿namespace Workshop.Core.Excel.Core.AdvancedTypes
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Workshop.Core.Domains;
+using Workshop.Core.Excel.Attributes;
+
+namespace Workshop.Core.Excel.Core.AdvancedTypes
 {
 
-    public class FormulatedType<T> : IFormulatedType
+    public class FormulatedType<T> : IFormulatedType, IEntity<Guid>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Exportable(ignore: true)]
+        public Guid Id { get; set; }
         public T Value { get; set; }
         public string Formula { get; set; }
 

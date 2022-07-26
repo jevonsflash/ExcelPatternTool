@@ -1,11 +1,19 @@
 ﻿using Workshop.Core.Excel.Models;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Workshop.Core.Domains;
+using Workshop.Core.Excel.Attributes;
 
 namespace Workshop.Core.Excel.Core.AdvancedTypes
 {
-    public class StyledType<T> : IStyledType
+    public class StyledType<T> : IStyledType, IEntity<Guid>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Exportable(ignore: true)]
+        public Guid Id { get; set; }
+    
         public T Value { get; set; }
-        public string Comment { get; set; }
         public StyleMetadata StyleMetadata { get; set; }
 
         public StyledType()

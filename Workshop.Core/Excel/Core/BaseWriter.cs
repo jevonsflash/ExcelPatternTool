@@ -429,12 +429,6 @@ namespace Workshop.Core.Excel.Core
 
                 }
 
-
-                var comment = (propValue as IStyledType).Comment;
-                if (!string.IsNullOrEmpty(comment))
-                {
-                    cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
-                }
                 SetFormulatedValue(cell, formulatedValue);
 
             }

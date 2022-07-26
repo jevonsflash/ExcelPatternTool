@@ -43,14 +43,32 @@ namespace Workshop.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Mounth")
+                    b.Property<bool>("BoolValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTimeValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("DoubleValue")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("IntValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("IntWithFormula")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("RowNumber")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("StringValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StringWithNoteValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StringWithStyleValue")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

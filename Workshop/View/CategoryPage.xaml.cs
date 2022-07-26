@@ -55,5 +55,10 @@ namespace Workshop.View
             }
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
         }
+
+        private void DataGrid_SelectionChanged()
+        {
+
+        }
     }
 }

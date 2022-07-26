@@ -34,7 +34,14 @@ namespace Workshop.Core.Validators
                 {
                     return null;
                 }
-                c.Expression = c.Expression.Replace("{value}", propName);
+                if (!string.IsNullOrEmpty(propName))
+                {
+                    c.Expression = c.Expression.Replace("{value}", propName);
+                }
+                else
+                {
+                    c.Expression = c.Expression.Replace("{value}", x.PropName);
+                }
                 var lambdaResult = lambdaParser.Eval(c.Expression, (varName) =>
                 {
                     object input = null;

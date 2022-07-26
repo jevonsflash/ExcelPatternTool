@@ -15,8 +15,14 @@ namespace Workshop.Core.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     RowNumber = table.Column<long>(type: "INTEGER", nullable: false),
-                    Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    Mounth = table.Column<int>(type: "INTEGER", nullable: false)
+                    StringValue = table.Column<string>(type: "TEXT", nullable: true),
+                    DateTimeValue = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IntValue = table.Column<int>(type: "INTEGER", nullable: false),
+                    DoubleValue = table.Column<double>(type: "REAL", nullable: false),
+                    BoolValue = table.Column<bool>(type: "INTEGER", nullable: false),
+                    StringWithNoteValue = table.Column<string>(type: "TEXT", nullable: true),
+                    StringWithStyleValue = table.Column<string>(type: "TEXT", nullable: true),
+                    IntWithFormula = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {

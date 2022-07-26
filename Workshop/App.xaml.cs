@@ -52,7 +52,6 @@ namespace Workshop
             .AddSingleton<ImportPageViewModel>()
             .AddSingleton<CreateCategoryViewModel>()
             .AddSingleton<CategoryPageViewModel>()
-            .AddSingleton<LoginViewModel>()
             .AddSingleton<SettingPageViewModel>()
             .AddSingleton<ToolsPageViewModel>()
 

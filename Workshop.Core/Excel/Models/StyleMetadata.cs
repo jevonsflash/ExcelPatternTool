@@ -1,11 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Workshop.Core.Domains;
+using Workshop.Core.Excel.Attributes;
 
 namespace Workshop.Core.Excel.Models
 {
-    public class StyleMetadata
+    public class StyleMetadata : IEntity<Guid>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Exportable(ignore: true)]
+        public Guid Id { get; set; }
+
         public string FontColor { get; set; }
         public string FontName { get; set; }
         public short FontSize { get; set; }

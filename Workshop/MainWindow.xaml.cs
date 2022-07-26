@@ -90,11 +90,5 @@ namespace Workshop
             var control = (sender as Frame).NavigationService.RemoveBackEntry();
 
         }
-
-        private void ButtonLogin_OnClick(object sender, RoutedEventArgs e)
-        {
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.ShowDialog();
-        }
     }
 }

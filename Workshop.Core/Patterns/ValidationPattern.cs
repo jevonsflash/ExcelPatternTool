@@ -17,7 +17,7 @@ namespace Workshop.Core.Patterns
         {
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;
-            ProcessResult.Content = Description + Expression;
+            ProcessResult.Content =String.IsNullOrEmpty(Description) ? "需满足表达式" +Expression : Description;
             Target = Target.Value;//or Formula
 
         }
@@ -31,11 +31,11 @@ namespace Workshop.Core.Patterns
             set
             {
                 _description = value;
-                ProcessResult.Content = _description + _expression;
+                ProcessResult.Content = String.IsNullOrEmpty(_description) ? "需满足表达式" +Expression : _description;
             }
         }
 
-        [JsonConverter(typeof(StringEnumConverter))] 
+        [JsonConverter(typeof(StringEnumConverter))]
         public Convention Convention { get; set; }
 
         [JsonSchemaIgnore]
@@ -47,7 +47,7 @@ namespace Workshop.Core.Patterns
             set
             {
                 _expression = value;
-                ProcessResult.Content = _description + _expression;
+                ProcessResult.Content = String.IsNullOrEmpty(Description) ? "需满足表达式" +_expression : Description;
             }
         }
     }

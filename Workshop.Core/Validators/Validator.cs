@@ -9,6 +9,7 @@ using Workshop.Core.Excel.Attributes;
 using Workshop.Core.Linq.Models;
 using Workshop.Core.Patterns;
 using Workshop.Core.Linq.Core;
+using Workshop.Core.Excel.Models.Interfaces;
 
 namespace Workshop.Core.Validators
 {
@@ -17,25 +18,44 @@ namespace Workshop.Core.Validators
         private IValidatorProvider validatorProvider;
         private Dictionary<string, string> aliasDictionary;
 
-        public IEnumerable<PatternItem> ValidatorInfos { get; set; }
+
+        private IEnumerable<PatternItem> validatorInfos;
+
+        public IEnumerable<PatternItem> ValidatorInfos
+        {
+            get
+            {
+                if (validatorInfos==null)
+                {
+                    validatorInfos = validatorProvider.GetPatternItems();
+
+                }
+                return validatorInfos;
+            }
+            set { validatorInfos = value; }
+        }
+
         public IEnumerable<ProcessResult> Validate(object obj)
         {
 
-            ValidatorInfos = validatorProvider.GetPatternItems();
 
             var result = new List<ProcessResult>();
 
             foreach (var validator in ValidatorInfos)
             {
-                if (validator.ValidationPattern==null)
+                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention.ToString()).Convention;
+                if (currentConvention==null)
                 {
                     continue;
                 }
-                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention.ToString()).Convention;
                 var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
                 validator.ValidationPattern.Expression = ValidateItem(genericType, validator.ValidationPattern.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
-                currentResult.KeyName = $"{(obj as EmployeeEntity).Id} 的 {validator.PropName}";
+                if (currentResult==null)
+                {
+                    continue;
+                }
+                currentResult.KeyName = $"RowNumber 为 {(obj as IExcelEntity).RowNumber} 的 {validator.PropName}";
                 result.Add(currentResult);
             }
 

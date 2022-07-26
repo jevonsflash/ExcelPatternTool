@@ -12,7 +12,6 @@
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button Content="关于" Click="ButtonBase_OnClick"></Button>
-            <Button Content="登录" Click="ButtonLogin_OnClick"></Button>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 	<mah:MetroWindow.Resources>

@@ -7,9 +7,7 @@ namespace Workshop.Core.Excel.Core.AdvancedTypes
 {
     public interface IStyledType : IAdvancedType
     {
-        string Comment { get; set; }
         StyleMetadata StyleMetadata { get; set; }
-
 
     }
 }

@@ -19,7 +19,6 @@ namespace Workshop.ViewModel
         public ImportPageViewModel ImportPage => Ioc.Default.GetRequiredService<ImportPageViewModel>();
         public CreateCategoryViewModel CreateCategory => Ioc.Default.GetRequiredService<CreateCategoryViewModel>();
         public CategoryPageViewModel CategoryPage => Ioc.Default.GetRequiredService<CategoryPageViewModel>();
-        public LoginViewModel Login => Ioc.Default.GetRequiredService<LoginViewModel>();
         public SettingPageViewModel SettingPage => Ioc.Default.GetRequiredService<SettingPageViewModel>();
         public ToolsPageViewModel ToolsPage => Ioc.Default.GetRequiredService<ToolsPageViewModel>();
 

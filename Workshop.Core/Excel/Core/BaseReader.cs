@@ -128,10 +128,6 @@ namespace Workshop.Core.Excel.Core
                     case "styledtype`1":
                         var styledType = columns[j].PropType.GenericTypeArguments.FirstOrDefault();
                         var tmpStyled = ExtractAdvancedFromCell(cell, styledType, typeof(StyledType<>));
-                        if (cell.CellComment != null)
-                        {
-                            (tmpStyled as IStyledType).Comment = cell.CellComment.String.String;
-                        }
 
                         (tmpStyled as IStyledType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
                         AssignValue(objType, columns[j].PropName, result, tmpStyled);
