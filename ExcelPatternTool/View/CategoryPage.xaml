@@ -11,52 +11,54 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProcedurePage">
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"></RowDefinition>
-			<RowDefinition></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid Grid.Row="0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition></ColumnDefinition>
-				<ColumnDefinition></ColumnDefinition>
-			</Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
                 <Button  Content="添加" IsEnabled="False" Command="{Binding CreateCommand}"  Width="120"></Button>
                 <Button  Content="清空数据"  Command="{Binding ClearCommand}"  Width="120"></Button>
-			</StackPanel>
+            </StackPanel>
 
-			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-				<Button  Content="导出" x:Name="SaveToButton"  Command="{Binding SubmitCommand}"  Width="120"></Button>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button  Content="导出" x:Name="SaveToButton"  Command="{Binding SubmitCommand}"  Width="120"></Button>
 
-			</StackPanel>
-		</Grid>
-
-		<DataGrid Grid.Row="1"
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" >
+            <Label Content="您还没有导入数据，导入后将呈现内容"></Label>
+            <Button Content="前往导入" Width="100" Margin="0, 30" HorizontalAlignment="Center" Click="Button_Click"></Button>
+        </StackPanel>
+        <DataGrid Grid.Row="1"
+                  Visibility="{Binding HasValue, Converter={StaticResource Bool2VisibilityConverter}}" 
                   IsReadOnly="True"
-				  RowHeight="150"
-                  AutoGenerateColumns="False"
+                  AutoGenerateColumns="True"
                   AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
-                  ItemsSource="{Binding  EmployeeInfos}">
+                  ItemsSource="{Binding  Entities}">
 
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="批次" Binding="{Binding Year}"></DataGridTextColumn>
+            <DataGrid.Columns>
 
-				<DataGridTemplateColumn Header="操作"  Width="300">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition></ColumnDefinition>
-								</Grid.ColumnDefinitions>
-								<Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
-							</Grid>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-			</DataGrid.Columns>
-		</DataGrid>
+                <DataGridTemplateColumn Header="操作" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="1"  Width="120" Content="删除" Click="ButtonRemove_OnClick"></Button>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
-	</Grid>
+    </Grid>
 </Page>

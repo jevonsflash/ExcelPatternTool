@@ -5,6 +5,7 @@ using System.Text;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using ExcelPatternTool.Core;
+using System.Collections;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -30,6 +31,16 @@ namespace ExcelPatternTool.Core.Excel.Core
         public byte[] ProcessGetBytes<T>(IEnumerable<T> source, IExportOption exportOption)
         {
             var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow);
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            stream.Close();
+            return bytes;
+        }
+
+
+        public byte[] ProcessGetBytes(Type entityType, IEnumerable source, IExportOption exportOption)
+        {
+            var stream = excelWriter.WriteRows(entityType, source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow);
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             stream.Close();

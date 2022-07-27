@@ -28,6 +28,7 @@ using ExcelPatternTool.View;
 using ExcelPatternTool.Helper;
 using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using ExcelPatternTool.Core.EntityProxy;
 
 namespace ExcelPatternTool.ViewModel
 {
@@ -48,9 +49,11 @@ namespace ExcelPatternTool.ViewModel
 
         }
 
+
         private void ClearAction()
         {
-            this.EmployeeInfos.Clear();
+            this.Entities.Clear();
+            OnPropertyChanged(nameof(HasValue));
             MessageBox.Show("清空成功");
         }
 
@@ -69,8 +72,8 @@ namespace ExcelPatternTool.ViewModel
                  data = t;
                  try
                  {
-                     this.EmployeeInfos = new ObservableCollection<IExcelEntity>(data);
-                     this.EmployeeInfos.CollectionChanged += CategoryInfos_CollectionChanged;
+                     this.Entities = new ObservableCollection<object>(data);
+                     this.Entities.CollectionChanged += CategoryInfos_CollectionChanged;
 
 
                  }
@@ -86,15 +89,16 @@ namespace ExcelPatternTool.ViewModel
 
         private void CategoryPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(this.EmployeeInfos))
+            if (e.PropertyName == nameof(this.Entities))
             {
                 SubmitCommand.NotifyCanExecuteChanged();
-
+                OnPropertyChanged(nameof(HasValue));
             }
         }
 
         private void CategoryInfos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            OnPropertyChanged(nameof(HasValue));
 
             SubmitCommand.NotifyCanExecuteChanged();
         }
@@ -110,12 +114,14 @@ namespace ExcelPatternTool.ViewModel
         }
 
 
+
         internal void RemoveCategory(IExcelEntity CategoryInfo)
         {
-            if (EmployeeInfos.Any(c => c.RowNumber == CategoryInfo.RowNumber))
+            if (Entities.Any(c => (c as IExcelEntity).RowNumber == CategoryInfo.RowNumber))
             {
-                var current = EmployeeInfos.FirstOrDefault(c => c.RowNumber == CategoryInfo.RowNumber);
-                EmployeeInfos.RemoveAt(EmployeeInfos.IndexOf(current));
+                var current = Entities.FirstOrDefault(c => (c as IExcelEntity).RowNumber == CategoryInfo.RowNumber);
+                Entities.RemoveAt(Entities.IndexOf(current));
+
             }
             else
             {
@@ -125,12 +131,12 @@ namespace ExcelPatternTool.ViewModel
         }
 
 
-
+        public bool HasValue => this.Entities.Count>0;
 
 
         private void SubmitAction()
         {
-            var odInfos = EmployeeInfos.ToList();
+            var odInfos = Entities.ToList();
 
 
 
@@ -143,12 +149,12 @@ namespace ExcelPatternTool.ViewModel
                 var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
                 var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
 
-                var task = InvokeHelper.InvokeOnUi<IEnumerable<IExcelEntity>>(null, () =>
+                var task = InvokeHelper.InvokeOnUi<IEnumerable<object>>(null, () =>
                 {
 
-                    DocHelper.SaveTo(this.EmployeeInfos, new ExportOption(1, 1) { SheetName = "全职(生成器生成，请按需修改)", GenHeaderRow = true });
+                    DocHelper.SaveTo(EntityProxyContainer.Current.EntityType, this.Entities, new ExportOption(1, 1) { SheetName = "Sheet1", GenHeaderRow = true });
 
-                    return this.EmployeeInfos;
+                    return this.Entities;
 
 
 
@@ -163,29 +169,29 @@ namespace ExcelPatternTool.ViewModel
         }
 
 
-        private ObservableCollection<IExcelEntity> _categoryTypeInfos;
+        private ObservableCollection<object> _categoryTypeInfos;
 
-        public ObservableCollection<IExcelEntity> EmployeeInfos
+        public ObservableCollection<object> Entities
         {
             get
             {
                 if (_categoryTypeInfos == null)
                 {
-                    _categoryTypeInfos = new ObservableCollection<IExcelEntity>();
+                    _categoryTypeInfos = new ObservableCollection<object>();
                 }
                 return _categoryTypeInfos;
             }
             set
             {
                 _categoryTypeInfos = value;
-                OnPropertyChanged(nameof(EmployeeInfos));
+                OnPropertyChanged(nameof(Entities));
             }
         }
 
 
         private bool CanSubmit()
         {
-            return this.EmployeeInfos.Count > 0;
+            return this.Entities.Count > 0;
 
         }
 

@@ -196,7 +196,165 @@ namespace ExcelPatternTool.Core.Excel.Core
             }
         }
 
+        internal void SetHeaderToRow(Type entityType, int rowsToSkip, IEnumerable<ColumnMetadata> columnMetas, IRow row,
+     int rowCount)
+        {
+            //cells
+            int cellCount = 0;
+            if (rowCount - rowsToSkip == 0)
+            {
+                foreach (var columnMeta in columnMetas)
+                {
+                    var cell = row.CreateCell(cellCount);
+
+                    var headerFormat = GetClassStyleDefinition(entityType);
+                    ICellStyle headerCellStyle = MetaToCellStyle(headerFormat);
+                    cell.CellStyle = headerCellStyle;
+                    cell.SetCellValue(columnMeta.ColumnName);
+                    cellCount += 1;
+                }
+            }
+        }
+
+
         internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data)
+        {
+            var ws2 = Stopwatch.StartNew();
+
+            //cells
+            int cellCount = 0;
+
+            foreach (var columnMeta in columnMetas)
+            {
+                ws2.Start();
+                var cell = row.CreateCell(cellCount);
+
+                var propertyInfo = data.GetType().GetProperty(columnMeta.PropName);
+                var propValue = propertyInfo.GetValue(data, null);
+                var propType = propertyInfo.PropertyType;
+                ws2.Stop();
+                var stage1span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
+                if (propValue == null)
+                {
+                    cell.SetCellValue("");
+                    cellCount++;
+                    continue;
+                }
+
+
+                var bodyFormat = GetPropStyleDefinition(propertyInfo);
+                ws2.Stop();
+                var stage2_1span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
+                var bodyBaseCellStyle = MetaToCellStyle(bodyFormat);
+                ws2.Stop();
+                var stage2_2span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
+                var bodyCellStyle = GetStyleWithFormat(bodyBaseCellStyle, columnMeta.Format);
+                ws2.Stop();
+                var stage2_3span = ws2.ElapsedMilliseconds;
+                ws2.Restart();
+
+                if (string.IsNullOrEmpty(columnMeta.FieldValueType))
+                {
+                    string colTypeDesc = propType.Name.ToLowerInvariant();
+                    switch (colTypeDesc)
+                    {
+                        case "string":
+                            var strCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(strCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                        case "datetime":
+                            var dateCellValue = Convert.ToDateTime(propValue);
+                            cell.SetCellValue(dateCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            break;
+                        case "int":
+                        case "int32":
+                        case "decimal":
+                        case "int64":
+                        case "long":
+                        case "double":
+                        case "single":
+                            var numCellValue = Convert.ToDouble(propValue);
+                            cell.SetCellValue(numCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            cell.SetCellType(CellType.Numeric);
+                            break;
+                        case "boolean":
+                        case "bool":
+                            var cellValue = Convert.ToBoolean(propValue);
+                            cell.SetCellValue(cellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                        case "formulatedtype`1":
+                        case "styledtype`1":
+                        case "commentedtype`1":
+                        case "fulladvancedtype`1":
+                            HandleAdvancedType(cell, propValue as IAdvancedType, propType, bodyFormat, columnMeta);
+                            break;
+                        default:
+                            var anyCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(anyCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                    }
+                }
+                else
+                {
+                    var valueType = (FieldValueType)Enum.Parse(typeof(FieldValueType), columnMeta.FieldValueType);
+
+                    switch (valueType)
+                    {
+                        case FieldValueType.Date:
+                            var dateCellValue = Convert.ToDateTime(propValue);
+                            cell.SetCellValue(dateCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            break;
+
+                        case FieldValueType.Numeric:
+                            var numericCellValue = Convert.ToDouble(propValue);
+                            cell.SetCellValue(numericCellValue);
+                            cell.CellStyle = bodyCellStyle;
+                            cell.SetCellType(CellType.Numeric);
+                            break;
+
+                        case FieldValueType.Text:
+                            var stringCellValue = propValue.ToString();
+                            cell.SetCellValue(stringCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            cell.SetCellType(CellType.String);
+                            break;
+
+                        case FieldValueType.Bool:
+                            var boolCellValue = Convert.ToBoolean(propValue);
+                            cell.SetCellValue(boolCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            cell.SetCellType(CellType.Boolean);
+                            break;
+
+                        default:
+                            var anyCellValue = Convert.ToString(propValue);
+                            cell.SetCellValue(anyCellValue);
+                            cell.CellStyle = bodyBaseCellStyle;
+                            break;
+                    }
+                }
+
+                ws2.Stop();
+                var stage3span = ws2.ElapsedMilliseconds;
+
+                cellCount += 1;
+
+                Debug.WriteLine($"当前列循环{columnMeta.PropName}耗时{stage1span + stage2_1span + stage2_2span + stage2_3span + stage3span}ms|stage1:{stage1span}|stage2.1:{stage2_1span}|stage2.2:{stage2_2span}|stage2.3:{stage2_3span}|stage3:{stage3span}");
+                ws2.Reset();
+            }
+
+        }
+
+        internal void SetDataToRow(Type entityType, IEnumerable<ColumnMetadata> columnMetas, IRow row, object data)
         {
             var ws2 = Stopwatch.StartNew();
 
@@ -501,7 +659,7 @@ namespace ExcelPatternTool.Core.Excel.Core
             else if (formulatedValue is int || formulatedValue is decimal ||
                  formulatedValue is long || formulatedValue is double || formulatedValue is float)
             {
-                cell.SetCellValue((double)formulatedValue);
+                cell.SetCellValue(Convert.ToDouble(formulatedValue));
 
             }
         }

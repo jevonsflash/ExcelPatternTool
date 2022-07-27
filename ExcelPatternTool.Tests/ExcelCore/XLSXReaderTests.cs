@@ -7,6 +7,8 @@ using System.Linq;
 
 using ExcelPatternTool.Core.Excel.Core;
 using ExcelPatternTool.Core.Excel.Models;
+using ExcelPatternTool.Core.EntityProxy;
+using ExcelPatternTool.Tests.Entites;
 
 namespace ExcelPatternTool.Infrastructure.Tests
 {

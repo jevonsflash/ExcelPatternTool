@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 
 using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
+using ExcelPatternTool.Core.EntityProxy;
 
 namespace ExcelPatternTool.Core.DataBase
 {
@@ -19,8 +20,10 @@ namespace ExcelPatternTool.Core.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             //todo:replace with proxyclass
-            Type entityType = typeof(EmployeeEntity);
+            Type entityType = EntityProxyContainer.Current.EntityType;
+
 
             base.OnModelCreating(modelBuilder);
             var entityTypeBuilder = modelBuilder

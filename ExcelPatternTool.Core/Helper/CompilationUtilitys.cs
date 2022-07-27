@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using ExcelPatternTool.Core.Excel.Attributes;
+using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
+using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExcelPatternTool.Manager
 {
@@ -19,16 +24,19 @@ namespace ExcelPatternTool.Manager
 
             var references = new[]
                {
-                MetadataReference.CreateFromFile(typeof(SyntaxTree).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(StatementSyntax).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(SyntaxFactory).GetTypeInfo().Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(KeylessAttribute).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(ExportableAttribute).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(CommentedType<>).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(IExcelEntity).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(DisplayNameAttribute).GetTypeInfo().Assembly.Location)
             };
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            var allReferences = assemblies.Where(c => !c.IsDynamic).Select(x => { 
-                var f = MetadataReference.CreateFromFile(x.Location); 
-                return f; 
+            var allReferences = assemblies.Where(c => !c.IsDynamic).Select(x =>
+            {
+                var f = MetadataReference.CreateFromFile(x.Location);
+                return f;
             }).Concat(references);
-            return Compile(AssemblyInfo.Create("RoslynSyntaxTool.Proxy.ConvertToCSharpProxy"), trees, allReferences);
+            return Compile(AssemblyInfo.Create(Assembly.GetCallingAssembly().GetName().Name+".Proxy"), trees, allReferences);
         }
 
         public static MemoryStream Compile(AssemblyInfo assemblyInfo, IEnumerable<SyntaxTree> trees, IEnumerable<MetadataReference> references)

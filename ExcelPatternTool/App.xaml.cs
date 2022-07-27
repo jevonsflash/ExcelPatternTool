@@ -17,7 +17,8 @@ using ExcelPatternTool.Core.DataBase;
 using ExcelPatternTool.ViewModel;
 using ExcelPatternTool.Core.Validators;
 using CommunityToolkit.Mvvm.Messaging;
-using ExcelPatternTool.Core.Helper;
+using ExcelPatternTool.Core.EntityProxy;
+using System.Reflection;
 
 namespace ExcelPatternTool
 {
@@ -35,6 +36,7 @@ namespace ExcelPatternTool
             if (!_initialized)
             {
                 _initialized = true;
+                EntityProxyContainer.Current.Init();
 
                 var connectionString = @"Data Source=mato.db";
                 var contextOptions = new DbContextOptionsBuilder<ExcelPatternToolDbContext>()
@@ -53,11 +55,14 @@ namespace ExcelPatternTool
             .AddSingleton<SettingPageViewModel>()
             .AddSingleton<ExcelPatternToolDbContext>((c) => _dataContext)
             .AddSingleton<Validator>((c) => new Validator())
+
                     .BuildServiceProvider());
                 App.Current.Startup += Current_Startup;
                 App.Current.Exit += Current_Exit;
+
             }
         }
+
 
         private void Current_Exit(object sender, ExitEventArgs e)
         {

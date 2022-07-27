@@ -12,7 +12,7 @@ using ExcelPatternTool.Core.Linq.Models;
 using ExcelPatternTool.Core.Excel.Core;
 using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.Validators.Implements;
-using ExcelPatternTool.Core.Entites;
+using ExcelPatternTool.Tests.Entites;
 
 namespace ExcelPatternTool.Core.Validators.Tests
 {
@@ -34,8 +34,8 @@ namespace ExcelPatternTool.Core.Validators.Tests
             importOption.SheetName = "全职";
             this.Employees = import.Process<EmployeeEntity>(importOption).ToList();
 
-            var validator = new Validator(new DefaultValidatorProvider());
-
+            var validator = new Validator();
+            validator.SetValidatorProvider<EmployeeEntity>(new DefaultValidatorProvider());
             foreach (var item in this.Employees)
             {
 

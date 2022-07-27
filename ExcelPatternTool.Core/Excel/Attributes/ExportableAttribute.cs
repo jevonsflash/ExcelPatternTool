@@ -16,9 +16,8 @@ namespace ExcelPatternTool.Core.Excel.Attributes
 
         public bool Ignore { get; set; }
 
-        public ExportableAttribute(string name, int order)
+        public ExportableAttribute(string name)
         {
-            Order = order;
             Name = name;
             Ignore = false;
 

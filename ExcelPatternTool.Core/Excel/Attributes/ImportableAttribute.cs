@@ -9,9 +9,8 @@ namespace ExcelPatternTool.Core.Excel.Attributes
         public int Order { get; set; }
         public bool Ignore { get; set; }
 
-        public ImportableAttribute(string name, int order)
+        public ImportableAttribute(int order)
         {
-            Name = name;
             Order = order;
             Ignore = false;
         }

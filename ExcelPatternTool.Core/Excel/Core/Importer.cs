@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -43,6 +46,22 @@ namespace ExcelPatternTool.Core.Excel.Core
             else
             {
                 result = excelReader.ReadRows<T>(importOption);
+            }
+            return result;
+
+        }
+
+        public IEnumerable<IExcelEntity> Process(Type entityType, IImportOption importOption)
+        {
+            IEnumerable<IExcelEntity> result;
+            if (string.IsNullOrEmpty(importOption.SheetName))
+            {
+                result = excelReader.ReadRows(entityType, importOption.SheetNumber, importOption.SkipRows);
+
+            }
+            else
+            {
+                result = excelReader.ReadRows(entityType, importOption);
             }
             return result;
 

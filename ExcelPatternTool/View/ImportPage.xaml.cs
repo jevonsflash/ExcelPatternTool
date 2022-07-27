@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using ExcelPatternTool.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -23,6 +25,12 @@ namespace ExcelPatternTool.View
         public ImportPage()
         {
             InitializeComponent();
+            Ioc.Default.GetRequiredService<ImportPageViewModel>().OnFinished+=ImportPage_OnFinished;
+        }
+
+        private void ImportPage_OnFinished(object sender, EventArgs e)
+        {
+            (App.Current.MainWindow as MainWindow).HamburgerMenuControl.SelectedIndex=0;
         }
 
         private void CurrentText_OnKeyDown(object sender, KeyEventArgs e)
@@ -34,5 +42,6 @@ namespace ExcelPatternTool.View
         {
             e.Column.Header = ((PropertyDescriptor)e.PropertyDescriptor).DisplayName;
         }
+
     }
 }

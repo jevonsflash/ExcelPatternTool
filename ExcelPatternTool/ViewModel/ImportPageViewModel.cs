@@ -23,21 +23,23 @@ using ExcelPatternTool.Core.Validators.Implements;
 using ExcelPatternTool.Helper;
 using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using ExcelPatternTool.Core.EntityProxy;
 
 namespace ExcelPatternTool.ViewModel
 {
     public class ImportPageViewModel : ObservableObject
     {
+        public event EventHandler OnFinished;
         private readonly ExcelPatternToolDbContext _dbContext;
         private Validator validator;
         public ImportPageViewModel(ExcelPatternToolDbContext dbContext)
         {
             validator = Ioc.Default.GetRequiredService<Validator>();
-            validator.SetValidatorProvider(new DefaultValidatorProvider());
+            validator.SetValidatorProvider(EntityProxyContainer.Current.EntityType, new DefaultValidatorProvider());
             this.ImportCommand = new RelayCommand(ImportAction, () => true);
             this.ValidDataCommand = new RelayCommand(GetDataAction, CanValidate);
             this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
-            this.Employees = new ObservableCollection<IExcelEntity>();
+            this.Employees = new ObservableCollection<object>();
             this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
             this.ProcessResultList.CollectionChanged += ProcessResultList_CollectionChanged;
             this.PropertyChanged += ImportPageViewModel_PropertyChanged;
@@ -65,12 +67,16 @@ namespace ExcelPatternTool.ViewModel
 
         private async void SubmitAction()
         {
-            var task = InvokeHelper.InvokeOnUi<IEnumerable<IExcelEntity>>(null, () =>
+            var task = InvokeHelper.InvokeOnUi<IEnumerable<object>>(null, () =>
             {
 
                 foreach (var employee in Employees)
                 {
-                    Ioc.Default.GetRequiredService<CategoryPageViewModel>().EmployeeInfos.Add(employee);
+                    Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        Ioc.Default.GetRequiredService<CategoryPageViewModel>().Entities.Add((IExcelEntity)employee);
+                    });
+
                 }
 
 
@@ -82,7 +88,7 @@ namespace ExcelPatternTool.ViewModel
             {
 
                 this.Employees.Clear();
-
+                this.OnFinished?.Invoke(this, EventArgs.Empty);
                 MessageBox.Show("已完成导入");
 
             });
@@ -94,7 +100,7 @@ namespace ExcelPatternTool.ViewModel
             foreach (var item in this.Employees)
             {
 
-                var row = item.RowNumber + 1;
+                var row = (item as IExcelEntity).RowNumber + 1;
                 var id = ProcessResultList.Count + 1;
                 var level = 1;
 
@@ -121,7 +127,7 @@ namespace ExcelPatternTool.ViewModel
 
             }
             var currentCount = ProcessResultList.Count();
-         
+
         }
 
 
@@ -133,15 +139,15 @@ namespace ExcelPatternTool.ViewModel
             var task = InvokeHelper.InvokeOnUi<dynamic>(null, () =>
             {
 
-      
+
 
                 var result = DocHelper.ImportFromDelegator((importer) =>
                 {
 
 
 
-                    var op1 = new ImportOption<EmployeeEntity>(0, 2);
-                    var r1 = importer.Process<EmployeeEntity>(op1);
+                    var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 2);
+                    var r1 = importer.Process(EntityProxyContainer.Current.EntityType, op1);
 
 
                     return new { Employees = r1 };
@@ -157,7 +163,7 @@ namespace ExcelPatternTool.ViewModel
                 {
 
 
-                    this.Employees = new ObservableCollection<IExcelEntity>(data.Employees);
+                    this.Employees = new ObservableCollection<object>(data.Employees);
                     this.IsValidSuccess = null;
                 }
             });
@@ -176,9 +182,9 @@ namespace ExcelPatternTool.ViewModel
                 OnPropertyChanged(nameof(ProcessResultList));
             }
         }
-        private ObservableCollection<IExcelEntity> _employees;
+        private ObservableCollection<object> _employees;
 
-        public ObservableCollection<IExcelEntity> Employees
+        public ObservableCollection<object> Employees
         {
             get { return _employees; }
             set

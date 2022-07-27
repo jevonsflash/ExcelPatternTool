@@ -5,10 +5,11 @@ namespace ExcelPatternTool.Core.Excel.Models
 {
     public class ImportOption : IImportOption
     {
-        public ImportOption(int sheetNumber, int skipRows)
+        public ImportOption(Type entityType, int sheetNumber, int skipRows)
         {
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
+            this.EntityType=entityType;
 
         }
 

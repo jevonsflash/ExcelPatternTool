@@ -17,8 +17,14 @@ namespace ExcelPatternTool.Core.Excel.Core
 
         internal T GetDataToObject<T>(IRow row, List<ColumnMetadata> columns) where T : IExcelEntity
         {
-            T result = (T)Activator.CreateInstance(typeof(T));
             Type objType = typeof(T);
+            return (T)GetDataToObject(objType, row, columns);
+        }
+
+        internal object GetDataToObject(Type objType, IRow row, List<ColumnMetadata> columns)
+        {
+            object result = Activator.CreateInstance(objType);
+
             for (int j = 0; j < columns.Count; j++)
             {
                 ICell cell = row.GetCell(columns[j].ColumnOrder);
@@ -197,7 +203,6 @@ namespace ExcelPatternTool.Core.Excel.Core
 
             return result;
         }
-
 
         private bool ExtractBooleanFromCell(ICell cell)
         {

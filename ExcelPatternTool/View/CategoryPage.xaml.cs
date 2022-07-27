@@ -55,5 +55,11 @@ namespace ExcelPatternTool.View
         {
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            (App.Current.MainWindow as MainWindow).HamburgerMenuControl.SelectedIndex=1;
+
+        }
     }
 }

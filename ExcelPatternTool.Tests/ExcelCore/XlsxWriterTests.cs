@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using ExcelPatternTool.Core.Excel.Core;
 using ExcelPatternTool.Core.Excel.Models;
+using ExcelPatternTool.Tests.Entites;
 
 namespace ExcelPatternTool.Infrastructure.Tests
 {
@@ -23,7 +24,7 @@ namespace ExcelPatternTool.Infrastructure.Tests
             exporter.DumpXlsx(filePath);
             
             var eo=new ExportOption(1,1);
-            eo.SheetName = "生成1";
+            eo.SheetName = "Sheet1";
             eo.GenHeaderRow = true;
 
             var data = GetDatas();
@@ -46,7 +47,7 @@ namespace ExcelPatternTool.Infrastructure.Tests
             data1 = File.ReadAllBytes(filePath);
             import.LoadXlsx(data1);
             var importOption = new ImportOption<EmployeeEntity>(0, 2);
-            importOption.SheetName = "全职";
+            importOption.SheetName = "Sheet2";
             var output = import.Process<EmployeeEntity>(importOption).ToList();
 
             return output;

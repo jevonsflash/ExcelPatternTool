@@ -48,8 +48,7 @@ namespace ExcelPatternTool.Core.Validators
                 {
                     continue;
                 }
-                var genericType = validatorProvider.GetType().GetGenericTypeDefinition();
-                validator.ValidationPattern.Expression = ValidateItem(genericType, validator.ValidationPattern.Expression);
+                validator.ValidationPattern.Expression = ValidateItem(validator.ValidationPattern.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
                 if (currentResult==null)
                 {
@@ -62,7 +61,7 @@ namespace ExcelPatternTool.Core.Validators
             return result;
         }
 
-        private string ValidateItem(Type entityType, string originalString)
+        private string ValidateItem(string originalString)
         {
             var result = originalString;
 
@@ -117,7 +116,7 @@ namespace ExcelPatternTool.Core.Validators
 
         public Validator(IValidatorProvider validatorProvider) : this()
         {
-            SetValidatorProvider(validatorProvider);
+            this.validatorProvider = validatorProvider;
 
         }
 
@@ -127,12 +126,15 @@ namespace ExcelPatternTool.Core.Validators
 
         }
 
-        public void SetValidatorProvider(IValidatorProvider validatorProvider)
+        public void SetValidatorProvider<T>(IValidatorProvider validatorProvider)
+        {
+            this.SetValidatorProvider(typeof(T), validatorProvider);
+        }
+
+        public void SetValidatorProvider(Type entityType, IValidatorProvider validatorProvider)
         {
             this.validatorProvider = validatorProvider;
-            var genericType = validatorProvider.GetType().GetGenericArguments().FirstOrDefault();
-            InitAliasDictionary(genericType);
-
+            InitAliasDictionary(entityType);
             this.validatorProvider.PropertyTypeMaper = this.GetOriginalPropertyName;
 
         }
