@@ -11,6 +11,7 @@ using ExcelPatternTool.Core.Excel.Attributes;
 using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
 using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.Excel.Services;
+using ExcelPatternTool.Core.Helper;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -91,11 +92,11 @@ namespace ExcelPatternTool.Core.Excel.Core
         public StyleMetadata GetClassStyleDefinition(Type type)
         {
             StyleMetadata styleMetadata;
-            var defaultFontName = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontName"];
-            var defaultFontColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontColor"];
-            short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontSize"]);
-            var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
-            var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
+            string defaultFontName = ConfigurationHelper.GetConfigValue("HeaderDefaultStyle:DefaultFontName", "宋体");
+            var defaultFontColor = ConfigurationHelper.GetConfigValue("HeaderDefaultStyle:DefaultFontColor", "#FFFFFF");
+            short defaultFontSize = Convert.ToInt16(ConfigurationHelper.GetConfigValue("HeaderDefaultStyle:DefaultFontSize","10"));
+            var defaultBorderColor = ConfigurationHelper.GetConfigValue("HeaderDefaultStyle:DefaultBorderColor", "#000000");
+            var defaultBackColor = ConfigurationHelper.GetConfigValue("HeaderDefaultStyle:DefaultBackColor", "#888888");
             foreach (var attr in type.GetCustomAttributes())
             {
                 if (attr is StyleAttribute)
@@ -131,14 +132,15 @@ namespace ExcelPatternTool.Core.Excel.Core
             return new StyleMetadata(defaultFontColor, defaultFontName, defaultFontSize, defaultBorderColor, defaultBackColor);
         }
 
+
         public StyleMetadata GetPropStyleDefinition(PropertyInfo prop)
         {
             StyleMetadata styleMetadata;
-            var defaultFontName = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontName"];
-            var defaultFontColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontColor"];
-            short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultFontSize"]);
-            var defaultBorderColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultBorderColor"];
-            var defaultBackColor = AppConfigurtaionService.Configuration["BodyDefaultStyle:DefaultBackColor"];
+            var defaultFontName = ConfigurationHelper.GetConfigValue("BodyDefaultStyle:DefaultFontName", "宋体");
+            var defaultFontColor = ConfigurationHelper.GetConfigValue("BodyDefaultStyle:DefaultFontColor", "#000000");
+            short defaultFontSize = Convert.ToInt16(ConfigurationHelper.GetConfigValue("BodyDefaultStyle:DefaultFontSize", "10"));
+            var defaultBorderColor = ConfigurationHelper.GetConfigValue("BodyDefaultStyle:DefaultBorderColor", "#000000");
+            var defaultBackColor = ConfigurationHelper.GetConfigValue("BodyDefaultStyle:DefaultBackColor", "#FFFFFF");
 
             var attrs = Attribute.GetCustomAttributes(prop);
 

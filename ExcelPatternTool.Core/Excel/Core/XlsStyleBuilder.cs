@@ -6,6 +6,7 @@ using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Services;
+using ExcelPatternTool.Core.Helper;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -171,7 +172,7 @@ namespace ExcelPatternTool.Core.Excel.Core
             HSSFPatriarch patr = (HSSFPatriarch)Workbook.GetSheetAt(0).CreateDrawingPatriarch();
             HSSFComment comment12 = patr.CreateComment(new HSSFClientAnchor(0, 0, 0, 0, 1, 2, 2, 3));//批注显示定位        }
             comment12.String = richTextString;
-            comment12.Author = AppConfigurtaionService.Configuration["CellComment:DefaultAuthor"];
+            comment12.Author = ConfigurationHelper.GetConfigValue("CellComment:DefaultAuthor", "Linxiao");
             return comment12;
 
         }

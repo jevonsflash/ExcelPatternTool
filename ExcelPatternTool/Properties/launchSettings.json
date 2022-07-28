@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ExcelPatternTool": {
+      "commandName": "Project",
+      "hotReloadEnabled": true,
+      "nativeDebugging": false
+    }
+  }
+}

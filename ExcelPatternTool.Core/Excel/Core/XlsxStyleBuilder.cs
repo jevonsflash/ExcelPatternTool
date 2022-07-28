@@ -7,6 +7,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Services;
+using ExcelPatternTool.Core.Helper;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -119,7 +120,7 @@ namespace ExcelPatternTool.Core.Excel.Core
             IDrawing patr = Workbook.GetSheetAt(0).CreateDrawingPatriarch();
             IComment comment12 = patr.CreateCellComment(new XSSFClientAnchor(0, 0, 0, 0, 0, 0, 0, 0));//批注显示定位        }
             comment12.String = richTextString;
-            comment12.Author = AppConfigurtaionService.Configuration["CellComment:DefaultAuthor"];
+            comment12.Author = ConfigurationHelper.GetConfigValue("CellComment:DefaultAuthor", "Linxiao");
             return comment12;
 
         }
