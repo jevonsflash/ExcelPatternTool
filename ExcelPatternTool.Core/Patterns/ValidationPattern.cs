@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NJsonSchema.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,7 +37,7 @@ namespace ExcelPatternTool.Core.Patterns
         [JsonConverter(typeof(StringEnumConverter))]
         public Convention Convention { get; set; }
 
-        [JsonSchemaIgnore]
+        [JsonIgnore]
         public ProcessResult ProcessResult { get; set; }
 
         public string Expression

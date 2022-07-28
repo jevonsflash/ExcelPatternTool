@@ -12,6 +12,7 @@ using NPOI.SS.Formula.Functions;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
 using ExcelPatternTool.Core.Patterns;
+using Newtonsoft.Json;
 
 namespace ExcelPatternTool.Core.EntityProxy
 {
@@ -25,7 +26,14 @@ namespace ExcelPatternTool.Core.EntityProxy
             _pattern = LocalDataHelper.ReadObjectLocal<Pattern>();
 
         }
-
+        public EntityProxyGenerator(string filePath)
+        {
+            if (DirFileHelper.IsExistFile(filePath))
+            {
+                var serializedstr = DirFileHelper.ReadFile(filePath);
+                _pattern = JsonConvert.DeserializeObject<Pattern>(serializedstr);
+            }
+        }
         public AttributeListSyntax CreateAttribult(string attr)
         {
             var result = SyntaxFactory.AttributeList(

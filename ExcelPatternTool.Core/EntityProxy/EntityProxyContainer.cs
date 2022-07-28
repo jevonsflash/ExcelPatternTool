@@ -38,6 +38,13 @@ namespace ExcelPatternTool.Core.EntityProxy
             this.entityAss= entityProxyGenerator.GetEntityProxyAssembly();
         }
 
+        public void Init(string patternFilePath)
+        {
+            var entityProxyGenerator = new EntityProxyGenerator(patternFilePath);
+            entityProxyGenerator.Process();
+            this.entityAss= entityProxyGenerator.GetEntityProxyAssembly();
+        }
+
         public Type EntityType => this.entityAss.GetType("ExcelPatternTool.Core.Entites.ExcelEntity");
 
     }
