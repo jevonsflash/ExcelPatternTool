@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using ExcelPatternTool.Core.Excel.Attributes;
 using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
@@ -23,23 +24,45 @@ namespace ExcelPatternTool.Manager
 
         public static MemoryStream CompileClientProxy(IEnumerable<SyntaxTree> trees)
         {
+            //https://github.com/dotnet/runtime/issues/42621
+            //var references = new[]
+            //   {
+            //    MetadataReference.CreateFromFile(typeof(KeyAttribute).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(KeylessAttribute).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(DatabaseGeneratedAttribute).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(ExportableAttribute).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(CommentedType<>).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(IExcelEntity).GetTypeInfo().Assembly.Location),
+            //    MetadataReference.CreateFromFile(typeof(DisplayNameAttribute).GetTypeInfo().Assembly.Location)
+            //};
 
-            var references = new[]
-               {
-                MetadataReference.CreateFromFile(typeof(KeyAttribute).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(KeylessAttribute).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(DatabaseGeneratedAttribute).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ExportableAttribute).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(CommentedType<>).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(IExcelEntity).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(DisplayNameAttribute).GetTypeInfo().Assembly.Location)
-            };
+            var references = new List<MetadataReference>();
+            IEnumerable<MetadataReference> allReferences;
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            var allReferences = assemblies.Where(c => !c.IsDynamic).Select(x =>
+            unsafe
             {
-                var f = MetadataReference.CreateFromFile(x.Location);
-                return f;
-            }).Concat(references);
+                MetadataReference AddMetadataReference(Assembly assembly)
+                {
+                    assembly.TryGetRawMetadata(out byte* blob, out int length);
+                    return (AssemblyMetadata.Create(ModuleMetadata.CreateFromMetadata((IntPtr)blob, length)).GetReference());
+                }
+                references.Add(AddMetadataReference(typeof(KeyAttribute).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(KeylessAttribute).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(DatabaseGeneratedAttribute).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(ExportableAttribute).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(CommentedType<>).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(IExcelEntity).GetTypeInfo().Assembly));
+                references.Add(AddMetadataReference(typeof(DisplayNameAttribute).GetTypeInfo().Assembly));
+
+
+                allReferences = assemblies.Where(c => !c.IsDynamic).Select(x =>
+                {
+                    var f = AddMetadataReference(x);
+                    return f;
+                }).Concat(references);
+
+
+            }
             return Compile(AssemblyInfo.Create(Assembly.GetCallingAssembly().GetName().Name+".Proxy"), trees, allReferences);
         }
 

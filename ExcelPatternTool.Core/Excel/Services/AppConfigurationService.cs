@@ -18,7 +18,7 @@ namespace ExcelPatternTool.Core.Excel.Services
         public static IConfiguration Configuration { get; set; }
         static AppConfigurtaionService()
         {
-            if (DirFileHelper.IsExistFile(jsonPath))
+            if (!DirFileHelper.IsExistFile(jsonPath))
             {
                 return;
             }
