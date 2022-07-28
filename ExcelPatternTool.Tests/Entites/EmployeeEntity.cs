@@ -4,12 +4,20 @@ using System.ComponentModel;
 using ExcelPatternTool.Core.Excel.Attributes;
 using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExcelPatternTool.Tests.Entites
 {
     [Keyless]
+    [Table("EmployeeEntity")]
     public class EmployeeEntity : IExcelEntity
     {
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Exportable(ignore: true)]
+        public Guid Id { get; set; }
+
         [Exportable(ignore: true)]
         [Importable(ignore: true)]
         public long RowNumber { get; set; }

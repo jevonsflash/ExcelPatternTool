@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +26,9 @@ namespace ExcelPatternTool.Manager
 
             var references = new[]
                {
+                MetadataReference.CreateFromFile(typeof(KeyAttribute).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(KeylessAttribute).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(DatabaseGeneratedAttribute).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ExportableAttribute).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(CommentedType<>).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IExcelEntity).GetTypeInfo().Assembly.Location),

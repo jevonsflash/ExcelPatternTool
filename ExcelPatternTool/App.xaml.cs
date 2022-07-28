@@ -29,7 +29,6 @@ namespace ExcelPatternTool
     {
         public static string Session;
         private bool _initialized;
-        private readonly ExcelPatternToolDbContext _dataContext;
 
         public App()
         {
@@ -37,29 +36,17 @@ namespace ExcelPatternTool
             {
                 _initialized = true;
                 EntityProxyContainer.Current.Init();
-
-                var connectionString = @"Data Source=mato.db";
-                var contextOptions = new DbContextOptionsBuilder<ExcelPatternToolDbContext>()
-                    .UseSqlite(connectionString)
-                    .Options;
-
-                _dataContext= new ExcelPatternToolDbContext(contextOptions);
-
-                _dataContext.Database.Migrate();
                 Ioc.Default.ConfigureServices(
                     new ServiceCollection()
-
-            .AddSingleton<MainViewModel>()
-            .AddSingleton<ImportPageViewModel>()
-            .AddSingleton<CategoryPageViewModel>()
-            .AddSingleton<SettingPageViewModel>()
-            .AddSingleton<ExcelPatternToolDbContext>((c) => _dataContext)
-            .AddSingleton<Validator>((c) => new Validator())
-
+                    .AddSingleton<MainViewModel>()
+                    .AddSingleton<ImportPageViewModel>()
+                    .AddSingleton<CategoryPageViewModel>()
+                    .AddSingleton<SettingPageViewModel>()
+                    .AddSingleton<DbContextFactory>()
+                    .AddSingleton<Validator>((c) => new Validator())
                     .BuildServiceProvider());
                 App.Current.Startup += Current_Startup;
                 App.Current.Exit += Current_Exit;
-
             }
         }
 

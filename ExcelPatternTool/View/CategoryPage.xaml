@@ -5,8 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       DataContext="{Binding Source={StaticResource Locator},Path=CategoryPage}"
       Unloaded="Page_Unloaded"
-      xmlns:local="clr-namespace:ExcelPatternTool.View"
-      xmlns:control="clr-namespace:ExcelPatternTool.Control"
+      xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProcedurePage">
@@ -23,13 +22,24 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                <Button  Content="添加" IsEnabled="False" Command="{Binding CreateCommand}"  Width="120"></Button>
                 <Button  Content="清空数据"  Command="{Binding ClearCommand}"  Width="120"></Button>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
-                <Button  Content="导出" x:Name="SaveToButton"  Command="{Binding SubmitCommand}"  Width="120"></Button>
-
+                <mah:DropDownButton Name="DownButton1"
+                                    Margin="5"                                    
+                                    Width="120"
+                                    Content="导出.."
+                                    DisplayMemberPath="Title"
+                                    Command="{Binding SubmitCommand}"
+                                    ItemsSource="{Binding ExportOptions}"
+                                    Orientation="Horizontal">
+                    <mah:DropDownButton.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                            <Setter Property="Command" Value="{Binding Command}" />
+                        </Style>
+                    </mah:DropDownButton.ItemContainerStyle>
+                </mah:DropDownButton>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" >

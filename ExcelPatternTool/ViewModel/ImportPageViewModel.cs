@@ -30,9 +30,8 @@ namespace ExcelPatternTool.ViewModel
     public class ImportPageViewModel : ObservableObject
     {
         public event EventHandler OnFinished;
-        private readonly ExcelPatternToolDbContext _dbContext;
         private Validator validator;
-        public ImportPageViewModel(ExcelPatternToolDbContext dbContext)
+        public ImportPageViewModel()
         {
             validator = Ioc.Default.GetRequiredService<Validator>();
             validator.SetValidatorProvider(EntityProxyContainer.Current.EntityType, new DefaultValidatorProvider());
@@ -43,7 +42,6 @@ namespace ExcelPatternTool.ViewModel
             this.ProcessResultList = new ObservableCollection<ProcessResultDto>();
             this.ProcessResultList.CollectionChanged += ProcessResultList_CollectionChanged;
             this.PropertyChanged += ImportPageViewModel_PropertyChanged;
-            this._dbContext = dbContext;
         }
 
         private void ImportPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

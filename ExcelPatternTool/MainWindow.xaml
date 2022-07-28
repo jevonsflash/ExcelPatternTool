@@ -8,7 +8,7 @@
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
                  WindowState="Maximized"
-        Title="薪酬管理系统 版本0.1" Height="720" Width="1080">
+        Title="EPT with UI" Height="720" Width="1080">
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button Content="关于" Click="ButtonBase_OnClick"></Button>

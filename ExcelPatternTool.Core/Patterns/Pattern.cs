@@ -11,6 +11,9 @@ namespace ExcelPatternTool.Core.Patterns
 {
     public class Pattern
     {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TableKeyType TableKeyType { get; set; }
+        public string TableName { get; set; }
         public IEnumerable<PatternItem> Patterns { get; set; }
 
     }

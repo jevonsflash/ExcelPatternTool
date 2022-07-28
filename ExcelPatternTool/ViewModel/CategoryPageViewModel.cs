@@ -29,24 +29,21 @@ using ExcelPatternTool.Helper;
 using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using ExcelPatternTool.Core.EntityProxy;
+using MahApps.Metro.Controls.Dialogs;
+using MahApps.Metro.Controls;
 
 namespace ExcelPatternTool.ViewModel
 {
     public class CategoryPageViewModel : ObservableObject
     {
-
-        private string filePath;
-
-        private readonly ExcelPatternToolDbContext _dbContext;
-        public CategoryPageViewModel(ExcelPatternToolDbContext dbContext)
+        public CategoryPageViewModel(DbContextFactory dbContextFactory)
         {
-            this.SubmitCommand = new RelayCommand(SubmitAction, CanSubmit);
+            this.SubmitCommand = new RelayCommand(() => { }, () => HasValue);
             this.ClearCommand = new RelayCommand(ClearAction);
             this.RemoveCommand = new RelayCommand<IExcelEntity>(RemoveAction);
             this.PropertyChanged += CategoryPageViewModel_PropertyChanged;
-            this._dbContext = dbContext;
             InitData();
-
+            this.dbContextFactory=dbContextFactory;
         }
 
 
@@ -94,6 +91,7 @@ namespace ExcelPatternTool.ViewModel
                 SubmitCommand.NotifyCanExecuteChanged();
                 OnPropertyChanged(nameof(HasValue));
             }
+
         }
 
         private void CategoryInfos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -126,33 +124,63 @@ namespace ExcelPatternTool.ViewModel
             else
             {
                 MessageBox.Show("条目不存在");
-
             }
         }
 
 
-        public bool HasValue => this.Entities.Count>0;
-
-
-        private void SubmitAction()
+        private void ExportToExcelAction()
         {
             var odInfos = Entities.ToList();
-
-
-
             if (odInfos.Count > 0)
             {
+                var task = InvokeHelper.InvokeOnUi<IEnumerable<object>>(null, () =>
+                {
+                    DocHelper.SaveTo(EntityProxyContainer.Current.EntityType, this.Entities, new ExportOption(1, 1) { SheetName = "Sheet1", GenHeaderRow = true });
+                    return this.Entities;
+                }, async (t) =>
+                {
+                    MessageBox.Show("已完成导出");
 
-                var defaultFontName = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontName"];
-                var defaultFontColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontColor"];
-                short defaultFontSize = Convert.ToInt16(AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultFontSize"]);
-                var defaultBorderColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBorderColor"];
-                var defaultBackColor = AppConfigurtaionService.Configuration["HeaderDefaultStyle:DefaultBackColor"];
+                });
+            }
+        }
 
+        private async void ExportToSqliteAction()
+        {
+            await ExportToDb("sqlite");
+        }
+
+
+        private async void ExportToSqlServerAction()
+        {
+            await ExportToDb("sqlserver");
+        }
+
+        private async void ExportToMySqlAction()
+        {
+            await ExportToDb("mysql");
+        }
+
+
+        private async Task ExportToDb(string dbtype)
+        {
+            var odInfos = Entities.ToList();
+            if (odInfos.Count > 0)
+            {
+                var result = await DialogManager.ShowInputAsync((MetroWindow)App.Current.MainWindow, "导出至数据库", "请填写数据库连接字符串");
+                if (string.IsNullOrEmpty(result))
+                {
+                    return;
+                }
                 var task = InvokeHelper.InvokeOnUi<IEnumerable<object>>(null, () =>
                 {
 
-                    DocHelper.SaveTo(EntityProxyContainer.Current.EntityType, this.Entities, new ExportOption(1, 1) { SheetName = "Sheet1", GenHeaderRow = true });
+                    using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(result, dbtype))
+                    {
+                        dbcontext.AddRange(odInfos);
+                        dbcontext.SaveChanges();
+                    }
+
 
                     return this.Entities;
 
@@ -160,16 +188,16 @@ namespace ExcelPatternTool.ViewModel
 
                 }, async (t) =>
                 {
-                    var result = this._dbContext.SaveChanges();
                     MessageBox.Show("已完成导出");
 
                 });
             }
-
         }
 
 
         private ObservableCollection<object> _categoryTypeInfos;
+        private readonly DbContextFactory dbContextFactory;
+        private readonly IDialogCoordinator dialogCoordinator;
 
         public ObservableCollection<object> Entities
         {
@@ -189,11 +217,17 @@ namespace ExcelPatternTool.ViewModel
         }
 
 
-        private bool CanSubmit()
-        {
-            return this.Entities.Count > 0;
+        public List<MenuCommand> ExportOptions => new List<MenuCommand>() {
+            new MenuCommand("导出到Excel", ExportToExcelAction, () => true),
+            new MenuCommand("导出到SqlServer", ExportToSqlServerAction, () => true),
+            new MenuCommand("导出到Sqlite", ExportToSqliteAction, () => true),
+            new MenuCommand("导出到MySql", ExportToMySqlAction, () => true),
+        };
 
-        }
+
+
+        public bool HasValue => this.Entities.Count>0;
+
 
 
         public RelayCommand GetDataCommand { get; set; }
