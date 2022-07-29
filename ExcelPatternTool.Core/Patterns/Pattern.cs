@@ -11,9 +11,9 @@ namespace ExcelPatternTool.Core.Patterns
 {
     public class Pattern
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TableKeyType TableKeyType { get; set; }
-        public string TableName { get; set; }
+        public Excel ExcelImport { get; set; }
+        public Excel ExcelExport { get; set; }
+        public DbExport DbExport { get; set; }
         public IEnumerable<PatternItem> Patterns { get; set; }
 
     }
@@ -32,7 +32,7 @@ namespace ExcelPatternTool.Core.Patterns
         public bool Ignore { get; set; }
         [Range(0, int.MaxValue)]
         public int Order { get; set; }
-        public ValidationPattern ValidationPattern { get; set; }
-        public ExportablePattern ExportablePattern { get; set; }
+        public Validation ValidationPattern { get; set; }
+        public ExcelExportFeild ExportablePattern { get; set; }
     }
 }

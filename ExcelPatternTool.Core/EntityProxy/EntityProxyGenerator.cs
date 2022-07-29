@@ -171,11 +171,11 @@ namespace ExcelPatternTool.Core.EntityProxy
 
             var result = new List<MemberDeclarationSyntax>();
 
-            if (_pattern.TableKeyType!=TableKeyType.NoKey)
+            if (_pattern.DbExport?.TableKeyType!=TableKeyType.NoKey)
             {
 
                 result.Add(SyntaxFactory.PropertyDeclaration(
-                                    GetTypeSyntax(_pattern.TableKeyType.ToString()),
+                                    GetTypeSyntax(_pattern.DbExport?.TableKeyType.ToString()),
                                     SyntaxFactory.Identifier("Id"))
                                 .WithAttributeLists(
                                     SyntaxFactory.List<AttributeListSyntax>(
@@ -274,38 +274,31 @@ namespace ExcelPatternTool.Core.EntityProxy
                                             .WithSemicolonToken(
                                                 SyntaxFactory.Token(SyntaxKind.SemicolonToken))}))));
 
+         
+            foreach (var patternItem in _pattern.Patterns)
+            {
+                var propertyType = patternItem.PropType.ToString();
+                var genericType = patternItem.CellType.ToString();
+                var propertyName = patternItem.PropName;
+                var headerName = patternItem.HeaderName;
+                var order = patternItem.Order;
 
-
-
-
-            result.Add(this.CreateProperty("string", "StringValue", "常规", 0));
-            result.Add(this.CreateProperty("DateTime", "DateTimeValue", "日期", 1));
-
-            result.Add(this.CreateProperty("int", "IntValue", "整数", 2));
-            result.Add(this.CreateProperty("double", "DoubleValue", "小数", 3));
-            result.Add(this.CreateProperty("bool", "BoolValue", "布尔值", 4));
-            result.Add(this.CreateProperty("CommentedType", "string", "StringWithNoteValue", "常规(注释)", 5));
-            result.Add(this.CreateProperty("StyledType", "string", "StringWithStyleValue", "常规(样式)", 6));
-            result.Add(this.CreateProperty("FormulatedType", "int", "IntWithFormula", "公式", 10));
-
-
-
-            //foreach (var patternItem in pattern.Patterns)
-            //{
-            //    patternItem.Order
-            //}
-
+                if (patternItem.CellType!=CellType.GeneralType)
+                {
+                    result.Add(this.CreateProperty(genericType, propertyType, propertyName, headerName, order));
+                }
+                else
+                {
+                    result.Add(this.CreateProperty(propertyType, propertyName, headerName, order));
+                }
+            }
             return result;
         }
 
         public void Process()
         {
-
-
             try
             {
-
-
                 var treeFrame = SyntaxFactory.CompilationUnit()
 .WithUsings(
     SyntaxFactory.List<UsingDirectiveSyntax>(
@@ -380,12 +373,12 @@ namespace ExcelPatternTool.Core.EntityProxy
                 SyntaxFactory.ClassDeclaration("ExcelEntity")
                 .WithAttributeLists(
             SyntaxFactory.List<AttributeListSyntax>(
-                _pattern.TableKeyType==TableKeyType.NoKey ?
+                _pattern.DbExport?.TableKeyType==TableKeyType.NoKey ?
                 new AttributeListSyntax[]{
                     CreateAttribult("Keyless"),
-                    CreateAttribult("Table", string.IsNullOrEmpty(_pattern.TableName)?"DefaultTable": _pattern.TableName)
+                    CreateAttribult("Table", string.IsNullOrEmpty(_pattern.DbExport?.TableName)?"DefaultTable": _pattern.DbExport?.TableName)
                   } : new AttributeListSyntax[] {
-                    CreateAttribult("Table", string.IsNullOrEmpty(_pattern.TableName)?"DefaultTable": _pattern.TableName)
+                    CreateAttribult("Table", string.IsNullOrEmpty(_pattern.DbExport?.TableName)?"DefaultTable": _pattern.DbExport?.TableName)
 
                   }))
                 .WithModifiers(
@@ -406,26 +399,21 @@ namespace ExcelPatternTool.Core.EntityProxy
 .NormalizeWhitespace().SyntaxTree;
 
 
-
-
                 var stream = CompilationUtilitys.CompileClientProxy(new List<SyntaxTree>() { treeFrame });
 
                 using (stream)
                 {
                     var assembly = Assembly.Load(stream.ToArray());
                     _generatedServiceProxyAssembly = assembly;
-
                 }
 
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex);
+                //Console.WriteLine(ex);
                 throw ex;
             }
-
-
         }
 
         public Assembly GetEntityProxyAssembly()

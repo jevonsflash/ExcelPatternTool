@@ -98,7 +98,7 @@ namespace ExcelPatternTool.Helper
         {
             if (importOption == null)
             {
-                importOption = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 1);
+                importOption = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 0);
             }
             Importer import = new Importer();
             List<T> output = new List<T>();
@@ -147,7 +147,7 @@ namespace ExcelPatternTool.Helper
         {
             if (importOption == null)
             {
-                importOption = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 1);
+                importOption = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 0);
             }
             Importer import = new Importer();
             List<IExcelEntity> output = new List<IExcelEntity>();

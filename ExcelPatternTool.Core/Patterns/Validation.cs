@@ -7,12 +7,12 @@ using ExcelPatternTool.Core.Linq.Models;
 
 namespace ExcelPatternTool.Core.Patterns
 {
-    public class ValidationPattern
+    public class Validation
     {
         private string _description;
         private string _expression;
 
-        public ValidationPattern()
+        public Validation()
         {
             ProcessResult = new ProcessResult();
             ProcessResult.IsValidated = false;

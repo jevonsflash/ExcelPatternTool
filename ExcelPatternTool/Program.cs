@@ -30,7 +30,7 @@ namespace ExcelPatternTool
 
                 var sw = Stopwatch.StartNew();
 
-                var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 2);
+                var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 1);
                 var result = DocProcessor.ImportFrom(CliProcessor.inputPathList.First(), op1);
 
                 ValidateProcessor.GetDataAction(result);

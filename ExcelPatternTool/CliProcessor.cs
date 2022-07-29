@@ -22,7 +22,7 @@ namespace ExcelPatternTool
             var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
             Console.WriteLine();
             Console.WriteLine("Excel Pattern Tool v{0}.{1}", versionInfo.FileMajorPart, versionInfo.FileMinorPart);
-            Console.WriteLine("参数:");
+            Console.WriteLine("参数列表:");
             Console.WriteLine(" -p  PatternFile");
             Console.WriteLine("     指定一个Pattern文件(Json), 作为转换的模型文件");
             Console.WriteLine(" -i  Input");

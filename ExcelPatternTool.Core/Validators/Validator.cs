@@ -19,20 +19,20 @@ namespace ExcelPatternTool.Core.Validators
         private Dictionary<string, string> aliasDictionary;
 
 
-        private IEnumerable<PatternItem> validatorInfos;
+        private IEnumerable<PatternItem> _patternItems;
 
-        public IEnumerable<PatternItem> ValidatorInfos
+        public IEnumerable<PatternItem> PatternItems
         {
             get
             {
-                if (validatorInfos==null)
+                if (_patternItems==null)
                 {
-                    validatorInfos = validatorProvider.GetPatternItems();
+                    _patternItems = validatorProvider.GetPatternItems();
 
                 }
-                return validatorInfos;
+                return _patternItems;
             }
-            set { validatorInfos = value; }
+            set { _patternItems = value; }
         }
 
         public IEnumerable<ProcessResult> Validate(object obj)
@@ -41,8 +41,12 @@ namespace ExcelPatternTool.Core.Validators
 
             var result = new List<ProcessResult>();
 
-            foreach (var validator in ValidatorInfos)
+            foreach (var validator in PatternItems)
             {
+                if (validator.ValidationPattern==null)
+                {
+                    continue;
+                }
                 var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention.ToString()).Convention;
                 if (currentConvention==null)
                 {

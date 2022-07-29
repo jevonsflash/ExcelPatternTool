@@ -1,15 +1,21 @@
-﻿using System;
+﻿using ExcelPatternTool.Core.Excel.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ExcelPatternTool.Core.Patterns
 {
-    public class ExportablePattern
+    public class ExcelExportFeild
     {
         public int Order { get; set; }
 
         public string Name { get; set; }
-        public string Type { get; set; }
+
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public FieldValueType Type { get; set; }
 
         public string Format { get; set; }
 

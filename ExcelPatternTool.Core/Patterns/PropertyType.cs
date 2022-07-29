@@ -4,15 +4,15 @@ namespace ExcelPatternTool.Core.Patterns
 {
     public enum PropertyType
     {
-        [EnumMember(Value = "字符串")]
+        [EnumMember(Value = "string")]
         @string,
-        [EnumMember(Value = "日期")]
+        [EnumMember(Value = "DateTime")]
         DateTime,
-        [EnumMember(Value = "整型")]
+        [EnumMember(Value = "int")]
         @int,
-        [EnumMember(Value = "浮点型")]
+        [EnumMember(Value = "double")]
         @double,
-        [EnumMember(Value = "布尔")]
+        [EnumMember(Value = "bool")]
         @bool,
     }
 }
