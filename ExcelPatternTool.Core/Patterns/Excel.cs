@@ -9,7 +9,8 @@ namespace ExcelPatternTool.Core.Patterns
     public class Excel
     {
         public string SheetName { get; set; } = "Sheet1";
-        public int StartRowNumber { get; set; } = 0;
+        public int SheetNumber { get; set; } = 0;
+        public int SkipRow{ get; set; } = 0;
 
     }
 }

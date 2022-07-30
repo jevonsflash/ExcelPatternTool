@@ -1,8 +1,11 @@
 ﻿using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Excel.Models;
+using ExcelPatternTool.Core.Helper;
+using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Core.Validators;
 using ExcelPatternTool.Core.Validators.Implements;
 using ExcelPatternTool.Helper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,12 +28,20 @@ namespace ExcelPatternTool
             }
             try
             {
+
+                var serializedstr = DirFileHelper.ReadFile(CliProcessor.patternFilePath);
+                var _pattern = JsonConvert.DeserializeObject<Pattern>(serializedstr);
+
+
+
+
                 ValidateProcessor.Init();
                 DbProcessor.Init();
 
                 var sw = Stopwatch.StartNew();
 
-                var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 1);
+                var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, _pattern.ExcelImport.SheetNumber, _pattern.ExcelImport.SkipRow);
+                op1.SheetName=_pattern.ExcelImport.SheetName;
                 var result = DocProcessor.ImportFrom(CliProcessor.inputPathList.First(), op1);
 
                 ValidateProcessor.GetDataAction(result);
