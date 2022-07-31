@@ -9,5 +9,7 @@ namespace ExcelPatternTool.Core.Validators
         Func<string, string> PropertyTypeMaper { get; set; }
         IEnumerable<PatternItem> GetPatternItems();
         ValidateConvention GetConvention(string type);
+        Dictionary<string, ValidateConvention> InitConventions();
+        object TryGetValue(string varName, object e);
     }
 }

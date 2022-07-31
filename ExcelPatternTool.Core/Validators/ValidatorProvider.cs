@@ -13,16 +13,18 @@ namespace ExcelPatternTool.Core.Validators
 {
     public abstract class ValidatorProvider : IValidatorProvider
     {
-        public Dictionary<string, ValidateConvention> Conventions { get; set; }
+        protected Dictionary<string, ValidateConvention> Conventions { get; set; }
         public ValidatorProvider()
         {
-            Conventions = new Dictionary<string, ValidateConvention>();
-            Init();
+            Conventions = this.InitConventions();
         }
 
-        public Func<string, string> PropertyTypeMaper { get; set; }
-        public void Init()
+        virtual public Func<string, string> PropertyTypeMaper { get; set; }
+        virtual public Dictionary<string, ValidateConvention> InitConventions()
         {
+
+            var conventions = new Dictionary<string, ValidateConvention>();
+
             var generalOne = new Func<PatternItem, object, ProcessResult>((x, e) =>
             {
 
@@ -147,11 +149,12 @@ namespace ExcelPatternTool.Core.Validators
 
             });
 
-            Conventions.Add("LambdaExpression", new ValidateConvention(generalOne));
-            Conventions.Add("RegularExpression", new ValidateConvention(regularOne));
+            conventions.Add("LambdaExpression", new ValidateConvention(generalOne));
+            conventions.Add("RegularExpression", new ValidateConvention(regularOne));
+            return conventions;
         }
 
-        private object TryGetValue(string varName, object e)
+        virtual public object TryGetValue(string varName, object e)
         {
             var propName = PropertyTypeMaper?.Invoke(varName);
             PropertyInfo propertyInfo;
@@ -176,7 +179,7 @@ namespace ExcelPatternTool.Core.Validators
 
         abstract public IEnumerable<PatternItem> GetPatternItems();
 
-        public ValidateConvention GetConvention(string type)
+        virtual public ValidateConvention GetConvention(string type)
         {
             ValidateConvention result;
             Conventions.TryGetValue(type, out result);
