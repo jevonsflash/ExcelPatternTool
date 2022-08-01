@@ -32,9 +32,6 @@ namespace ExcelPatternTool
                 var serializedstr = DirFileHelper.ReadFile(CliProcessor.patternFilePath);
                 var _pattern = JsonConvert.DeserializeObject<Pattern>(serializedstr);
 
-
-
-
                 ValidateProcessor.Init();
                 DbProcessor.Init();
 
@@ -62,11 +59,15 @@ namespace ExcelPatternTool
                 }
                 if (CliProcessor.destination=="excel")
                 {
+                    var op2 = new ExportOption(EntityProxyContainer.Current.EntityType, _pattern.ExcelExport.SheetNumber, _pattern.ExcelExport.SkipRow);
+                    op2.SheetName=_pattern.ExcelExport.SheetName;
+                    op2.GenHeaderRow=_pattern.ExcelExport.GenHeaderRow;
+
                     DocProcessor.SaveTo(
                         EntityProxyContainer.Current.EntityType,
                         CliProcessor.outputPathList.First(),
-                        result,
-                        new ExportOption(1, 1) { SheetName = "Sheet1", GenHeaderRow = true });
+                        result, op2
+                        );
                     Console.WriteLine("已成功完成，导出共 {0} 条数据", result.Count);
 
                 }

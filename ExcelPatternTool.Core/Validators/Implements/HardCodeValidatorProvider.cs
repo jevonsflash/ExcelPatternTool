@@ -28,7 +28,7 @@ namespace ExcelPatternTool.Core.Validators.Implements
             {
                 PropName = "合计",
                 HeaderName="Sum",
-                ValidationPattern=validationPattern
+                Validation=validationPattern
             });
 
 

@@ -32,7 +32,7 @@ namespace ExcelPatternTool.Core.Patterns
         public bool Ignore { get; set; }
         [Range(0, int.MaxValue)]
         public int Order { get; set; }
-        public Validation ValidationPattern { get; set; }
-        public ExcelExportFeild ExportablePattern { get; set; }
+        public Validation Validation { get; set; }
+        public ExcelExportFeild ExcelExportItem { get; set; }
     }
 }

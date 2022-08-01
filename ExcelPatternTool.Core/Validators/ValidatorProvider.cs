@@ -30,7 +30,7 @@ namespace ExcelPatternTool.Core.Validators
 
                 var lambdaParser = new LambdaParser();
                 var propName = PropertyTypeMaper?.Invoke(x.PropName);
-                var c = x.ValidationPattern;
+                var c = x.Validation;
                 if (c==null)
                 {
                     return null;
@@ -91,7 +91,7 @@ namespace ExcelPatternTool.Core.Validators
 
 
                 object val = TryGetValue(x.PropName, e);
-                var c = x.ValidationPattern;
+                var c = x.Validation;
                 if (c==null)
                 {
                     return null;

@@ -7,11 +7,13 @@ namespace ExcelPatternTool.Core.Excel.Models
 {
     public class ExportOption : IExportOption
     {
-        public ExportOption(int sheetNumber, int skipRows)
+        public ExportOption(Type entityType, int sheetNumber, int skipRows)
         {
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
             SheetName = "未命名";
+            this.EntityType=entityType;
+
         }
 
         public Type EntityType { get; set; }

@@ -37,8 +37,8 @@ namespace ExcelPatternTool.Core.Validators.Implements
                 //再此编写自定义校验功能
                 //可用 x.PropName（或PropertyTypeMaper(x.PropName)） 获取当前列轮询的字段（Excel表头）名称
                 //返回ProcessResult作为校验结果,IsValidated设置为true表示校验通过
-                x.ValidationPattern.ProcessResult.IsValidated = true;
-                return x.ValidationPattern.ProcessResult;
+                x.Validation.ProcessResult.IsValidated = true;
+                return x.Validation.ProcessResult;
             }));
 
             return defaultConventions;

@@ -43,16 +43,16 @@ namespace ExcelPatternTool.Core.Validators
 
             foreach (var validator in PatternItems)
             {
-                if (validator.ValidationPattern==null)
+                if (validator.Validation==null)
                 {
                     continue;
                 }
-                var currentConvention = validatorProvider.GetConvention(validator.ValidationPattern.Convention.ToString()).Convention;
+                var currentConvention = validatorProvider.GetConvention(validator.Validation.Convention.ToString()).Convention;
                 if (currentConvention==null)
                 {
                     continue;
                 }
-                validator.ValidationPattern.Expression = ValidateItem(validator.ValidationPattern.Expression);
+                validator.Validation.Expression = ValidateItem(validator.Validation.Expression);
                 var currentResult = currentConvention?.Invoke(validator, obj);
                 if (currentResult==null)
                 {

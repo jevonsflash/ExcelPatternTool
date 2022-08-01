@@ -171,7 +171,7 @@ namespace ExcelPatternTool.Core.EntityProxy
 
             var result = new List<MemberDeclarationSyntax>();
 
-            if (_pattern.DbExport?.TableKeyType!=TableKeyType.NoKey)
+            if (_pattern.DbExport!=null && _pattern.DbExport?.TableKeyType!=TableKeyType.NoKey)
             {
 
                 result.Add(SyntaxFactory.PropertyDeclaration(
