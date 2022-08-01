@@ -28,7 +28,7 @@ namespace ExcelPatternTool.Core.Excel.Core
                 tmp.PropName = prop.Name;
                 tmp.PropType = prop.PropertyType;
                 tmp.ColumnName = prop.Name;
-                tmp.ColumnOrder = int.MaxValue;
+                tmp.ColumnOrder = -1;
                 tmp.DefaultForNullOrInvalidValues = string.Empty;
 
                 foreach (var attr in attrs)

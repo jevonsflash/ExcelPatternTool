@@ -1,0 +1,96 @@
+﻿{
+  "ExcelImport": {
+    "SheetName": "",
+    "SheetNumber": 0,
+    "SkipRow": 3,
+    "GenHeaderRow": true
+  },
+  "ExcelExport": {
+    "SheetName": "ept-sheet1",
+    "SheetNumber": 0,
+    "SkipRow": 0,
+    "GenHeaderRow": true
+  },
+  "DbExport": {
+    "TableKeyType": "Guid",
+    "TableName": "Employee"
+  },
+  "Patterns": [
+    {
+      "PropName": "stringValue",
+      "HeaderName": "常规",
+      "PropType": "string",
+      "CellType": "常规",
+      "Ignore": false,
+      "Order": 0
+    },
+    {
+      "PropName": "DateTimeValue",
+      "HeaderName": "日期",
+      "PropType": "DateTime",
+      "CellType": "常规",
+      "Ignore": false,
+      "Order": 1
+    },
+    {
+      "PropName": "IntValue",
+      "HeaderName": "整数",
+      "PropType": "int",
+      "CellType": "常规",
+      "Ignore": false,
+      "Order": 2,
+      "Validation": {
+        "Target": "单元格数值",
+        "Description": "整数值需要大于2",
+        "Convention": "普通校验器",
+        "Expression": "{value}>=2"
+      }
+    },
+    {
+      "PropName": "DoubleValue",
+      "HeaderName": "小数",
+      "PropType": "double",
+      "CellType": "常规",
+      "Ignore": false,
+      "Order": 3
+    },
+    {
+      "PropName": "boolValue",
+      "HeaderName": "布尔值",
+      "PropType": "bool",
+      "CellType": "常规",
+      "Ignore": false,
+      "Order": 4
+    },
+    {
+      "PropName": "StringWithNoteValue",
+      "HeaderName": "常规(注释)",
+      "PropType": "string",
+      "CellType": "包含注解",
+      "Ignore": false,
+      "Order": 5
+    },
+    {
+      "PropName": "StringWithStyleValue",
+      "HeaderName": "常规(样式)",
+      "PropType": "string",
+      "CellType": "包含样式",
+      "Ignore": false,
+      "Order": 6
+    },
+    {
+      "PropName": "IntWithFormula",
+      "HeaderName": "公式",
+      "PropType": "int",
+      "CellType": "包含公式",
+      "Ignore": false,
+      "Order": 10,
+      "Validation": {
+        "Target": "单元格公式",
+        "Description": "需要满足正则表达式",
+        "Convention": "正则表达式校验器",
+        "Expression": "^SUM\\(I\\d+,J\\d+\\)$"
+      }
+    }
+  ]
+}

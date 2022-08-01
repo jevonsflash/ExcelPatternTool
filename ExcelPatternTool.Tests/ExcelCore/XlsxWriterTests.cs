@@ -23,7 +23,7 @@ namespace ExcelPatternTool.Infrastructure.Tests
             var filePath = @"D:\test2.xlsx";
             exporter.DumpXlsx(filePath);
             
-            var eo=new ExportOption(1,1);
+            var eo=new ExportOption<EmployeeEntity>(1,1);
             eo.SheetName = "Sheet1";
             eo.GenHeaderRow = true;
 

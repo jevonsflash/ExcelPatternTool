@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExcelPatternTool.Core.Helper;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace ExcelPatternTool
 
         public static void Usage()
         {
-            var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+            var versionInfo = FileVersionInfo.GetVersionInfo(Environment.ProcessPath);
             Console.WriteLine();
             Console.WriteLine("Excel Pattern Tool v{0}.{1}", versionInfo.FileMajorPart, versionInfo.FileMinorPart);
             Console.WriteLine("参数列表:");

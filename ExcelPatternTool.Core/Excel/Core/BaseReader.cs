@@ -27,6 +27,10 @@ namespace ExcelPatternTool.Core.Excel.Core
 
             for (int j = 0; j < columns.Count; j++)
             {
+                if (columns[j].ColumnOrder<0)
+                {
+                    continue;
+                }
                 ICell cell = row.GetCell(columns[j].ColumnOrder);
                 if (cell==null)
                 {
@@ -454,7 +458,7 @@ namespace ExcelPatternTool.Core.Excel.Core
                 tmp.PropName = prop.Name;
                 tmp.PropType = prop.PropertyType;
                 tmp.ColumnName = prop.Name;
-                tmp.ColumnOrder = int.MaxValue;
+                tmp.ColumnOrder = -1;
                 foreach (var attr in attrs)
                 {
                     if (attr is ImportableAttribute)
