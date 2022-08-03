@@ -1,5 +1,6 @@
 ﻿using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Excel.Models;
+using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Core.Validators;
@@ -39,8 +40,15 @@ namespace ExcelPatternTool
 
                 var op1 = new ImportOption(EntityProxyContainer.Current.EntityType, _pattern.ExcelImport.SheetNumber, _pattern.ExcelImport.SkipRow);
                 op1.SheetName=_pattern.ExcelImport.SheetName;
-                var result = DocProcessor.ImportFrom(CliProcessor.inputPathList.First(), op1);
-
+                List<IExcelEntity> result;
+                if (CliProcessor.source=="excel")
+                {
+                    result = DocProcessor.ImportFrom(CliProcessor.inputPathList.First(), op1);
+                }
+                else
+                {
+                    result = DbProcessor.ImportFromDb(EntityProxyContainer.Current.EntityType, CliProcessor.source, CliProcessor.outputPathList.First());
+                }
                 ValidateProcessor.GetDataAction(result);
 
                 Console.WriteLine("校验完成，发现{0}个问题", ValidateProcessor.ProcessResultList.Count);

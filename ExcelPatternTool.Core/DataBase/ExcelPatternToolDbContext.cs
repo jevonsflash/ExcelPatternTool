@@ -43,5 +43,11 @@ namespace ExcelPatternTool.Core.DataBase
 
             }
         }
+
+        public object GetDbSet(Type entityType)
+        {
+            var method = this.GetType().GetMethod("Set", new Type[0]).MakeGenericMethod(entityType);
+            return method.Invoke(this, new object[0]);
+        }
     }
 }

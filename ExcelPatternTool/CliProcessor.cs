@@ -27,14 +27,15 @@ namespace ExcelPatternTool
             Console.WriteLine(" -p  PatternFile");
             Console.WriteLine("     指定一个Pattern文件(Json), 作为转换的模型文件");
             Console.WriteLine(" -i  Input");
-            Console.WriteLine("     指定一个Excel文件路径，此文件将作为导入数据源");
-            Console.WriteLine("     支持Xls或者Xlsx文件");
+            Console.WriteLine("     指定一个路径，或Sql连接字符串作为导入目标");
+            Console.WriteLine("     当指定 -s 参数为sqlserver, sqlite, mysql时，需指定为连接字符串;");
+            Console.WriteLine("     当指定 -s 参数为excel时，需指定为将要读取的Excel文件路径，支持Xls或者Xlsx文件");
             Console.WriteLine(" -o  Output");
             Console.WriteLine("     指定一个路径，或Sql连接字符串作为导出目标");
             Console.WriteLine("     当指定 -d 参数为sqlserver, sqlite, mysql时，需指定为连接字符串;");
             Console.WriteLine("     当指定 -d 参数为excel时，需指定为将要另存的Excel文件路径，支持Xls或者Xlsx文件");
             Console.WriteLine(" -s  Source");
-            Console.WriteLine("     值为excel");
+            Console.WriteLine("     值为excel, sqlserver, sqlite或者mysql");
             Console.WriteLine(" -d  Destination");
             Console.WriteLine("     值为excel, sqlserver, sqlite或者mysql");
             Console.WriteLine(" -w  WaitAtEnd");

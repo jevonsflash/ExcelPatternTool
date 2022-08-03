@@ -1,4 +1,5 @@
 ﻿using ExcelPatternTool.Core.DataBase;
+using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,16 @@ namespace ExcelPatternTool
                 }
             }
         }
+
+        public static List<IExcelEntity> ImportFromDb(Type entityType, string dbtype, string connectingString)
+        {
+            using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(connectingString, dbtype))
+            {
+                var dbset = dbcontext.GetDbSet(entityType);
+                return ((IEnumerable<IExcelEntity>)dbset).ToList();
+            }
+        }
+
 
     }
 }

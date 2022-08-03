@@ -2,10 +2,10 @@
 
 Excel表格-数据库互导工具
 
-## 介绍：
-指定Pattern文件-一个规则描述的json文档，基于此规则实现Excel表格与数据库之间的导入导出，校验等功能。
+## 介绍
+指定Pattern文件-一个规则描述的json文档，基于此规则实现Excel表格与数据库之间的导入导出，校验等功能。使用场景有：Excel导入至数据库、Excel转Excel（合并，校验，规范化）、数据库导出至Excel（报表生成）等。
 
-## 特点：
+## 特点
 1. 小巧，轻量化的命令行工具
 2. 基于json文档的配置
 3. 支持Excel97-2003(xls)与Excel2007及以上(xlsx)格式
@@ -13,12 +13,12 @@ Excel表格-数据库互导工具
 5. 支持单元格注解，样式，公式的导出(导出至Excel)
 6. 内置lambda表达式和正则表达式两种校验器
 
-## 更新内容：
+## 更新内容
 
 Date | Version | Content
 :----------: | :-----------: | :-----------
 V0.1.0         | 2022-7-29     | 初始版本
-
+V0.1.1         | 2022-8-3     | 1. 新增数据库导入 2. 减小程序包体积
 
 ## 快速开始
 
@@ -106,12 +106,45 @@ Sample2：
 
 ### 安装
 
-不需要特别的安装，在此获取[ept.exe](https://github.com/MatoApps/ExcelPatternTool/raw/master/EPT/ept.exe)，或git pull代码后`生成`可执行文件
+不需要特别的安装，直接运行可执行文件即可
+* 直接下载
+，在此获取[ept.exe](https://github.com/MatoApps/ExcelPatternTool/raw/master/EPT/ept.exe)，
+
+或
+```
+git clone https://github.com/MatoApps/ExcelPatternTool.git
+```
+
+```
+cd .\ExcelPatternTool
+```
+```
+dotnet publish -p:PublishSingleFile=true -r win-x64 -c Release --self-contained true -p:EnableCompressionInSingleFile=true
+```
+
+
+代码后`生成`可执行文件
+```
+ExcelPatternTool\bin\Release\net6.0\win-x64\publish\ExcelPatternTool.exe
+```
 
 ### 运行
 1. 进入可执行文件所在目录，并运行
 * 若要导出至Sqlite，请确保相同目录下包含`e_sqlite3.dll`
 * 若要导出至SQL server，请确保相同录下包含`Microsoft.Data.SqlClient.SNI.dll`
+
+参数列表:
+
+参数 | 含义 | 用法
+:----------: | :-----------: | :-----------
+ -p | PatternFile | 指定一个Pattern文件(Json), 作为转换的模型文件
+ -i | Input | 指定一个路径，或Sql连接字符串作为导入目标<br>当指定 -s 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -s 参数为`excel`时，需指定为将要读取的Excel文件路径，支持Xls或者Xlsx文件
+ -o | Output | 指定一个路径，或Sql连接字符串作为导出目标<br>当指定 -d 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -d 参数为`excel`时，需指定为将要另存的Excel文件路径，支持Xls或者Xlsx文件
+ -s | Source | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`
+ -d | Destination  | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`
+ -w | WaitAtEnd  | 指定时，程序执行完成后，将等待用户输入退出
+ -h | Help | 查看帮助
+
 
 导出至Sqlite的Sample
 ```
@@ -137,18 +170,6 @@ Sample2：
 
 ![ss1](https://github.com/MatoApps/ExcelPatternTool/blob/master/EPT/screenshots/3.png)
 
-
-参数列表:
-
-参数 | 含义 | 用法
-:----------: | :-----------: | :-----------
- -p | PatternFile | 指定一个Pattern文件(Json), 作为转换的模型文件
- -i | Input | 指定一个Excel文件路径，此文件将作为导入数据源<br>支持Xls或者Xlsx文件
- -o | Output | 指定一个路径，或Sql连接字符串作为导出目标<br>当指定 -d 参数为sqlserver, sqlite, mysql时，需指定为连接字符串;<br>当指定 -d 参数为excel时，需指定为将要另存的Excel文件路径，支持Xls或者Xlsx文件
- -s | Source | 值为excel
- -d | Destination  | 值为excel, sqlserver, sqlite或者mysql
- -w | WaitAtEnd  | 指定时，程序执行完成后，将等待用户输入退出
- -h | Help | 查看帮助
 
 ## 其他
 ### 配置
@@ -204,6 +225,11 @@ public override Dictionary<string, ValidateConvention> InitConventions()
     return defaultConventions;
 }
 ```
+## Todo
+
+- [x] 从数据库导入
+- [ ] 校验过程的忽略与单独使用
+- [ ] ept带UI版本（WPF）
 
 
 ## 工具
