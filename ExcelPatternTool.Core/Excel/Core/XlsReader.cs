@@ -99,19 +99,22 @@ namespace ExcelPatternTool.Core.Excel.Core
             {
                 T objectInstance;
                 IRow row = sheet.GetRow(i);
-                try
+                if (row != null)
                 {
+                    try
+                    {
 
 
-                    objectInstance = GetDataToObject<T>(row, columns);
+                        objectInstance = GetDataToObject<T>(row, columns);
 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw new Exception($"处理行失败,位置{row.RowNum}:{e.Message}");
+                    }
+                    result.Add(objectInstance);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw new Exception($"处理行失败,位置{row.RowNum}:{e.Message}");
-                }
-                result.Add(objectInstance);
             }
             return result;
         }
@@ -186,19 +189,22 @@ namespace ExcelPatternTool.Core.Excel.Core
             {
                 IExcelEntity objectInstance;
                 IRow row = sheet.GetRow(i);
-                try
+                if (row != null)
                 {
+                    try
+                    {
 
 
-                    objectInstance = (IExcelEntity)GetDataToObject(entityType, row, columns);
+                        objectInstance = (IExcelEntity)GetDataToObject(entityType, row, columns);
 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw new Exception($"处理行失败,位置{row.RowNum}:{e.Message}");
+                    }
+                    result.Add(objectInstance);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw new Exception($"处理行失败,位置{row.RowNum}:{e.Message}");
-                }
-                result.Add(objectInstance);
             }
             return result;
         }
