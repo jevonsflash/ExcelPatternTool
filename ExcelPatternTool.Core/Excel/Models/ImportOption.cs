@@ -20,14 +20,13 @@ namespace ExcelPatternTool.Core.Excel.Models
     }
 
 
-    public class ImportOption<T> : IImportOption
+    public class ImportOption<T> : IImportOption where T : IExcelEntity
     {
         public ImportOption(int sheetNumber, int skipRows)
         {
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
             EntityType = typeof(T);
-
         }
 
         public Type EntityType { get; set; }
