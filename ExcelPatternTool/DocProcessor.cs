@@ -93,12 +93,12 @@ namespace ExcelPatternTool.Helper
 
         }
 
-       
-        public static List<T> ImportFrom<T>(string filePath, ImportOption importOption) where T : IExcelEntity
+
+        public static List<T> ImportFrom<T>(string filePath, IImportOption importOption) where T : IExcelEntity
         {
             if (importOption == null)
             {
-                importOption = new ImportOption(EntityProxyContainer.Current.EntityType, 0, 0);
+                importOption = new ImportOption<T>(0, 0);
             }
             Importer import = new Importer();
             List<T> output = new List<T>();
@@ -143,7 +143,7 @@ namespace ExcelPatternTool.Helper
 
         }
 
-        public static List<IExcelEntity> ImportFrom(string filePath, ImportOption importOption)
+        public static List<IExcelEntity> ImportFrom(string filePath, IImportOption importOption)
         {
             if (importOption == null)
             {
