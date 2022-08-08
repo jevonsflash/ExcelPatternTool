@@ -1,8 +1,8 @@
 # ExcelPatternTool.Core
 
-开箱即用的应用程序包，不需要编写pattern.json，指定一个C#类即可立即开始
+开箱即用的应用程序包，*不需要编写pattern.json，指定一个C#类即可立即开始
 
-
+*若验证Excel需要指定pattern.json
 
 ## 快速开始
 
@@ -11,6 +11,32 @@
 
 ```
 dotnet add package ExcelPatternTool.Core
+```
+
+从Excel导入
+```
+Importer import = new Importer();
+import.LoadXlsx(File.ReadAllBytes(filePath));   //导入xlsx文件
+// or
+import.LoadXls(File.ReadAllBytes(filePath));    //或导入xls文件
+var importOption = new ImportOption<T>(0, 0);
+var result = import.Process<T>(importOption).ToList()
+
+Console.WriteLine(result);      //导入完成！
+
+```
+
+导出Excel
+```
+IList<T> src = ...  //准备数据
+
+
+Exporter exporter = new Exporter();
+exporter.DumpXlsx(filePath);    //导出xlsx文件
+// or
+exporter.DumpXls(filePath);     //或导出xls文件
+var exportOption = new ExportOption<T>(0, 0);
+var issuccess = exporter.Process(src, exportOption);
 ```
 
 ## 使用说明
