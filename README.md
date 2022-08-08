@@ -5,8 +5,11 @@ Excel表格-数据库互导工具
 ## 介绍
 指定Pattern文件-一个规则描述的json文档，基于此规则实现Excel表格与数据库之间的导入导出，校验等功能。使用场景有：Excel导入至数据库、Excel转Excel（合并，校验，规范化）、数据库导出至Excel（报表生成）等。
 
-本工具提供带UI版本，
-[前往WPF版]( https://github.com/MatoApps/ExcelPatternTool-UI)
+本工具提供其他版本：
+
+[ExcelPatternTool with UI]( https://github.com/MatoApps/ExcelPatternTool-UI)
+
+[ExcelPatternTool.Core]( https://github.com/MatoApps/ExcelPatternTool/tree/master/ExcelPatternTool.Core)
 
 ## 特点
 1. 小巧，轻量化的命令行工具

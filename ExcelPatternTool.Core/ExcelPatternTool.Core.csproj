@@ -4,6 +4,11 @@
 	<Version>0.1.1</Version>
     <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	  <Authors>LinXiao</Authors>
+	  <Company>MatoApp</Company>
+	  <Copyright>Copyright ©  2022</Copyright>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <RepositoryUrl>https://github.com/MatoApps/ExcelPatternTool</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
