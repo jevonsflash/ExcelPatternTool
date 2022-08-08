@@ -1,6 +1,6 @@
 # ExcelPatternTool.Core
 
-开箱即用的应用程序包，不需要编写pattern.json，指定一个C#泛型类即可立即开始
+开箱即用的应用程序包，不需要编写pattern.json，指定一个C#类即可立即开始
 
 
 
