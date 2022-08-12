@@ -5,6 +5,8 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -51,8 +53,11 @@ namespace ExcelPatternTool.Core.Excel.Core
             }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
-            for (int i = firstRow + importOption.SkipRows; i <= lastRow; i++)
+
+            int startRow = firstRow + importOption.SkipRows;
+            Parallel.For(startRow, lastRow+1, (i) =>
             {
+
                 T objectInstance;
                 IRow row = sheet.GetRow(i);
                 if (row != null)
@@ -70,7 +75,9 @@ namespace ExcelPatternTool.Core.Excel.Core
                     result.Add(objectInstance);
                 }
 
-            }
+            });
+
+            result.OrderBy(c => c.RowNumber);
             return result;
 
         }
@@ -95,18 +102,19 @@ namespace ExcelPatternTool.Core.Excel.Core
             }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
-            for (int i = firstRow + rowsToSkip; i <= lastRow; i++)
+
+
+            int startRow = firstRow + rowsToSkip;
+            Parallel.For(startRow, lastRow+1, (i) =>
             {
+
                 T objectInstance;
                 IRow row = sheet.GetRow(i);
                 if (row != null)
                 {
                     try
                     {
-
-
                         objectInstance = GetDataToObject<T>(row, columns);
-
                     }
                     catch (Exception e)
                     {
@@ -115,7 +123,8 @@ namespace ExcelPatternTool.Core.Excel.Core
                     }
                     result.Add(objectInstance);
                 }
-            }
+            });
+            result.OrderBy(c => c.RowNumber);
             return result;
         }
 
@@ -141,8 +150,10 @@ namespace ExcelPatternTool.Core.Excel.Core
             }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
-            for (int i = firstRow + importOption.SkipRows; i <= lastRow; i++)
+            int startRow = firstRow + importOption.SkipRows;
+            Parallel.For(startRow, lastRow+1, (i) =>
             {
+
                 IExcelEntity objectInstance;
                 IRow row = sheet.GetRow(i);
                 if (row != null)
@@ -160,7 +171,8 @@ namespace ExcelPatternTool.Core.Excel.Core
                     result.Add(objectInstance);
                 }
 
-            }
+            });
+            result.OrderBy(c => c.RowNumber);
             return result;
 
         }
@@ -185,16 +197,16 @@ namespace ExcelPatternTool.Core.Excel.Core
             }
             int firstRow = sheet.FirstRowNum;
             int lastRow = sheet.LastRowNum;
-            for (int i = firstRow + rowsToSkip; i <= lastRow; i++)
+            int startRow = firstRow + rowsToSkip;
+            Parallel.For(startRow, lastRow+1, (i) =>
             {
+
                 IExcelEntity objectInstance;
                 IRow row = sheet.GetRow(i);
                 if (row != null)
                 {
                     try
                     {
-
-
                         objectInstance = (IExcelEntity)GetDataToObject(entityType, row, columns);
 
                     }
@@ -205,7 +217,8 @@ namespace ExcelPatternTool.Core.Excel.Core
                     }
                     result.Add(objectInstance);
                 }
-            }
+            });
+            result.OrderBy(c => c.RowNumber);
             return result;
         }
 
