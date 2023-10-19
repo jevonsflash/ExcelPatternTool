@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using ExcelPatternTool.Core.Excel.Core.Interfaces;
 using ExcelPatternTool.Core.Excel.Services;
 using ExcelPatternTool.Core.Helper;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace ExcelPatternTool.Core.Excel.Core
 {
@@ -124,13 +126,15 @@ namespace ExcelPatternTool.Core.Excel.Core
             {
                 return new HSSFColor.Automatic();
             }
-            Color color = ColorTranslator.FromHtml(htmlColor);
+ 
+            var color = Rgba32.ParseHex(htmlColor);
+  
 
             IColor result;
             HSSFPalette customPalette = (Workbook as HSSFWorkbook).GetCustomPalette();
             if (_palleteColorSize >= 63)
             {
-                HSSFColor hSSFColor = customPalette.FindColor(color.R, color.G, color.B);
+                HSSFColor hSSFColor = customPalette.FindColor (color.R, color.G, color.B);
                 if (hSSFColor == null)
                 {
                     hSSFColor = customPalette.FindSimilarColor(color.R, color.G, color.B);

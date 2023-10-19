@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
@@ -106,7 +106,7 @@ namespace ExcelPatternTool.Core.Excel.Core
             {
                 return new XSSFColor(IndexedColors.Automatic);
             }
-            var result = new XSSFColor(ColorTranslator.FromHtml(htmlColor));
+            var result = new XSSFColor(Color.ParseHex(htmlColor));
             return result;
         }
 
