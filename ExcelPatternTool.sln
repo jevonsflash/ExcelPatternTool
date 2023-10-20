@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Validation
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Contracts", "ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj", "{75FC0E42-5424-4346-A253-67EB303BE30F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Common", "ExcelPatternTool.Common\ExcelPatternTool.Common.csproj", "{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{75FC0E42-5424-4346-A253-67EB303BE30F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FC0E42-5424-4346-A253-67EB303BE30F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FC0E42-5424-4346-A253-67EB303BE30F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

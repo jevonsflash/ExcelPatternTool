@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcelPatternTool.Common\ExcelPatternTool.Common.csproj" />
     <ProjectReference Include="..\ExcelPatternTool.Core\ExcelPatternTool.Core.csproj" />
     <ProjectReference Include="..\ExcelPatternTool.Validation\ExcelPatternTool.Validation.csproj" />
   </ItemGroup>

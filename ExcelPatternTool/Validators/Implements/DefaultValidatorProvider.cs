@@ -6,7 +6,7 @@ using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Validation;
 using ExcelPatternTool.Validation.Helper;
 
-namespace ExcelPatternTool.Validation.Implements
+namespace ExcelPatternTool.Validators.Implements
 {
     public class DefaultValidatorProvider : ValidatorProvider
     {

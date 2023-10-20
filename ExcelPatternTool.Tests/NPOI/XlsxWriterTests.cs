@@ -9,7 +9,7 @@ using ExcelPatternTool.Tests.Entites;
 using ExcelPatternTool.Core.NPOI;
 using ExcelPatternTool.Contracts.Models;
 
-namespace ExcelPatternTool.Tests.ExcelCore
+namespace ExcelPatternTool.Tests.NPOI
 {
     [TestClass()]
     public class XlsxWriterTests

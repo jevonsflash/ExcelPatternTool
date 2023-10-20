@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcelPatternTool.Common\ExcelPatternTool.Common.csproj" />
     <ProjectReference Include="..\ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj" />
   </ItemGroup>
 
