@@ -1,4 +1,4 @@
-﻿namespace ExcelPatternTool.Model.Dto
+﻿namespace ExcelPatternTool
 {
     public class ProcessResultDto
     {

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ExcelPatternTool.Contracts.Patterns;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;

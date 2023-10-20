@@ -8,15 +8,15 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using ExcelPatternTool.Core.Excel.Attributes;
-using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Attributes;
+using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExcelPatternTool.Manager
+namespace ExcelPatternTool.Core.Helper
 {
     public static class CompilationUtilitys
     {
@@ -44,7 +44,7 @@ namespace ExcelPatternTool.Manager
                 MetadataReference AddMetadataReference(Assembly assembly)
                 {
                     assembly.TryGetRawMetadata(out byte* blob, out int length);
-                    return (AssemblyMetadata.Create(ModuleMetadata.CreateFromMetadata((IntPtr)blob, length)).GetReference());
+                    return AssemblyMetadata.Create(ModuleMetadata.CreateFromMetadata((nint)blob, length)).GetReference();
                 }
                 references.Add(AddMetadataReference(typeof(KeyAttribute).GetTypeInfo().Assembly));
                 references.Add(AddMetadataReference(typeof(KeylessAttribute).GetTypeInfo().Assembly));
@@ -63,7 +63,7 @@ namespace ExcelPatternTool.Manager
 
 
             }
-            return Compile(AssemblyInfo.Create(Assembly.GetCallingAssembly().GetName().Name+".Proxy"), trees, allReferences);
+            return Compile(AssemblyInfo.Create(Assembly.GetCallingAssembly().GetName().Name + ".Proxy"), trees, allReferences);
         }
 
         public static MemoryStream Compile(AssemblyInfo assemblyInfo, IEnumerable<SyntaxTree> trees, IEnumerable<MetadataReference> references)
@@ -81,7 +81,7 @@ namespace ExcelPatternTool.Manager
             {
                 foreach (var message in result.Diagnostics.Select(i => i.ToString()))
                 {
-                    System.Console.WriteLine(message);
+                    Console.WriteLine(message);
                 }
                 return null;
             }

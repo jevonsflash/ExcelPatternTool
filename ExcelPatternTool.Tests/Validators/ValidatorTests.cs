@@ -1,20 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ExcelPatternTool.Core.Validators;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ExcelPatternTool.Core.Linq.Models;
-using ExcelPatternTool.Core.Excel.Core;
-using ExcelPatternTool.Core.Excel.Models;
-using ExcelPatternTool.Core.Validators.Implements;
 using ExcelPatternTool.Tests.Entites;
+using ExcelPatternTool.Core.NPOI;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Models;
+using ExcelPatternTool.Validation;
+using ExcelPatternTool.Validation.Validators.Implements;
 
-namespace ExcelPatternTool.Core.Validators.Tests
+namespace ExcelPatternTool.Tests.Validators
 {
     [TestClass()]
     public class ValidatorTests
@@ -32,11 +27,11 @@ namespace ExcelPatternTool.Core.Validators.Tests
             import.LoadXlsx(data1);
             var importOption = new ImportOption<EmployeeEntity>(0, 2);
             importOption.SheetName = "全职";
-            this.Employees = import.Process<EmployeeEntity>(importOption).ToList();
+            Employees = import.Process<EmployeeEntity>(importOption).ToList();
 
             var validator = new Validator();
             validator.SetValidatorProvider<EmployeeEntity>(new DefaultValidatorProvider());
-            foreach (var item in this.Employees)
+            foreach (var item in Employees)
             {
 
                 var row = Employees.IndexOf(item);
@@ -58,7 +53,7 @@ namespace ExcelPatternTool.Core.Validators.Tests
 
                 foreach (var processResultDto in result)
                 {
-                    this.ProcessResultList.Add(processResultDto);
+                    ProcessResultList.Add(processResultDto);
 
                 }
 

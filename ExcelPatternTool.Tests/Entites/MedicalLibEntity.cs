@@ -1,5 +1,5 @@
-﻿using ExcelPatternTool.Core.Excel.Attributes;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
+﻿using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

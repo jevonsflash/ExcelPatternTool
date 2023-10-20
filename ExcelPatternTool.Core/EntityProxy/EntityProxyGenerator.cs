@@ -1,5 +1,4 @@
-﻿using ExcelPatternTool.Manager;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System;
@@ -10,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NPOI.SS.Formula.Functions;
 using ExcelPatternTool.Core.Helper;
-using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
 using ExcelPatternTool.Core.Patterns;
 using Newtonsoft.Json;
+using ExcelPatternTool.Contracts.Patterns;
 
 namespace ExcelPatternTool.Core.EntityProxy
 {

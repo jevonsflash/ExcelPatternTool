@@ -1,4 +1,4 @@
-﻿using ExcelPatternTool.Core.Excel.Services;
+﻿using ExcelPatternTool.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

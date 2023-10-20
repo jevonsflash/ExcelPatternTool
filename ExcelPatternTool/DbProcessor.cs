@@ -1,6 +1,6 @@
-﻿using ExcelPatternTool.Core.DataBase;
+﻿using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Core.DataBase;
 using ExcelPatternTool.Core.EntityProxy;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

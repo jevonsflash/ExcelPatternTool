@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ExcelPatternTool.Core.Excel.Core;
-using ExcelPatternTool.Core.Excel.Models;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.EntityProxy;
 using System.Collections;
+using ExcelPatternTool.Core.NPOI;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Models;
 
-namespace ExcelPatternTool.Helper
+namespace ExcelPatternTool
 {
     public class DocProcessor
     {

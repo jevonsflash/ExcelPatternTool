@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
 using ExcelPatternTool.Core.EntityProxy;
+using ExcelPatternTool.Core.NPOI.AdvancedTypes;
+using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 
 namespace ExcelPatternTool.Core.DataBase
 {

@@ -1,9 +1,7 @@
-﻿using ExcelPatternTool.Core.EntityProxy;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
-using ExcelPatternTool.Core.Linq.Models;
-using ExcelPatternTool.Core.Validators;
-using ExcelPatternTool.Core.Validators.Implements;
-using ExcelPatternTool.Model.Dto;
+﻿using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Core.EntityProxy;
+using ExcelPatternTool.Validation;
+using ExcelPatternTool.Validators.Implements;
 using System;
 using System.Collections.Generic;
 using System.Linq;

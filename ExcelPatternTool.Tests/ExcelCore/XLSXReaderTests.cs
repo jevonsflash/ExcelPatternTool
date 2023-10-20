@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Linq;
-
-using ExcelPatternTool.Core.Excel.Core;
-using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Tests.Entites;
+using ExcelPatternTool.Core.NPOI;
+using ExcelPatternTool.Contracts.Models;
 
-namespace ExcelPatternTool.Infrastructure.Tests
+namespace ExcelPatternTool.Tests.ExcelCore
 {
     [TestClass()]
     public class XlsxReaderTests
@@ -26,7 +25,7 @@ namespace ExcelPatternTool.Infrastructure.Tests
             import.LoadXlsx(data1);
             var importOption = new ImportOption<EmployeeEntity>(0, 2);
             importOption.SheetName = "全职";
-            var output = import.Process<EmployeeEntity>(importOption).ToList();           
+            var output = import.Process<EmployeeEntity>(importOption).ToList();
             Assert.IsNotNull(output);
         }
     }

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>0.2.0</Version>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<Description>Out-of-the-box Excel toolkit with NPOI, No need to write pattern.json, specify a C# class to start immediately</Description>
+		<Authors>LinXiao</Authors>
+		<Company>MatoApp</Company>
+		<Copyright>Copyright ©  2023</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/jevonsflash/ExcelPatternTool</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj" />
+		<ProjectReference Include="..\ExcelPatternTool.Core\ExcelPatternTool.Core.csproj" />
+	</ItemGroup>
+
+</Project>

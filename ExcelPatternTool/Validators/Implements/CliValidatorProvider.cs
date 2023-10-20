@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ExcelPatternTool.Contracts.Validations;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
+using ExcelPatternTool.Validation;
+using ExcelPatternTool.Validation.Helper;
 using Newtonsoft.Json;
+using DirFileHelper = ExcelPatternTool.Core.Helper.DirFileHelper;
 
-namespace ExcelPatternTool.Core.Validators.Implements
+namespace ExcelPatternTool.Validators.Implements
 {
     /// <summary>
     /// 可实现一个自定义的ValidatorProvider
     /// </summary>
     public class CliValidatorProvider : ValidatorProvider
     {
-        public override IEnumerable<PatternItem> GetPatternItems()
+        public override IEnumerable<IValidationContainer> GetValidationContainers(Type entityType)
         {
             if (DirFileHelper.IsExistFile(CliProcessor.patternFilePath))
             {
@@ -25,7 +29,7 @@ namespace ExcelPatternTool.Core.Validators.Implements
             return default;
         }
 
-        public override Dictionary<string, ValidateConvention> InitConventions()
+        public override Dictionary<string, IValidateConvention> InitConventions()
         {
 
             var defaultConventions = base.InitConventions();

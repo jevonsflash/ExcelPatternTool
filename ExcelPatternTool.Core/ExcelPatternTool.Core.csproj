@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <None Include="README.md" Pack="true" PackagePath="\"/>
+	  <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +36,10 @@
     <PackageReference Include="NPOI" Version="2.6.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj" />
   </ItemGroup>
 
 

@@ -1,4 +1,4 @@
-﻿using ExcelPatternTool.Core.Excel.Models;
+﻿using ExcelPatternTool.Contracts.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;

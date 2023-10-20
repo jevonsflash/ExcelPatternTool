@@ -1,17 +1,10 @@
-﻿using ExcelPatternTool.Core.EntityProxy;
-using ExcelPatternTool.Core.Excel.Models;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
-using ExcelPatternTool.Core.Helper;
+﻿using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Models;
+using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Patterns;
-using ExcelPatternTool.Core.Validators;
-using ExcelPatternTool.Core.Validators.Implements;
-using ExcelPatternTool.Helper;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
+using DirFileHelper = ExcelPatternTool.Core.Helper.DirFileHelper;
 
 namespace ExcelPatternTool
 {

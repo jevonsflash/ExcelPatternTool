@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel;
-using ExcelPatternTool.Core.Excel.Attributes;
-using ExcelPatternTool.Core.Excel.Core.AdvancedTypes;
-using ExcelPatternTool.Core.Excel.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
+using ExcelPatternTool.Contracts.Attributes;
 
 namespace ExcelPatternTool.Tests.Entites
 {

@@ -5,12 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using ExcelPatternTool.Core.Excel.Core;
-using ExcelPatternTool.Core.Excel.Models;
 using ExcelPatternTool.Tests.Entites;
+using ExcelPatternTool.Core.NPOI;
+using ExcelPatternTool.Contracts.Models;
 
-namespace ExcelPatternTool.Infrastructure.Tests
+namespace ExcelPatternTool.Tests.ExcelCore
 {
     [TestClass()]
     public class XlsxWriterTests
@@ -63,13 +62,13 @@ namespace ExcelPatternTool.Infrastructure.Tests
             stopwatch.Start();
             var import = new Importer();
             var filePath = @"case\国家药品供应保障综合管理信息平台药品目录YPID(V190715).xlsx";
-           
+
             import.LoadXlsx(filePath);
             var importOption = new ImportOption<MedicalLibEntity>(0, 1);
             var output = import.Process<MedicalLibEntity>(importOption).ToList();
 
             stopwatch.Stop();
-            Assert.IsTrue(stopwatch.ElapsedMilliseconds <=100000);
+            Assert.IsTrue(stopwatch.ElapsedMilliseconds <= 100000);
             Assert.IsNotNull(output);
 
         }
