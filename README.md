@@ -7,9 +7,9 @@ Excel表格-数据库互导工具
 
 本工具提供其他版本：
 
-[ExcelPatternTool with UI]( https://github.com/MatoApps/ExcelPatternTool-UI)
+[ExcelPatternTool with UI]( https://github.com/jevonsflash/ExcelPatternTool-UI)
 
-[ExcelPatternTool.Core]( https://github.com/MatoApps/ExcelPatternTool/tree/master/ExcelPatternTool.Core)
+[ExcelPatternTool.Core]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Core)
 
 ## 特点
 1. 小巧，轻量化的命令行工具
@@ -109,17 +109,17 @@ Sample2：
     
 ```
 
-完整示例请参考 [Sample](https://github.com/MatoApps/ExcelPatternTool/raw/master/EPT/sample/pattern.json)
+完整示例请参考 [Sample](https://github.com/jevonsflash/ExcelPatternTool/raw/master/EPT/sample/pattern.json)
 
 ### 安装
 
 不需要特别的安装，直接运行可执行文件即可
 * 直接下载
-，在此获取[ept.exe](https://github.com/MatoApps/ExcelPatternTool/raw/master/EPT/ept.exe)，
+，在此获取[ept.exe](https://github.com/jevonsflash/ExcelPatternTool/releases/download/v0.1.2/ExcelPatternTool.exe)，
 
 或
 ```
-git clone https://github.com/MatoApps/ExcelPatternTool.git
+git clone https://github.com/jevonsflash/ExcelPatternTool.git
 ```
 
 ```
@@ -163,19 +163,19 @@ ExcelPatternTool\bin\Release\net6.0\win-x64\publish\ExcelPatternTool.exe
 ```
 
 2. 等待程序执行完毕
-![ss1](https://github.com/MatoApps/ExcelPatternTool/blob/master/EPT/screenshots/1.png)
+![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/1.png)
 
 ### 结果
 
 将在-o 参数指定的地址生成数据
 生成至Excel
 
-![ss1](https://github.com/MatoApps/ExcelPatternTool/blob/master/EPT/screenshots/2.png)
+![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/2.png)
 
 
 生成至Sqlite
 
-![ss1](https://github.com/MatoApps/ExcelPatternTool/blob/master/EPT/screenshots/3.png)
+![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/3.png)
 
 
 ## 其他
@@ -235,13 +235,13 @@ public override Dictionary<string, ValidateConvention> InitConventions()
 ## Todo
 
 - [x] 从数据库导入
-- [x] ept带UI版本 [前往WPF版]( https://github.com/MatoApps/ExcelPatternTool-UI)
+- [x] ept带UI版本 [前往WPF版]( https://github.com/jevonsflash/ExcelPatternTool-UI)
 - [ ] 校验过程的忽略与单独使用
 
 
 ## 工具
 
-[Roslyn Syntax Tool](https://github.com/MatoApps/RoslynSyntaxTool)
+[Roslyn Syntax Tool](https://github.com/jevonsflash/RoslynSyntaxTool)
 
 * 此工具能将C#代码，转换成使用语法工厂构造器（SyntaxFactory）生成等效语法树代码
 
