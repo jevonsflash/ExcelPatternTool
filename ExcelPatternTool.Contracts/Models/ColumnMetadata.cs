@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace ExcelPatternTool.Contracts.Models
 {
@@ -17,7 +18,43 @@ namespace ExcelPatternTool.Contracts.Models
             {
                 if (string.IsNullOrEmpty(_format))
                 {
-                    var format = "_ * #,##0.00_ ;_ * -#,##0.00_ ;_ * \" - \"??_ ;_ @_ ";
+                    var format = "";
+                    switch (PropType.Name.ToLower())
+                    {
+
+                        case "string":
+                            format = "@";
+                            break;
+                        case "datetime":
+                            format = "yyyy/m/d h:mm";
+                            break;
+                        case "int":
+                        case "int32":
+                            format = "0";
+                            break;
+                    
+                        case "int64":
+                        case "long":
+                            format = "0";
+                            break;
+                        case "double":                      
+                        case "single":
+                        case "decimal":
+                            format = "0.00_ ";
+                            break;
+                        case "boolean":
+                        case "bool":
+                            format = "@";
+                            break;
+
+
+
+                        default:
+                            format = "_ * #,##0.00_ ;_ * -#,##0.00_ ;_ * \" - \"??_ ;_ @_ ";
+
+                            break;
+                    }
+
                     return format;
                 }
 

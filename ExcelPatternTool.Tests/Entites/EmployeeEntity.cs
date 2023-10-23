@@ -56,6 +56,23 @@ namespace ExcelPatternTool.Tests.Entites
         [Importable(6)]
         public StyledType<string> StringWithStyleValue { get; set; }
 
+        [DisplayName("常规(全)")]
+        [Exportable("常规(全)")]
+        [Importable(7)]
+        public FullAdvancedType<string> StringWithFullValue { get; set; }
+
+
+        [DisplayName("公式参数1")]
+        [Exportable("公式参数1")]
+        [Importable(8)]
+        public int FormulaArg1 { get; set; }
+
+
+        [DisplayName("公式参数2")]
+        [Exportable("公式参数2")]
+        [Importable(9)]
+        public int FormulaArg12 { get; set; }
+
 
         [DisplayName("公式")]
         [Exportable("公式")]

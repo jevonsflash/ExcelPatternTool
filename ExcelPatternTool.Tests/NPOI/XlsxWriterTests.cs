@@ -8,25 +8,56 @@ using System.Threading.Tasks;
 using ExcelPatternTool.Tests.Entites;
 using ExcelPatternTool.Core.NPOI;
 using ExcelPatternTool.Contracts.Models;
+using ExcelPatternTool.Core.Helper;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Core.StyleMapping;
 
 namespace ExcelPatternTool.Tests.NPOI
 {
     [TestClass()]
     public class XlsxWriterTests
     {
+        private static readonly string importPath = Path.Combine(CommonHelper.AppBasePath, "case");
+        private static readonly string outputPath = Path.Combine(CommonHelper.AppBasePath, "output");
+
         [TestMethod()]
         public void WriteRowsTest()
         {
             Exporter exporter = new Exporter();
 
-            var filePath = @"D:\test2.xlsx";
+            var filePath = Path.Combine(outputPath, "writeRowsTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<EmployeeEntity>(1, 1);
-            eo.SheetName = "Sheet1";
+            var eo = new ExportOption<EmployeeEntity>(1, 0);
             eo.GenHeaderRow = true;
+            var data = GetDatas<EmployeeEntity>(Path.Combine(importPath, "test.xlsx"), "Sheet1");
+            var bytes = exporter.ProcessGetBytes(data, eo);
 
-            var data = GetDatas();
+
+
+            using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+
+                file.Write(bytes);
+            }
+
+        }
+
+
+        [TestMethod()]
+        public void StyleMappingTest()
+        {
+            Exporter exporter = new Exporter();
+
+            var filePath = Path.Combine(outputPath, "styleMappingTest.xlsx");
+            exporter.DumpXlsx(filePath);
+
+            var eo = new ExportOption<EmployeeHealthEntity>(1, 0);
+            eo.SheetName = "Sheet1";
+            eo.GenHeaderRow = false;
+            eo.StyleMapperProvider = typeof(EmployeeHealthEntityStyleMapperProvider);
+
+            var data = GetDatas<EmployeeHealthEntity>(Path.Combine(importPath, "test.xlsx"), "Sheet2");
             var bytes = exporter.ProcessGetBytes(data, eo);
 
             using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
@@ -37,17 +68,19 @@ namespace ExcelPatternTool.Tests.NPOI
 
         }
 
-        private IEnumerable<EmployeeEntity> GetDatas()
+
+
+
+        private IEnumerable<T> GetDatas<T>(string filePath = @"D:\test.xlsx", string sheetName = "Sheet1") where T : IExcelEntity
         {
             Importer import = new Importer();
-            var filePath = @"D:\test.xlsx";
             var data1 = new byte[0];
 
             data1 = File.ReadAllBytes(filePath);
             import.LoadXlsx(data1);
-            var importOption = new ImportOption<EmployeeEntity>(0, 2);
-            importOption.SheetName = "Sheet2";
-            var output = import.Process<EmployeeEntity>(importOption).ToList();
+            var importOption = new ImportOption<T>(0, 1);
+            importOption.SheetName = sheetName;
+            var output = import.Process<T>(importOption).ToList();
 
             return output;
         }

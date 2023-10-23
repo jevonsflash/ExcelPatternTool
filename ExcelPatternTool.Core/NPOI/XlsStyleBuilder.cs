@@ -8,6 +8,8 @@ using ExcelPatternTool.Core.Helper;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using ExcelPatternTool.Contracts.NPOI;
+using System.Runtime.CompilerServices;
+using NPOI.XSSF.UserModel;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -94,11 +96,16 @@ namespace ExcelPatternTool.Core.NPOI
             return result;
         }
 
-        public IFont GetFont(short fontSize, string fontName, IColor fontColor)
+        public IFont GetFont(short fontSize, string fontName, IColor fontColor, bool isItalic, bool isBold, bool isStrikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             var font = Workbook.CreateFont();
-            font.Boldweight = 100;
-            ((HSSFFont)font).Color = ((HSSFColor)fontColor).Indexed;
+            font.IsBold = isBold;
+            font.IsItalic = isItalic;
+            font.IsStrikeout = isStrikeout;
+            font.TypeOffset = typeOffset;
+            font.Underline = underline;
+            var index = ((HSSFColor)fontColor).Indexed;
+            ((HSSFFont)font).Color = index;
             font.FontName = fontName;
             font.FontHeightInPoints = fontSize;
             return font;

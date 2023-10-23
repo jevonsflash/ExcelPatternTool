@@ -11,7 +11,7 @@ namespace ExcelPatternTool.Core.Helper
     {
         public static string GetConfigValue(string key, string defaultValue = default)
         {
-            return AppConfigurtaionService.Configuration==null ? defaultValue : AppConfigurtaionService.Configuration[key];
+            return AppConfigurtaionService.Configuration==null || string.IsNullOrEmpty(AppConfigurtaionService.Configuration[key]) ? defaultValue : AppConfigurtaionService.Configuration[key];
         }
 
     }

@@ -144,7 +144,7 @@ namespace ExcelPatternTool.Validation
             _entityType = entityType;
             this.validatorProvider = validatorProvider;
             InitAliasDictionary(entityType);
-            this.validatorProvider.PropertyTypeMaper = GetOriginalPropertyName;
+            this.validatorProvider.PropertyTypeMapper = GetOriginalPropertyName;
 
         }
     }

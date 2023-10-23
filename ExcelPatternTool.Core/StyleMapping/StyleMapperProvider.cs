@@ -19,7 +19,7 @@ namespace ExcelPatternTool.Core.StyleMapping
             Conventions = InitConventions();
         }
 
-        virtual public Func<string, string> PropertyTypeMaper { get; set; }
+        virtual public Func<string, string> PropertyTypeMapper { get; set; }
         virtual public Dictionary<string, StyleConvention> InitConventions()
         {
 
@@ -29,7 +29,7 @@ namespace ExcelPatternTool.Core.StyleMapping
             {
                 StyleMetadata result;
                 var lambdaParser = new LambdaParser();
-                var propName = PropertyTypeMaper?.Invoke(key);
+                var propName = PropertyTypeMapper?.Invoke(key);
                 if (c == null)
                 {
                     return null;
@@ -138,7 +138,7 @@ namespace ExcelPatternTool.Core.StyleMapping
 
         virtual public object TryGetValue(string varName, object e)
         {
-            var propName = PropertyTypeMaper?.Invoke(varName);
+            var propName = PropertyTypeMapper?.Invoke(varName);
             PropertyInfo propertyInfo;
             if (!string.IsNullOrEmpty(propName))
             {
@@ -159,7 +159,10 @@ namespace ExcelPatternTool.Core.StyleMapping
             }
         }
 
-        abstract public Dictionary<string, StyleMapping> GetStyleMappingContainers();
+        virtual public Dictionary<string, StyleMapping> GetStyleMappingContainers()
+        {
+            return new Dictionary<string, StyleMapping>();
+        }
 
         virtual public StyleConvention GetConvention(string type)
         {

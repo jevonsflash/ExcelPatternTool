@@ -7,6 +7,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Contracts.NPOI;
+using NPOI.HSSF.Util;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -90,11 +91,24 @@ namespace ExcelPatternTool.Core.NPOI
             return result;
         }
 
-        public IFont GetFont(short fontSize, string fontName, IColor fontColor)
+        public IFont GetFont(short fontSize, string fontName, IColor fontColor, bool isItalic, bool isBold, bool isStrikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             var font = Workbook.CreateFont();
-            font.Boldweight = 100;
-            ((XSSFFont)font).SetColor((XSSFColor)fontColor);
+            font.IsBold = isBold;
+            font.IsItalic = isItalic;
+            font.IsStrikeout = isStrikeout;
+            font.TypeOffset = typeOffset;
+            font.Underline = underline;
+            var index = ((XSSFColor)fontColor).Index;
+            if (index != 0)
+            {
+                ((XSSFFont)font).Color = index;
+            }
+            else
+            {
+                ((XSSFFont)font).SetColor((XSSFColor)fontColor);
+            }
+
             font.FontName = fontName;
             font.FontHeightInPoints = fontSize;
             return font;
@@ -105,7 +119,7 @@ namespace ExcelPatternTool.Core.NPOI
             {
                 return new XSSFColor(IndexedColors.Automatic);
             }
-            var result = new XSSFColor(Color.ParseHex(htmlColor));
+            var result = new XSSFColor(Color.Parse(htmlColor));
             return result;
         }
 

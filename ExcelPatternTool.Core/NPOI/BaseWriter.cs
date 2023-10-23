@@ -63,25 +63,17 @@ namespace ExcelPatternTool.Core.NPOI
 
             short builtIndDataFormat = StyleBuilderProvider.GetStyleBuilder(Document).GetBuiltIndDataFormat(dataFormat);
             var type = StyleBuilderProvider.GetWorkbookType(Document);
-            if (type == "xls")
+
+            if (builtIndDataFormat != -1)
             {
-                if (builtIndDataFormat != -1)
-                {
-                    cellStyle.DataFormat = builtIndDataFormat;
-                }
-                else
-                {
-                    IDataFormat dataFormat2 = Document.CreateDataFormat();
-                    cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
-                }
+                cellStyle.DataFormat = builtIndDataFormat;
             }
             else
             {
-
                 IDataFormat dataFormat2 = Document.CreateDataFormat();
                 cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
-
             }
+
 
 
             return cellStyle;
@@ -105,26 +97,16 @@ namespace ExcelPatternTool.Core.NPOI
                     StyleAttribute exportableAttribute = attr as StyleAttribute;
                     styleMetadata = new StyleMetadata();
 
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontName))
-                        styleMetadata.FontName = exportableAttribute.FontName;
-                    else
-                        styleMetadata.FontName = defaultFontName;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontColor))
-                        styleMetadata.FontColor = exportableAttribute.FontColor;
-                    else
-                        styleMetadata.FontColor = defaultFontColor;
-                    if (exportableAttribute.FontSize > 0)
-                        styleMetadata.FontSize = exportableAttribute.FontSize;
-                    else
-                        styleMetadata.FontSize = defaultFontSize;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BorderColor))
-                        styleMetadata.BorderColor = exportableAttribute.BorderColor;
-                    else
-                        styleMetadata.BorderColor = defaultBorderColor;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BackColor))
-                        styleMetadata.BackColor = exportableAttribute.BackColor;
-                    else
-                        styleMetadata.BackColor = defaultBackColor;
+                    styleMetadata.FontName = !string.IsNullOrWhiteSpace(exportableAttribute.FontName) ? exportableAttribute.FontName : defaultFontName;
+                    styleMetadata.FontColor = !string.IsNullOrWhiteSpace(exportableAttribute.FontColor) ? exportableAttribute.FontColor : defaultFontColor;
+                    styleMetadata.FontSize = exportableAttribute.FontSize > 0 ? exportableAttribute.FontSize : defaultFontSize;
+                    styleMetadata.BorderColor = !string.IsNullOrWhiteSpace(exportableAttribute.BorderColor) ? exportableAttribute.BorderColor : defaultBorderColor;
+                    styleMetadata.BackColor = !string.IsNullOrWhiteSpace(exportableAttribute.BackColor) ? exportableAttribute.BackColor : defaultBackColor;
+                    styleMetadata.IsItalic = exportableAttribute.IsItalic;
+                    styleMetadata.IsBold = exportableAttribute.IsBold;
+                    styleMetadata.IsStrikeout = exportableAttribute.IsStrikeout;
+                    styleMetadata.TypeOffset = exportableAttribute.TypeOffset;
+                    styleMetadata.Underline = exportableAttribute.Underline;
                     return styleMetadata;
                 }
 
@@ -152,26 +134,16 @@ namespace ExcelPatternTool.Core.NPOI
                     var exportableAttribute = attr as StyleAttribute;
                     styleMetadata = new StyleMetadata();
 
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontName))
-                        styleMetadata.FontName = exportableAttribute.FontName;
-                    else
-                        styleMetadata.FontName = defaultFontName;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.FontColor))
-                        styleMetadata.FontColor = exportableAttribute.FontColor;
-                    else
-                        styleMetadata.FontColor = defaultFontColor;
-                    if (exportableAttribute.FontSize > 0)
-                        styleMetadata.FontSize = exportableAttribute.FontSize;
-                    else
-                        styleMetadata.FontSize = defaultFontSize;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BorderColor))
-                        styleMetadata.BorderColor = exportableAttribute.BorderColor;
-                    else
-                        styleMetadata.BorderColor = defaultBorderColor;
-                    if (!string.IsNullOrWhiteSpace(exportableAttribute.BackColor))
-                        styleMetadata.BackColor = exportableAttribute.BackColor;
-                    else
-                        styleMetadata.BackColor = defaultBackColor;
+                    styleMetadata.FontName = !string.IsNullOrWhiteSpace(exportableAttribute.FontName) ? exportableAttribute.FontName : defaultFontName;
+                    styleMetadata.FontColor = !string.IsNullOrWhiteSpace(exportableAttribute.FontColor) ? exportableAttribute.FontColor : defaultFontColor;
+                    styleMetadata.FontSize = exportableAttribute.FontSize > 0 ? exportableAttribute.FontSize : defaultFontSize;
+                    styleMetadata.BorderColor = !string.IsNullOrWhiteSpace(exportableAttribute.BorderColor) ? exportableAttribute.BorderColor : defaultBorderColor;
+                    styleMetadata.BackColor = !string.IsNullOrWhiteSpace(exportableAttribute.BackColor) ? exportableAttribute.BackColor : defaultBackColor;
+                    styleMetadata.IsItalic = exportableAttribute.IsItalic;
+                    styleMetadata.IsBold = exportableAttribute.IsBold;
+                    styleMetadata.IsStrikeout = exportableAttribute.IsStrikeout;
+                    styleMetadata.TypeOffset = exportableAttribute.TypeOffset;
+                    styleMetadata.Underline = exportableAttribute.Underline;
                     return styleMetadata;
                 }
             }
@@ -220,7 +192,7 @@ namespace ExcelPatternTool.Core.NPOI
         }
 
 
-        internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data, StyleMapper styleMapper=null)
+        internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data, StyleMapper styleMapper = null)
         {
             var ws2 = Stopwatch.StartNew();
 
@@ -245,26 +217,34 @@ namespace ExcelPatternTool.Core.NPOI
                     continue;
                 }
 
+                var bodyFormat = GetPropStyleDefinition(propertyInfo);
+
                 if (styleMapper != null)
                 {
-                    var styleMapping = styleMapper.StyleMappingContainers[columnMeta.PropName];
-                    if (styleMapping == null)
+                    var styleMapping = styleMapper.StyleMappingContainers.GetValueOrDefault(columnMeta.ColumnName);
+                    if (styleMapping != null)
                     {
-                        continue;
-                    }
-                    var currentConvention = styleMapper.styleMapperProvider.GetConvention(styleMapping.Convention.ToString()).Convention;
-                    if (currentConvention == null)
-                    {
-                        continue;
-                    }
-                    var currentResult = currentConvention?.Invoke(columnMeta.PropName, styleMapping, data);
-                    if (currentResult == null)
-                    {
-                        continue;
+                        var currentConvention = styleMapper.styleMapperProvider.GetConvention(styleMapping.Convention.ToString()).Convention;
+                        if (currentConvention != null)
+                        {
+                            var currentResult = currentConvention?.Invoke(columnMeta.PropName, styleMapping, data);
+                            if (currentResult != null)
+                            {
+                                bodyFormat.FontName = !string.IsNullOrWhiteSpace(currentResult.FontName) ? currentResult.FontName : bodyFormat.FontName;
+                                bodyFormat.FontColor = !string.IsNullOrWhiteSpace(currentResult.FontColor) ? currentResult.FontColor : bodyFormat.FontColor;
+                                bodyFormat.FontSize = currentResult.FontSize > 0 ? currentResult.FontSize : bodyFormat.FontSize;
+                                bodyFormat.BorderColor = !string.IsNullOrWhiteSpace(currentResult.BorderColor) ? currentResult.BorderColor : bodyFormat.BorderColor;
+                                bodyFormat.BackColor = !string.IsNullOrWhiteSpace(currentResult.BackColor) ? currentResult.BackColor : bodyFormat.BackColor;
+                                bodyFormat.IsItalic = currentResult.IsItalic;
+                                bodyFormat.IsBold = currentResult.IsBold;
+                                bodyFormat.IsStrikeout = currentResult.IsStrikeout;
+                                bodyFormat.TypeOffset =  currentResult.TypeOffset;
+                                bodyFormat.Underline = currentResult.Underline;
+                            }
+                        }
                     }
                 }
 
-                var bodyFormat = GetPropStyleDefinition(propertyInfo);
                 ws2.Stop();
                 var stage2_1span = ws2.ElapsedMilliseconds;
                 ws2.Restart();
@@ -402,6 +382,34 @@ namespace ExcelPatternTool.Core.NPOI
 
 
                 var bodyFormat = GetPropStyleDefinition(propertyInfo);
+
+                if (styleMapper != null)
+                {
+                    var styleMapping = styleMapper.StyleMappingContainers.GetValueOrDefault(columnMeta.ColumnName);
+                    if (styleMapping != null)
+                    {
+                        var currentConvention = styleMapper.styleMapperProvider.GetConvention(styleMapping.Convention.ToString()).Convention;
+                        if (currentConvention != null)
+                        {
+                            var currentResult = currentConvention?.Invoke(columnMeta.PropName, styleMapping, data);
+                            if (currentResult != null)
+                            {
+                                bodyFormat.FontName = !string.IsNullOrWhiteSpace(currentResult.FontName) ? currentResult.FontName : bodyFormat.FontName;
+                                bodyFormat.FontColor = !string.IsNullOrWhiteSpace(currentResult.FontColor) ? currentResult.FontColor : bodyFormat.FontColor;
+                                bodyFormat.FontSize = currentResult.FontSize > 0 ? currentResult.FontSize : bodyFormat.FontSize;
+                                bodyFormat.BorderColor = !string.IsNullOrWhiteSpace(currentResult.BorderColor) ? currentResult.BorderColor : bodyFormat.BorderColor;
+                                bodyFormat.BackColor = !string.IsNullOrWhiteSpace(currentResult.BackColor) ? currentResult.BackColor : bodyFormat.BackColor;
+                                bodyFormat.IsItalic = currentResult.IsItalic;
+                                bodyFormat.IsBold = currentResult.IsBold;
+                                bodyFormat.IsStrikeout = currentResult.IsStrikeout;
+                                bodyFormat.TypeOffset = currentResult.TypeOffset;
+                                bodyFormat.Underline = currentResult.Underline;
+                            }
+                        }
+                    }
+                }
+
+
                 ws2.Stop();
                 var stage2_1span = ws2.ElapsedMilliseconds;
                 ws2.Restart();
@@ -596,7 +604,11 @@ namespace ExcelPatternTool.Core.NPOI
                     {
                         styleMeta.FontName = bodyFormat.FontName;
                     }
-
+                    styleMeta.IsItalic = bodyFormat.IsItalic;
+                    styleMeta.IsBold = bodyFormat.IsBold;
+                    styleMeta.IsStrikeout = bodyFormat.IsStrikeout;
+                    styleMeta.TypeOffset = bodyFormat.TypeOffset;
+                    styleMeta.Underline = bodyFormat.Underline;
                     var specificCellStyle = MetaToCellStyle(styleMeta);
 
                     var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
@@ -638,6 +650,11 @@ namespace ExcelPatternTool.Core.NPOI
                     {
                         styleMeta.FontName = bodyFormat.FontName;
                     }
+                    styleMeta.IsItalic = bodyFormat.IsItalic;
+                    styleMeta.IsBold = bodyFormat.IsBold;
+                    styleMeta.IsStrikeout = bodyFormat.IsStrikeout;
+                    styleMeta.TypeOffset = bodyFormat.TypeOffset;
+                    styleMeta.Underline = bodyFormat.Underline;
                     var specificCellStyle = MetaToCellStyle(styleMeta);
 
                     var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);

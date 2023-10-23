@@ -21,7 +21,7 @@ namespace ExcelPatternTool.Contracts.Models
         public int SheetNumber { get; set; }
         public int SkipRows { get; set; }
         public bool GenHeaderRow { get; set; }
-
+        public Type StyleMapperProvider { get; set; }
     }
 
 
@@ -41,5 +41,6 @@ namespace ExcelPatternTool.Contracts.Models
         public int SheetNumber { get; set; }
         public int SkipRows { get; set; }
         public bool GenHeaderRow { get; set; }
+        public Type StyleMapperProvider { get; set; }
     }
 }

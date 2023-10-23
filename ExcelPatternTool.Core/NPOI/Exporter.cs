@@ -30,14 +30,12 @@ namespace ExcelPatternTool.Core.NPOI
 
         public byte[] ProcessGetBytes<T>(IEnumerable<T> source, IExportOption exportOption)
         {
-            StyleMapperProvider styleMapperProvider = null;
+            StyleMapper styleMapper = null;
             if (exportOption.StyleMapperProvider != null)
             {
-                styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
-
+                var styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+                styleMapper = new StyleMapper(styleMapperProvider);
             }
-            var styleMapper = new StyleMapper(styleMapperProvider);
-
             var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
@@ -48,13 +46,12 @@ namespace ExcelPatternTool.Core.NPOI
 
         public byte[] ProcessGetBytes(Type entityType, IEnumerable source, IExportOption exportOption)
         {
-            StyleMapperProvider styleMapperProvider = null;
+            StyleMapper styleMapper = null;
             if (exportOption.StyleMapperProvider != null)
             {
-                styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
-
+                var styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+                styleMapper = new StyleMapper(styleMapperProvider);
             }
-            var styleMapper = new StyleMapper(styleMapperProvider);
 
             var stream = excelWriter.WriteRows(entityType, source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
             byte[] bytes = new byte[stream.Length];
@@ -68,13 +65,12 @@ namespace ExcelPatternTool.Core.NPOI
         {
             try
             {
-                StyleMapperProvider styleMapperProvider = null;
+                StyleMapper styleMapper = null;
                 if (exportOption.StyleMapperProvider != null)
                 {
-                    styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
-
+                    var styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+                    styleMapper = new StyleMapper(styleMapperProvider);
                 }
-                var styleMapper = new StyleMapper(styleMapperProvider);
                 var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
 
                 using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))

@@ -30,6 +30,24 @@ namespace ExcelPatternTool.Tests.Linq.Core
             Console.WriteLine(o2);
         }
 
+        [TestMethod()]
+        public void LambdaParserTest2()
+        {
+
+            var lambdaParser = new LambdaParser();
+
+            var varContext = new Dictionary<string, object>();
+            varContext["value"] = 113;
+
+            var o1 = lambdaParser.Eval("BloodPressure2>=130||BloodPressure2<40", (value) =>
+            {
+                return 108;
+            }); // --> 5
+
+            Console.WriteLine(o1);
+
+        }
+
 
     }
 }

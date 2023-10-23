@@ -21,11 +21,11 @@ Excel表格-数据库互导工具
 
 ## 更新内容
 
-Date | Version | Content
-:----------: | :-----------: | :-----------
-V0.1.0         | 2022-7-29     | 初始版本
-V0.1.1         | 2022-8-3     | 1. 新增数据库导入 2. 减小程序包体积
-V0.2.0         | 2023-10-19     | 1. 更新引用库，使用SixLabors.ImageSharp替换System.Drawing以兼容Linux 2. 升级项目框架到 .Net 7.0
+|  Date  |  Version   | Content                                                                                         |
+| :----: | :--------: | :---------------------------------------------------------------------------------------------- |
+| V0.1.0 | 2022-7-29  | 初始版本                                                                                        |
+| V0.1.1 |  2022-8-3  | 1. 新增数据库导入 2. 减小程序包体积                                                             |
+| V0.2.0 | 2023-10-19 | 1. 更新引用库，使用SixLabors.ImageSharp替换System.Drawing以兼容Linux 2. 升级项目框架到 .Net 7.0 |
 
 ## 快速开始
 
@@ -142,15 +142,15 @@ ExcelPatternTool\bin\Release\net6.0\win-x64\publish\ExcelPatternTool.exe
 
 参数列表:
 
-参数 | 含义 | 用法
-:----------: | :-----------: | :-----------
- -p | PatternFile | 指定一个Pattern文件(Json), 作为转换的模型文件
- -i | Input | 指定一个路径，或Sql连接字符串作为导入目标<br>当指定 -s 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -s 参数为`excel`时，需指定为将要读取的Excel文件路径，支持Xls或者Xlsx文件
- -o | Output | 指定一个路径，或Sql连接字符串作为导出目标<br>当指定 -d 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -d 参数为`excel`时，需指定为将要另存的Excel文件路径，支持Xls或者Xlsx文件
- -s | Source | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`
- -d | Destination  | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`
- -w | WaitAtEnd  | 指定时，程序执行完成后，将等待用户输入退出
- -h | Help | 查看帮助
+| 参数  |    含义     | 用法                                                                                                                                                                                                  |
+| :---: | :---------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  -p   | PatternFile | 指定一个Pattern文件(Json), 作为转换的模型文件                                                                                                                                                         |
+|  -i   |    Input    | 指定一个路径，或Sql连接字符串作为导入目标<br>当指定 -s 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -s 参数为`excel`时，需指定为将要读取的Excel文件路径，支持Xls或者Xlsx文件 |
+|  -o   |   Output    | 指定一个路径，或Sql连接字符串作为导出目标<br>当指定 -d 参数为`sqlserver`, `sqlite`, `mysql`时，需指定为连接字符串;<br>当指定 -d 参数为`excel`时，需指定为将要另存的Excel文件路径，支持Xls或者Xlsx文件 |
+|  -s   |   Source    | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`                                                                                                                                                         |
+|  -d   | Destination | 值为`excel`, `sqlserver`, `sqlite`或者`mysql`                                                                                                                                                         |
+|  -w   |  WaitAtEnd  | 指定时，程序执行完成后，将等待用户输入退出                                                                                                                                                            |
+|  -h   |    Help     | 查看帮助                                                                                                                                                                                              |
 
 
 导出至Sqlite的Sample
@@ -163,19 +163,19 @@ ExcelPatternTool\bin\Release\net6.0\win-x64\publish\ExcelPatternTool.exe
 ```
 
 2. 等待程序执行完毕
-![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/1.png)
+![ss1](./EPT/screenshots/1.png)
 
 ### 结果
 
 将在-o 参数指定的地址生成数据
 生成至Excel
 
-![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/2.png)
+![ss1](./EPT/screenshots/2.png)
 
 
 生成至Sqlite
 
-![ss1](https://github.com/jevonsflash/ExcelPatternTool/blob/master/EPT/screenshots/3.png)
+![ss1](./EPT/screenshots/3.png)
 
 
 ## 其他

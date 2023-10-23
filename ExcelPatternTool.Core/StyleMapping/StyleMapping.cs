@@ -26,7 +26,7 @@ namespace ExcelPatternTool.Core.StyleMapping
         public string Expression { get; set; }
 
 
-        public Dictionary<object, StyleMetadata> MappingConfig { get; }
+        public Dictionary<object, StyleMetadata> MappingConfig { get; set; }
 
     }
 }

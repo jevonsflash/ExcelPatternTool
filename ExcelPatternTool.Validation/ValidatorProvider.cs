@@ -19,7 +19,7 @@ namespace ExcelPatternTool.Validation
             Conventions = InitConventions();
         }
 
-        virtual public Func<string, string> PropertyTypeMaper { get; set; }
+        virtual public Func<string, string> PropertyTypeMapper { get; set; }
         virtual public Dictionary<string, IValidateConvention> InitConventions()
         {
 
@@ -29,7 +29,7 @@ namespace ExcelPatternTool.Validation
             {
 
                 var lambdaParser = new LambdaParser();
-                var propName = PropertyTypeMaper?.Invoke(key);
+                var propName = PropertyTypeMapper?.Invoke(key);
                 if (c == null)
                 {
                     return null;
@@ -154,7 +154,7 @@ namespace ExcelPatternTool.Validation
 
         virtual public object TryGetValue(string varName, object e)
         {
-            var propName = PropertyTypeMaper?.Invoke(varName);
+            var propName = PropertyTypeMapper?.Invoke(varName);
             PropertyInfo propertyInfo;
             if (!string.IsNullOrEmpty(propName))
             {

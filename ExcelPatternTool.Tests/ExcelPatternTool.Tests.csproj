@@ -20,12 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="case\国家药品供应保障综合管理信息平台药品目录YPID%28V190715%29.xlsx">
+    <None Update="case\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="case\示例工作表.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+	  <None Update="output\*.*">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="output\" />
   </ItemGroup>
 
 </Project>

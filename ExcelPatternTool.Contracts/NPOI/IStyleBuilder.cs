@@ -20,7 +20,7 @@ namespace ExcelPatternTool.Contracts.NPOI
         /// <param name="fontName"></param>
         /// <param name="fontColor"></param>
         /// <returns></returns>
-        IFont GetFont(short fontSize, string fontName, IColor fontColor);
+        IFont GetFont(short fontSize, string fontName, IColor fontColor, bool isItalic, bool isBold, bool isStrikeout, FontSuperScript typeOffset, FontUnderlineType underline);
         /// <summary>
         /// 获取颜色
         /// </summary>

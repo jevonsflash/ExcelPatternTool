@@ -28,7 +28,7 @@ namespace ExcelPatternTool.Core.NPOI
         internal IFont CreateFont(StyleMetadata rowStyle)
         {
             var fontColor = StyleBuilderProvider.GetStyleBuilder(Document).GetColor(rowStyle.FontColor);
-            return StyleBuilderProvider.GetStyleBuilder(Document).GetFont(rowStyle.FontSize, rowStyle.FontName, fontColor);
+            return StyleBuilderProvider.GetStyleBuilder(Document).GetFont(rowStyle.FontSize, rowStyle.FontName, fontColor, rowStyle.IsItalic, rowStyle.IsBold, rowStyle.IsStrikeout, rowStyle.TypeOffset, rowStyle.Underline);
         }
         internal StyleMetadata CellStyleToMeta(ICellStyle cellStyle)
         {
@@ -42,6 +42,11 @@ namespace ExcelPatternTool.Core.NPOI
             string argb2 = StyleBuilderProvider.GetStyleBuilder(Document).GetARGBFromIColor(borderColor);
             string argb3 = StyleBuilderProvider.GetStyleBuilder(Document).GetARGBFromIColor(backColor);
             var cellStyleMeta = new StyleMetadata(argb, fontName, fontSize, argb2, argb3);
+            cellStyleMeta.IsBold = cellStyle.GetFont(Document).IsBold;
+            cellStyleMeta.IsItalic = cellStyle.GetFont(Document).IsItalic;
+            cellStyleMeta.IsStrikeout = cellStyle.GetFont(Document).IsStrikeout;
+            cellStyleMeta.TypeOffset = cellStyle.GetFont(Document).TypeOffset;
+            cellStyleMeta.Underline = cellStyle.GetFont(Document).Underline;
             return cellStyleMeta;
         }
 

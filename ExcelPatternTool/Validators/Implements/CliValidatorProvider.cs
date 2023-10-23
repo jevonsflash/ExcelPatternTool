@@ -42,7 +42,7 @@ namespace ExcelPatternTool.Validators.Implements
             defaultConventions.Add("MyExpression", new ValidateConvention((key, c, e) =>
             {
                 //再此编写自定义校验功能
-                //可用 key（或PropertyTypeMaper(key)） 获取当前列轮询的字段（Excel表头）名称
+                //可用 key（或PropertyTypeMapper(key)） 获取当前列轮询的字段（Excel表头）名称
                 //返回ProcessResult作为校验结果,IsValidated设置为true表示校验通过
                 c.ProcessResult.IsValidated = true;
                 return c.ProcessResult;
