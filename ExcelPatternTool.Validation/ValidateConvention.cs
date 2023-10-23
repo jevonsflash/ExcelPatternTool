@@ -14,10 +14,10 @@ namespace ExcelPatternTool.Validation
 
         }
 
-        public ValidateConvention(Func<IValidationContainer, object, ProcessResult> convention)
+        public ValidateConvention(Func<string , IValidation, object, ProcessResult> convention)
         {
             Convention = convention;
         }
-        public Func<IValidationContainer, object, ProcessResult> Convention { get; set; }
+        public Func<string , IValidation, object, ProcessResult> Convention { get; set; }
     }
 }

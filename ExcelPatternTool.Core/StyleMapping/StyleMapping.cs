@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using ExcelPatternTool.Contracts.Patterns;
 using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Models;
 
-namespace ExcelPatternTool.StyleMapping
+namespace ExcelPatternTool.Core.StyleMapping
 {
     public class StyleMapping
     {
@@ -25,7 +26,7 @@ namespace ExcelPatternTool.StyleMapping
         public string Expression { get; set; }
 
 
-        
+        public Dictionary<object, StyleMetadata> MappingConfig { get; }
 
     }
 }

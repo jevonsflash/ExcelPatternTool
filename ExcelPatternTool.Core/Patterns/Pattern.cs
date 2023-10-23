@@ -20,7 +20,7 @@ namespace ExcelPatternTool.Core.Patterns
 
     }
 
-    public class PatternItem: IValidationContainer
+    public class PatternItem
     {
         public string PropName { get; set; }
         public string HeaderName { get; set; }

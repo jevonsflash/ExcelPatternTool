@@ -17,9 +17,9 @@ namespace ExcelPatternTool.Validation
         private Dictionary<string, string> aliasDictionary;
 
 
-        private IEnumerable<IValidationContainer> _validationContainers;
+        private Dictionary<string, IValidation> _validationContainers;
 
-        public IEnumerable<IValidationContainer> ValidationContainers
+        public Dictionary<string, IValidation> ValidationContainers
         {
             get
             {
@@ -43,22 +43,22 @@ namespace ExcelPatternTool.Validation
 
             foreach (var validator in ValidationContainers)
             {
-                if (validator.Validation == null)
+                if (validator.Value == null)
                 {
                     continue;
                 }
-                var currentConvention = validatorProvider.GetConvention(validator.Validation.Convention.ToString()).Convention;
+                var currentConvention = validatorProvider.GetConvention(validator.Value.Convention.ToString()).Convention;
                 if (currentConvention == null)
                 {
                     continue;
                 }
-                validator.Validation.Expression = ValidateItem(validator.Validation.Expression);
-                var currentResult = currentConvention?.Invoke(validator, obj);
+                validator.Value.Expression = ValidateItem(validator.Value.Expression);
+                var currentResult = currentConvention?.Invoke(validator.Key, validator.Value, obj);
                 if (currentResult == null)
                 {
                     continue;
                 }
-                currentResult.KeyName = $"RowNumber 为 {(obj as IExcelEntity).RowNumber} 的 {validator.PropName}";
+                currentResult.KeyName = $"RowNumber 为 {(obj as IExcelEntity).RowNumber} 的 {validator.Key}";
                 result.Add(currentResult);
             }
 

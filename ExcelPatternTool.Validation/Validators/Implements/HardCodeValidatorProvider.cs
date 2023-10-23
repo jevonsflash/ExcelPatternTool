@@ -7,9 +7,9 @@ namespace ExcelPatternTool.Validation.Validators.Implements
 {
     public class HardCodeValidatorProvider : ValidatorProvider
     {
-        public override IEnumerable<IValidationContainer> GetValidationContainers(Type entityType)
+        public override Dictionary<string, IValidation> GetValidationContainers(Type entityType)
         {
-            var result = new List<IValidationContainer>();
+            var result = new Dictionary<string, IValidation>();
 
             var validationPattern = new Validation()
             {
@@ -19,13 +19,7 @@ namespace ExcelPatternTool.Validation.Validators.Implements
                 Target = Target.Formula
 
             };
-            result.Add(new ValidationContainer()
-            {
-                PropName = "合计",
-                Validation = validationPattern
-            });
-
-
+            result.Add("合计", validationPattern);
             return result;
         }
 

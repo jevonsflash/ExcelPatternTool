@@ -5,7 +5,6 @@ using ExcelPatternTool.Contracts.Validations;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Validation;
-using ExcelPatternTool.Validation.Helper;
 using Newtonsoft.Json;
 using DirFileHelper = ExcelPatternTool.Core.Helper.DirFileHelper;
 
@@ -16,14 +15,18 @@ namespace ExcelPatternTool.Validators.Implements
     /// </summary>
     public class CliValidatorProvider : ValidatorProvider
     {
-        public override IEnumerable<IValidationContainer> GetValidationContainers(Type entityType)
+        public override Dictionary<string, IValidation> GetValidationContainers(Type entityType)
         {
             if (DirFileHelper.IsExistFile(CliProcessor.patternFilePath))
             {
                 var serializedstr = DirFileHelper.ReadFile(CliProcessor.patternFilePath);
                 var _pattern = JsonConvert.DeserializeObject<Pattern>(serializedstr);
+                if (_pattern != null)
+                {
+                    return new Dictionary<string, IValidation>(
+                        _pattern.Patterns.Select(c => new KeyValuePair<string, IValidation>(c.PropName, c.Validation)));
 
-                return _pattern.Patterns;
+                }
             }
 
             return default;
@@ -36,13 +39,13 @@ namespace ExcelPatternTool.Validators.Implements
             //x 为当前列轮询的字段规则PatternItem对象，
             //e 为当前行轮询的Entity对象
             //返回ProcessResult作为校验结果
-            defaultConventions.Add("MyExpression", new ValidateConvention((x, e) =>
+            defaultConventions.Add("MyExpression", new ValidateConvention((key, c, e) =>
             {
                 //再此编写自定义校验功能
-                //可用 x.PropName（或PropertyTypeMaper(x.PropName)） 获取当前列轮询的字段（Excel表头）名称
+                //可用 key（或PropertyTypeMaper(key)） 获取当前列轮询的字段（Excel表头）名称
                 //返回ProcessResult作为校验结果,IsValidated设置为true表示校验通过
-                x.Validation.ProcessResult.IsValidated = true;
-                return x.Validation.ProcessResult;
+                c.ProcessResult.IsValidated = true;
+                return c.ProcessResult;
             }));
 
             return defaultConventions;

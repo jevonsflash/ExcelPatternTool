@@ -9,5 +9,7 @@ namespace ExcelPatternTool.Contracts
         int SheetNumber { get; }
         int SkipRows { get; }
         bool GenHeaderRow { get; set; }
+
+        Type StyleMapperProvider { get; set; }
     }
 }

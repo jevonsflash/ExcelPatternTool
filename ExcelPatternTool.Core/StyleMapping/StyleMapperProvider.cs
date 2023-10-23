@@ -4,13 +4,14 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Patterns;
 using ExcelPatternTool.Validation.Linq;
 
-namespace ExcelPatternTool.StyleMapping
+namespace ExcelPatternTool.Core.StyleMapping
 {
-    public abstract class StyleMapperProvider 
+    public abstract class StyleMapperProvider
     {
         protected Dictionary<string, StyleConvention> Conventions { get; set; }
         public StyleMapperProvider()
@@ -24,12 +25,11 @@ namespace ExcelPatternTool.StyleMapping
 
             var conventions = new Dictionary<string, StyleConvention>();
 
-            var generalOne = new Func<StyleMappingContainer, object, ProcessResult>((x, e) =>
+            var generalOne = new Func<string, StyleMapping, object, StyleMetadata>((key, c, e) =>
             {
-
+                StyleMetadata result;
                 var lambdaParser = new LambdaParser();
-                var propName = PropertyTypeMaper?.Invoke(x.PropName);
-                var c = x.StyleMapping;
+                var propName = PropertyTypeMaper?.Invoke(key);
                 if (c == null)
                 {
                     return null;
@@ -40,7 +40,7 @@ namespace ExcelPatternTool.StyleMapping
                 }
                 else
                 {
-                    c.Expression = c.Expression.Replace("{value}", x.PropName);
+                    c.Expression = c.Expression.Replace("{value}", key);
                 }
                 var lambdaResult = lambdaParser.Eval(c.Expression, (varName) =>
                 {
@@ -72,34 +72,24 @@ namespace ExcelPatternTool.StyleMapping
                     }
                     return input;
                 }); // --> 5
-                if (lambdaResult is bool)
-                {
-                    c.ProcessResult.IsValidated = (bool)lambdaResult;
-                }
-                else
-                {
-                    c.ProcessResult.IsValidated = false;
-                    throw new ArgumentException($"普通表达式返回值类型为{lambdaResult.GetType()},应该为bool类型");
-                }
-                return c.ProcessResult;
+                result = c.MappingConfig[lambdaResult];
+                return result;
 
             });
 
-            var regularOne = new Func<StyleMappingContainer, object, ProcessResult>((x, e) =>
+            var regularOne = new Func<string, StyleMapping, object, StyleMetadata>((key, c, e) =>
             {
 
+                StyleMetadata result = null;
 
-                object val = TryGetValue(x.PropName, e);
-                var c = x.StyleMapping;
+                object val = TryGetValue(key, e);
                 if (c == null)
                 {
                     return null;
                 }
                 if (val == null)
                 {
-                    c.ProcessResult.Content += "(值为空)";
-                    c.ProcessResult.IsValidated = false;
-                    return c.ProcessResult;
+                    return result;
 
                 }
                 var input = string.Empty;
@@ -131,20 +121,13 @@ namespace ExcelPatternTool.StyleMapping
                 }
 
                 var pattern = c.Expression;
-                if (input == null)
-                {
-                    c.ProcessResult.Content += "(Formula为空)";
-                    c.ProcessResult.IsValidated = false;
-
-                }
-                else
+                if (input != null)
                 {
                     var regularResult = Regex.IsMatch(input, pattern);
-                    c.ProcessResult.IsValidated = regularResult;
-
+                    result = c.MappingConfig[regularResult];
                 }
 
-                return c.ProcessResult;
+                return result;
 
             });
 
@@ -176,11 +159,11 @@ namespace ExcelPatternTool.StyleMapping
             }
         }
 
-        abstract public IEnumerable<StyleMappingContainer> GetStyleMappingContainers(Type entityType);
+        abstract public Dictionary<string, StyleMapping> GetStyleMappingContainers();
 
         virtual public StyleConvention GetConvention(string type)
         {
-            IStyleConvention result;
+            StyleConvention result;
             Conventions.TryGetValue(type, out result);
             return result;
         }

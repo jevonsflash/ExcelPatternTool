@@ -5,6 +5,6 @@ namespace ExcelPatternTool.Contracts.Validations
 {
     public interface IValidateConvention
     {
-        Func<IValidationContainer, object, ProcessResult> Convention { get; set; }
+        Func<string , IValidation, object, ProcessResult> Convention { get; set; }
     }
 }

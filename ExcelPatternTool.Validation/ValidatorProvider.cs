@@ -25,12 +25,11 @@ namespace ExcelPatternTool.Validation
 
             var conventions = new Dictionary<string, IValidateConvention>();
 
-            var generalOne = new Func<IValidationContainer, object, ProcessResult>((x, e) =>
+            var generalOne = new Func<string, IValidation, object, ProcessResult>((key,c, e) =>
             {
 
                 var lambdaParser = new LambdaParser();
-                var propName = PropertyTypeMaper?.Invoke(x.PropName);
-                var c = x.Validation;
+                var propName = PropertyTypeMaper?.Invoke(key);
                 if (c == null)
                 {
                     return null;
@@ -41,7 +40,7 @@ namespace ExcelPatternTool.Validation
                 }
                 else
                 {
-                    c.Expression = c.Expression.Replace("{value}", x.PropName);
+                    c.Expression = c.Expression.Replace("{value}", key);
                 }
                 var lambdaResult = lambdaParser.Eval(c.Expression, (varName) =>
                 {
@@ -86,12 +85,11 @@ namespace ExcelPatternTool.Validation
 
             });
 
-            var regularOne = new Func<IValidationContainer, object, ProcessResult>((x, e) =>
+            var regularOne = new Func<string, IValidation, object, ProcessResult>((key, c, e) =>
             {
 
 
-                object val = TryGetValue(x.PropName, e);
-                var c = x.Validation;
+                object val = TryGetValue(key, e);
                 if (c == null)
                 {
                     return null;
@@ -177,7 +175,7 @@ namespace ExcelPatternTool.Validation
             }
         }
 
-        abstract public IEnumerable<IValidationContainer> GetValidationContainers(Type entityType);
+        abstract public Dictionary<string, IValidation> GetValidationContainers(Type entityType);
 
         virtual public IValidateConvention GetConvention(string type)
         {

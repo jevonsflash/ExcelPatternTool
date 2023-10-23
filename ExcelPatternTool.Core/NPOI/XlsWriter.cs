@@ -8,7 +8,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Collections;
-using ExcelPatternTool.Contracts.NPOI;
+using ExcelPatternTool.Core.StyleMapping;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -26,7 +26,7 @@ namespace ExcelPatternTool.Core.NPOI
 
 
 
-        public Stream WriteRows<T>(IEnumerable<T> dataCollection, string SheetName, int rowsToSkip, bool genHeader)
+        public Stream WriteRows<T>(IEnumerable<T> dataCollection, string SheetName, int rowsToSkip, bool genHeader, StyleMapper styleMapper = null)
         {
             sheet = Document.CreateSheet(SheetName);
             var columnMetas = GetTypeDefinition(typeof(T));
@@ -47,7 +47,7 @@ namespace ExcelPatternTool.Core.NPOI
                 var ws = Stopwatch.StartNew();
                 ws.Start();
                 var newRow = sheet.CreateRow(row);
-                SetDataToRow(columnMetas, newRow, data);
+                SetDataToRow(columnMetas, newRow, data, styleMapper);
                 row += 1;
                 ws.Stop();
                 Debug.WriteLine($"当前行循环{newRow.RowNum}耗时{ws.ElapsedMilliseconds}ms");
@@ -85,7 +85,7 @@ namespace ExcelPatternTool.Core.NPOI
 
         }
 
-        public Stream WriteRows(Type entityType, IEnumerable dataCollection, string SheetName, int rowsToSkip, bool genHeader)
+        public Stream WriteRows(Type entityType, IEnumerable dataCollection, string SheetName, int rowsToSkip, bool genHeader, StyleMapper styleMapper = null)
         {
             sheet = Document.CreateSheet(SheetName);
             var columnMetas = GetTypeDefinition(entityType);
@@ -104,7 +104,7 @@ namespace ExcelPatternTool.Core.NPOI
                 var ws = Stopwatch.StartNew();
                 ws.Start();
                 var newRow = sheet.CreateRow(row);
-                SetDataToRow(columnMetas, newRow, data);
+                SetDataToRow(columnMetas, newRow, data, styleMapper);
                 row += 1;
                 ws.Stop();
                 Debug.WriteLine($"当前行循环{newRow.RowNum}耗时{ws.ElapsedMilliseconds}ms");

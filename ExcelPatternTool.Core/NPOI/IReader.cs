@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ExcelPatternTool.Contracts;
 
-namespace ExcelPatternTool.Contracts.NPOI
+namespace ExcelPatternTool.Core.NPOI
 {
     public interface IReader
     {

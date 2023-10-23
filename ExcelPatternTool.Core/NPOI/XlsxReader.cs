@@ -6,7 +6,6 @@ using NPOI.XSSF.UserModel;
 using System.Threading.Tasks;
 using System.Linq;
 using ExcelPatternTool.Contracts;
-using ExcelPatternTool.Contracts.NPOI;
 
 namespace ExcelPatternTool.Core.NPOI
 {

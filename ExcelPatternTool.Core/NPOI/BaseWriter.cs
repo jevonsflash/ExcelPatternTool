@@ -11,11 +11,13 @@ using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.Attributes;
+using ExcelPatternTool.Core.StyleMapping;
 
 namespace ExcelPatternTool.Core.NPOI
 {
     public class BaseWriter : BaseHandler
     {
+
         internal IEnumerable<ColumnMetadata> GetTypeDefinition(Type type)
         {
 
@@ -218,7 +220,7 @@ namespace ExcelPatternTool.Core.NPOI
         }
 
 
-        internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data)
+        internal void SetDataToRow<T>(IEnumerable<ColumnMetadata> columnMetas, IRow row, T data, StyleMapper styleMapper=null)
         {
             var ws2 = Stopwatch.StartNew();
 
@@ -243,6 +245,24 @@ namespace ExcelPatternTool.Core.NPOI
                     continue;
                 }
 
+                if (styleMapper != null)
+                {
+                    var styleMapping = styleMapper.StyleMappingContainers[columnMeta.PropName];
+                    if (styleMapping == null)
+                    {
+                        continue;
+                    }
+                    var currentConvention = styleMapper.styleMapperProvider.GetConvention(styleMapping.Convention.ToString()).Convention;
+                    if (currentConvention == null)
+                    {
+                        continue;
+                    }
+                    var currentResult = currentConvention?.Invoke(columnMeta.PropName, styleMapping, data);
+                    if (currentResult == null)
+                    {
+                        continue;
+                    }
+                }
 
                 var bodyFormat = GetPropStyleDefinition(propertyInfo);
                 ws2.Stop();
@@ -355,7 +375,7 @@ namespace ExcelPatternTool.Core.NPOI
 
         }
 
-        internal void SetDataToRow(Type entityType, IEnumerable<ColumnMetadata> columnMetas, IRow row, object data)
+        internal void SetDataToRow(Type entityType, IEnumerable<ColumnMetadata> columnMetas, IRow row, object data, StyleMapper styleMapper = null)
         {
             var ws2 = Stopwatch.StartNew();
 

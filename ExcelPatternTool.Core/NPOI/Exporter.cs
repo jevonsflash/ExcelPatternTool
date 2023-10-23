@@ -4,7 +4,8 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using ExcelPatternTool.Contracts;
-using ExcelPatternTool.Contracts.NPOI;
+using NPOI.SS.Formula.Functions;
+using ExcelPatternTool.Core.StyleMapping;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -29,7 +30,15 @@ namespace ExcelPatternTool.Core.NPOI
 
         public byte[] ProcessGetBytes<T>(IEnumerable<T> source, IExportOption exportOption)
         {
-            var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow);
+            StyleMapperProvider styleMapperProvider = null;
+            if (exportOption.StyleMapperProvider != null)
+            {
+                styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+
+            }
+            var styleMapper = new StyleMapper(styleMapperProvider);
+
+            var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             stream.Close();
@@ -39,7 +48,15 @@ namespace ExcelPatternTool.Core.NPOI
 
         public byte[] ProcessGetBytes(Type entityType, IEnumerable source, IExportOption exportOption)
         {
-            var stream = excelWriter.WriteRows(entityType, source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow);
+            StyleMapperProvider styleMapperProvider = null;
+            if (exportOption.StyleMapperProvider != null)
+            {
+                styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+
+            }
+            var styleMapper = new StyleMapper(styleMapperProvider);
+
+            var stream = excelWriter.WriteRows(entityType, source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             stream.Close();
@@ -51,7 +68,14 @@ namespace ExcelPatternTool.Core.NPOI
         {
             try
             {
-                var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow);
+                StyleMapperProvider styleMapperProvider = null;
+                if (exportOption.StyleMapperProvider != null)
+                {
+                    styleMapperProvider = (StyleMapperProvider)Activator.CreateInstance(exportOption.StyleMapperProvider);
+
+                }
+                var styleMapper = new StyleMapper(styleMapperProvider);
+                var stream = excelWriter.WriteRows(source, exportOption.SheetName, exportOption.SkipRows, exportOption.GenHeaderRow, styleMapper);
 
                 using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
