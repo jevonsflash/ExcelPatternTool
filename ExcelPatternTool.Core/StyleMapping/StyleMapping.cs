@@ -19,9 +19,7 @@ namespace ExcelPatternTool.Core.StyleMapping
         [JsonConverter(typeof(StringEnumConverter))]
         public Target Target { get; set; }
 
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Convention Convention { get; set; }
+        public string Convention { get; set; }
 
         public string Expression { get; set; }
 

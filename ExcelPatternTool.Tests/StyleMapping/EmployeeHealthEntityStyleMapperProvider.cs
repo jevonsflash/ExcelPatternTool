@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using ExcelPatternTool.Contracts;
 using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Patterns;
+using ExcelPatternTool.Tests.Entites;
 using ExcelPatternTool.Validation.Linq;
 
 namespace ExcelPatternTool.Core.StyleMapping
@@ -18,36 +20,112 @@ namespace ExcelPatternTool.Core.StyleMapping
             var result = new Dictionary<string, StyleMapping>
             {
                 {
-                    "收缩压",
+                    "体温",
                     new StyleMapping()
                     {
                         Target = Target.Value,
-                        Convention = Convention.LambdaExpression,
-                        Expression = "{value}>=130||{value}<40",
+                        Convention = "LambdaExpression",
+                        Expression = "{value}>=36.5",
                         MappingConfig = new Dictionary<object, StyleMetadata>
                         {
-                            { true, new StyleMetadata(){  FontColor="Red",  BackColor="#FFFFFE"} } ,
+                            { true, new StyleMetadata(){  FontColor="Red"} } ,
                             { false, new StyleMetadata(){  FontColor="Black"} }
                         }
                     }
                 },
-                {
+                 {
+                    "收缩压",
+                    new StyleMapping()
+                    {
+                        Target = Target.Value,
+                        Convention = "BloodPressureResultExpression",
+                        MappingConfig = new Dictionary<object, StyleMetadata>
+                        {
+                            { "偏低异常", new StyleMetadata(){  FontColor="Orange"} } ,
+                            { "偏高异常", new StyleMetadata(){  FontColor="Red"} },
+                            { "正常", new StyleMetadata(){  FontColor="Black"} }
+                        }
+                    }
+
+                },
+                 {
                     "舒张压",
                     new StyleMapping()
                     {
                         Target = Target.Value,
-                        Convention = Convention.LambdaExpression,
-                        Expression = "{value}>=80 ",
+                        Convention = "BloodPressureResultExpression",
                         MappingConfig = new Dictionary<object, StyleMetadata>
                         {
-                            { true, new StyleMetadata(){  FontColor="Green",  BackColor="#FFFFFE"} } ,
-                            { false, new StyleMetadata(){  FontColor="Black"} }
+                            { "偏低异常", new StyleMetadata(){  FontColor="Orange"} } ,
+                            { "偏高异常", new StyleMetadata(){  FontColor="Red"} },
+                            { "正常", new StyleMetadata(){  FontColor="Black"} }
                         }
                     }
-                }
+
+                },
+
+
             };
             return result;
         }
 
+        public override Dictionary<string, StyleConvention> InitConventions()
+        {
+            var generalOne = new Func<string, StyleMapping, object, StyleMetadata>((key, c, e) =>
+            {
+                StyleMetadata result = null;
+                var lambdaParser = new LambdaParser();
+                if (c == null)
+                {
+                    return null;
+                }
+                var val = double.Parse((string)TryGetValue(key, e));
+                if (key == nameof(EmployeeHealthEntity.BloodPressure2))
+                {
+                    if (val > 140)
+                    {
+                        result = c.MappingConfig["偏高异常"];
+
+                    }
+                    else if (val < 90)
+                    {
+                        result = c.MappingConfig["偏低异常"];
+
+                    }
+                    else
+                    {
+                        result = c.MappingConfig["正常"];
+                    }
+                }
+
+                else if (key == nameof(EmployeeHealthEntity.BloodPressure1))
+                {
+                    if (val > 90)
+                    {
+                        result = c.MappingConfig["偏高异常"];
+
+                    }
+                    else if (val < 60)
+                    {
+                        result = c.MappingConfig["偏低异常"];
+
+                    }
+                    else
+                    {
+                        result = c.MappingConfig["正常"];
+                    }
+                }
+
+
+
+                return result;
+
+            });
+
+            var baseOne = base.InitConventions();
+            baseOne.Add("BloodPressureResultExpression", new StyleConvention(generalOne));
+            return baseOne;
+
+        }
     }
 }

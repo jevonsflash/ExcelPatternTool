@@ -37,34 +37,20 @@ namespace ExcelPatternTool.Core.NPOI
 
         private List<ICellStyle> _cellStyles = new List<ICellStyle>();
 
-        public ICellStyle GetStyle(IColor backColor)
+        private bool IsSameFont(IFont a, IFont b)
         {
-            ICellStyle result = null;
-            foreach (var toStyle in _cellStyles)
-            {
-                if ((toStyle.FillForegroundColorColor as HSSFColor).GetHexString()
-                    == (backColor as HSSFColor).GetHexString())
-                {
-                    result = toStyle;
-                }
-            }
-            if (result == null)
-            {
-                var newStyle = Workbook.CreateCellStyle();
-                newStyle.Alignment = HorizontalAlignment.Center;
-                newStyle.BorderBottom = BorderStyle.Thin;
-                newStyle.BorderLeft = BorderStyle.Thin;
-                newStyle.BorderRight = BorderStyle.Thin;
-                newStyle.BorderTop = BorderStyle.Thin;
-                newStyle.FillPattern = FillPattern.SolidForeground;
-                newStyle.VerticalAlignment = VerticalAlignment.Center;
-                ((HSSFCellStyle)newStyle).FillForegroundColor = ((HSSFColor)backColor).Indexed;
-                _cellStyles.Add(newStyle);
-                result = newStyle;
-            }
-            return result;
-
+            return
+           a.Color != 0 && a.Color == b.Color
+            && a.FontName == b.FontName
+            && a.FontHeightInPoints == b.FontHeightInPoints
+            && a.IsItalic == b.IsItalic
+            && a.IsBold == b.IsBold
+            && a.IsStrikeout == b.IsStrikeout
+            ;
         }
+
+
+
 
 
 
@@ -76,17 +62,43 @@ namespace ExcelPatternTool.Core.NPOI
 
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
         {
-            var cell = GetStyle(backColor);
-            if (borderColor != null)
+            ICellStyle cell = null;
+            foreach (var toStyle in _cellStyles)
             {
-                ((HSSFCellStyle)cell).LeftBorderColor = ((HSSFColor)borderColor).Indexed;
-                ((HSSFCellStyle)cell).RightBorderColor = ((HSSFColor)borderColor).Indexed;
-                ((HSSFCellStyle)cell).TopBorderColor = ((HSSFColor)borderColor).Indexed;
-                ((HSSFCellStyle)cell).BottomBorderColor = ((HSSFColor)borderColor).Indexed;
+                var currentFont = toStyle.GetFont(Workbook);
+                if (currentFont != null && (toStyle.FillForegroundColorColor as HSSFColor).GetHexString()
+                    == (backColor as HSSFColor).GetHexString() &&
+                   IsSameFont(toStyle.GetFont(Workbook), font)
+                   )
+                {
+                    cell = toStyle;
+                }
             }
-            if (font != null)
+            if (cell == null)
             {
-                cell.SetFont(font);
+                var newStyle = Workbook.CreateCellStyle();
+                newStyle.Alignment = HorizontalAlignment.Center;
+                newStyle.BorderBottom = BorderStyle.Thin;
+                newStyle.BorderLeft = BorderStyle.Thin;
+                newStyle.BorderRight = BorderStyle.Thin;
+                newStyle.BorderTop = BorderStyle.Thin;
+                newStyle.FillPattern = FillPattern.SolidForeground;
+                newStyle.VerticalAlignment = VerticalAlignment.Center;
+                ((HSSFCellStyle)newStyle).FillForegroundColor = ((HSSFColor)backColor).Indexed;
+                _cellStyles.Add(newStyle);
+                cell = newStyle;
+
+                if (borderColor != null)
+                {
+                    ((HSSFCellStyle)cell).LeftBorderColor = ((HSSFColor)borderColor).Indexed;
+                    ((HSSFCellStyle)cell).RightBorderColor = ((HSSFColor)borderColor).Indexed;
+                    ((HSSFCellStyle)cell).TopBorderColor = ((HSSFColor)borderColor).Indexed;
+                    ((HSSFCellStyle)cell).BottomBorderColor = ((HSSFColor)borderColor).Indexed;
+                }
+                if (font != null)
+                {
+                    cell.SetFont(font);
+                }
             }
             return cell;
         }

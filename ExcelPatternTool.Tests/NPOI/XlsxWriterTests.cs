@@ -54,7 +54,7 @@ namespace ExcelPatternTool.Tests.NPOI
 
             var eo = new ExportOption<EmployeeHealthEntity>(1, 0);
             eo.SheetName = "Sheet1";
-            eo.GenHeaderRow = false;
+            eo.GenHeaderRow = true;
             eo.StyleMapperProvider = typeof(EmployeeHealthEntityStyleMapperProvider);
 
             var data = GetDatas<EmployeeHealthEntity>(Path.Combine(importPath, "test.xlsx"), "Sheet2");

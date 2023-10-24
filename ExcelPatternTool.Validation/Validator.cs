@@ -47,7 +47,7 @@ namespace ExcelPatternTool.Validation
                 {
                     continue;
                 }
-                var currentConvention = validatorProvider.GetConvention(validator.Value.Convention.ToString()).Convention;
+                var currentConvention = validatorProvider.GetConvention(validator.Value.Convention).Convention;
                 if (currentConvention == null)
                 {
                     continue;

@@ -55,7 +55,7 @@ namespace ExcelPatternTool.Core.NPOI
 
         internal ICellStyle GetStyleWithFormat(ICellStyle baseStyle, string dataFormat)
         {
-            var cellStyle = StyleBuilderProvider.GetStyleBuilder(Document).GetStyle(baseStyle.FillForegroundColorColor);
+            var cellStyle = StyleBuilderProvider.GetStyleBuilder(Document).GetCellStyle(baseStyle.FillForegroundColorColor,null, baseStyle.GetFont(Document));
             cellStyle.CloneStyleFrom(baseStyle);
 
             if (string.IsNullOrWhiteSpace(dataFormat))

@@ -11,7 +11,7 @@ namespace ExcelPatternTool.Contracts.Models
         public string FontName { get; set; }
         public short FontSize { get; set; }
         public string BorderColor { get; set; } = "#000000";
-        public string BackColor { get; set; } = "#FEFEFE";
+        public string BackColor { get; set; } = "#FFFFFF";
 
         public bool IsItalic { get; set; }
 

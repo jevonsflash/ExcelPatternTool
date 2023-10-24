@@ -30,19 +30,40 @@ namespace ExcelPatternTool.Core.NPOI
 
         private List<ICellStyle> _cellStyles = new List<ICellStyle>();
 
-        public ICellStyle GetStyle(IColor backColor)
+        private bool IsSameFont(IFont a, IFont b)
         {
-            ICellStyle result = null;
+            return
+           a.Color != 0 && a.Color == b.Color
+            && a.FontName == b.FontName
+            && a.FontHeightInPoints == b.FontHeightInPoints
+            && a.IsItalic == b.IsItalic
+            && a.IsBold == b.IsBold
+            && a.IsStrikeout == b.IsStrikeout
+            ;
+        }
+
+
+        public short GetBuiltIndDataFormat(string dataFormat)
+        {
+            var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
+            return result;
+        }
+        public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
+        {
+            ICellStyle cell = null;
             foreach (var toStyle in _cellStyles)
             {
-                if ((toStyle.FillForegroundColorColor as XSSFColor).ARGBHex
-                    == (backColor as XSSFColor).ARGBHex)
+                var currentFont = toStyle.GetFont(Workbook);
+                if (currentFont != null && (toStyle.FillForegroundColorColor as XSSFColor).ARGBHex
+                    == (backColor as XSSFColor).ARGBHex &&
+                   IsSameFont(currentFont, font)
+                    )
 
                 {
-                    result = toStyle;
+                    cell = toStyle;
                 }
             }
-            if (result == null)
+            if (cell == null)
             {
                 var newStyle = Workbook.CreateCellStyle();
                 newStyle.Alignment = HorizontalAlignment.Center;
@@ -54,33 +75,18 @@ namespace ExcelPatternTool.Core.NPOI
                 newStyle.VerticalAlignment = VerticalAlignment.Center;
                 ((XSSFCellStyle)newStyle).SetFillForegroundColor((XSSFColor)backColor);
                 _cellStyles.Add(newStyle);
-                result = newStyle;
-            }
-            return result;
-
-        }
-
-        public short GetBuiltIndDataFormat(string dataFormat)
-        {
-            var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
-            return result;
-        }
-        public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)
-        {
-            var cell = GetStyle(backColor);
-            if (borderColor != null)
-            {
-                ((XSSFCellStyle)cell).SetLeftBorderColor((XSSFColor)borderColor);
-                ((XSSFCellStyle)cell).SetRightBorderColor((XSSFColor)borderColor);
-                ((XSSFCellStyle)cell).SetTopBorderColor((XSSFColor)borderColor);
-                ((XSSFCellStyle)cell).SetBottomBorderColor((XSSFColor)borderColor);
-            }
-
-
-            if (font != null)
-            {
-                cell.SetFont(font);
-
+                cell = newStyle;
+                if (borderColor != null)
+                {
+                    ((XSSFCellStyle)cell).SetLeftBorderColor((XSSFColor)borderColor);
+                    ((XSSFCellStyle)cell).SetRightBorderColor((XSSFColor)borderColor);
+                    ((XSSFCellStyle)cell).SetTopBorderColor((XSSFColor)borderColor);
+                    ((XSSFCellStyle)cell).SetBottomBorderColor((XSSFColor)borderColor);
+                }
+                if (font != null)
+                {
+                    cell.SetFont(font);
+                }
             }
             return cell;
         }

@@ -42,6 +42,5 @@ namespace ExcelPatternTool.Contracts.NPOI
         IColor GetBoarderColor(ICellStyle cellStyle);
 
         void SetWorkbook(IWorkbook workbook);
-        ICellStyle GetStyle(IColor backColor);
     }
 }

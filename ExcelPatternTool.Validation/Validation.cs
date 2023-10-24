@@ -36,8 +36,7 @@ namespace ExcelPatternTool.Validation
             }
         }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Convention Convention { get; set; }
+        public string Convention { get; set; }
 
         [JsonIgnore]
         public ProcessResult ProcessResult { get; set; }
