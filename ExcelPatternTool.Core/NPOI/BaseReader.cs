@@ -184,14 +184,16 @@ namespace ExcelPatternTool.Core.NPOI
                         }
                         else
                         {
-                            (tmpFullarmed as IFullAdvancedType).Formula = cell.CellFormula;
-                            if (cell.CellComment != null)
+                            if (cell.CellFormula != null)
                             {
-                                (tmpFullarmed as IFullAdvancedType).Comment = cell.CellComment.String.String;
+                                (tmpFullarmed as IFormulatedType).Formula = cell.CellFormula;
                             }
-
                         }
-                        (tmpFullarmed as IFullAdvancedType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
+                        if (cell.CellComment != null)
+                        {
+                            (tmpFullarmed as ICommentedType).Comment = cell.CellComment.String.String;
+                        }
+                        (tmpFullarmed as IStyledType).StyleMetadata = CellStyleToMeta(cell.CellStyle);
 
                         AssignValue(objType, columns[j].PropName, result, tmpFullarmed);
                         break;

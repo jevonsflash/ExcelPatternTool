@@ -3,7 +3,7 @@ using ExcelPatternTool.Contracts.Models;
 
 namespace ExcelPatternTool.Contracts.NPOI.AdvancedTypes
 {
-    public class FullAdvancedType<T> : IFullAdvancedType
+    public class FullAdvancedType<T> : ICommentedType, IFormulatedType, IAdvancedType, IStyledType
     {
 
         public T Value { get; set; }

@@ -12,6 +12,7 @@ using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.Attributes;
 using ExcelPatternTool.Core.StyleMapping;
+using System.Xml.Linq;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -55,14 +56,13 @@ namespace ExcelPatternTool.Core.NPOI
 
         internal ICellStyle GetStyleWithFormat(ICellStyle baseStyle, string dataFormat)
         {
-            var cellStyle = StyleBuilderProvider.GetStyleBuilder(Document).GetCellStyle(baseStyle.FillForegroundColorColor,null, baseStyle.GetFont(Document));
+            var cellStyle = StyleBuilderProvider.GetStyleBuilder(Document).GetCellStyle(baseStyle.FillForegroundColorColor, null, baseStyle.GetFont(Document));
             cellStyle.CloneStyleFrom(baseStyle);
 
             if (string.IsNullOrWhiteSpace(dataFormat))
                 return cellStyle;
 
             short builtIndDataFormat = StyleBuilderProvider.GetStyleBuilder(Document).GetBuiltIndDataFormat(dataFormat);
-            var type = StyleBuilderProvider.GetWorkbookType(Document);
 
             if (builtIndDataFormat != -1)
             {
@@ -73,13 +73,7 @@ namespace ExcelPatternTool.Core.NPOI
                 IDataFormat dataFormat2 = Document.CreateDataFormat();
                 cellStyle.DataFormat = dataFormat2.GetFormat(dataFormat);
             }
-
-
-
             return cellStyle;
-
-
-
         }
 
         public StyleMetadata GetClassStyleDefinition(Type type)
@@ -238,7 +232,7 @@ namespace ExcelPatternTool.Core.NPOI
                                 bodyFormat.IsItalic = currentResult.IsItalic;
                                 bodyFormat.IsBold = currentResult.IsBold;
                                 bodyFormat.IsStrikeout = currentResult.IsStrikeout;
-                                bodyFormat.TypeOffset =  currentResult.TypeOffset;
+                                bodyFormat.TypeOffset = currentResult.TypeOffset;
                                 bodyFormat.Underline = currentResult.Underline;
                             }
                         }
@@ -530,33 +524,33 @@ namespace ExcelPatternTool.Core.NPOI
             var gType = propType.GenericTypeArguments.FirstOrDefault();
             string gTypeDesc = gType.Name.ToLowerInvariant();
 
-            var formulatedValue = propValue.GetValue();
+            var innerValue = propValue.GetValue();
 
 
             if (gTypeDesc == "string")
             {
-                cell.SetCellValue(Convert.ToString(formulatedValue));
+                cell.SetCellValue(Convert.ToString(innerValue));
                 cell.CellStyle = bodyBaseCellStyle;
                 cell.SetCellType(CellType.String);
 
             }
             else if (gTypeDesc == "datetime")
             {
-                cell.SetCellValue(Convert.ToDateTime(formulatedValue));
+                cell.SetCellValue(Convert.ToDateTime(innerValue));
                 cell.CellStyle = bodyCellStyle;
             }
             else if (gTypeDesc == "int" || gTypeDesc == "int32" || gTypeDesc == "decimal" ||
                      gTypeDesc == "int64" || gTypeDesc == "long" || gTypeDesc == "double" ||
                      gTypeDesc == "single")
             {
-                cell.SetCellValue(Convert.ToDouble(formulatedValue));
+                cell.SetCellValue(Convert.ToDouble(innerValue));
                 cell.CellStyle = bodyCellStyle;
                 cell.SetCellType(CellType.Numeric);
 
             }
             else if (gTypeDesc == "boolean" || gTypeDesc == "bool")
             {
-                cell.SetCellValue(Convert.ToBoolean(formulatedValue));
+                cell.SetCellValue(Convert.ToBoolean(innerValue));
                 cell.CellStyle = bodyBaseCellStyle;
                 cell.SetCellType(CellType.Boolean);
 
@@ -565,24 +559,25 @@ namespace ExcelPatternTool.Core.NPOI
             if (propValue is IFormulatedType)
             {
                 var formula = (propValue as IFormulatedType).Formula;
+                if (!string.IsNullOrEmpty(formula))
+                {
+                    cell.SetCellFormula(formula);
+                    cell.SetCellType(CellType.Formula);
+                }
 
-                cell.SetCellFormula(formula);
-                cell.SetCellType(CellType.Formula);
-                SetFormulatedValue(cell, formulatedValue);
 
             }
-            else if (propValue is ICommentedType)
+            if (propValue is ICommentedType)
             {
                 var comment = (propValue as ICommentedType).Comment;
                 if (!string.IsNullOrEmpty(comment))
                 {
                     cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
                 }
-                SetFormulatedValue(cell, formulatedValue);
 
             }
 
-            else if (propValue is IStyledType)
+            if (propValue is IStyledType)
             {
 
                 var styleMeta = (propValue as IStyledType).StyleMetadata;
@@ -617,63 +612,9 @@ namespace ExcelPatternTool.Core.NPOI
                 else
                 {
                     cell.CellStyle = bodyCellStyle;
-
                 }
-
-                SetFormulatedValue(cell, formulatedValue);
-
             }
-
-            else if (propValue is IFullAdvancedType)
-            {
-                var formula = (propValue as IFormulatedType).Formula;
-
-                cell.SetCellFormula(formula);
-                cell.SetCellType(CellType.Formula);
-
-                var styleMeta = (propValue as IFullAdvancedType).StyleMetadata;
-                if (styleMeta != null)
-                {
-                    if (string.IsNullOrEmpty(styleMeta.BackColor))
-                    {
-                        styleMeta.BackColor = bodyFormat.BackColor;
-                    }
-                    if (string.IsNullOrEmpty(styleMeta.BorderColor))
-                    {
-                        styleMeta.BorderColor = bodyFormat.BorderColor;
-                    }
-                    if (string.IsNullOrEmpty(styleMeta.FontColor))
-                    {
-                        styleMeta.FontColor = bodyFormat.FontColor;
-                    }
-                    if (string.IsNullOrEmpty(styleMeta.FontName))
-                    {
-                        styleMeta.FontName = bodyFormat.FontName;
-                    }
-                    styleMeta.IsItalic = bodyFormat.IsItalic;
-                    styleMeta.IsBold = bodyFormat.IsBold;
-                    styleMeta.IsStrikeout = bodyFormat.IsStrikeout;
-                    styleMeta.TypeOffset = bodyFormat.TypeOffset;
-                    styleMeta.Underline = bodyFormat.Underline;
-                    var specificCellStyle = MetaToCellStyle(styleMeta);
-
-                    var specificBodyCellStyle = GetStyleWithFormat(specificCellStyle, columnMeta.Format);
-                    cell.CellStyle = specificBodyCellStyle;
-                }
-                else
-                {
-                    cell.CellStyle = bodyCellStyle;
-
-                }
-
-                var comment = (propValue as IFullAdvancedType).Comment;
-                if (!string.IsNullOrEmpty(comment))
-                {
-                    cell.CellComment = StyleBuilderProvider.GetStyleBuilder(Document).GetComment(comment);
-                }
-
-            }
-
+            SetFormulatedValue(cell, innerValue);
 
         }
 
