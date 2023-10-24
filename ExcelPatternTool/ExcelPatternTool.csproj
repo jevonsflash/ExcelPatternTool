@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>0.2.0</Version>
+		<Version>0.3.1</Version>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ExcelPatternTool.Core\ExcelPatternTool.Core.csproj" />
+		<ProjectReference Include="..\ExcelPatternTool.Odbc\ExcelPatternTool.Odbc.csproj" />
 		<ProjectReference Include="..\ExcelPatternTool.Validation\ExcelPatternTool.Validation.csproj" />
 	</ItemGroup>
 

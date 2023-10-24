@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ExcelPatternTool.Validation.Linq
+namespace ExcelPatternTool.Common.Linq
 {
 
     /// <summary>

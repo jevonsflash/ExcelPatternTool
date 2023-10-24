@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using ExcelPatternTool.Contracts.Validations;
-using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Validation;
 using Newtonsoft.Json;
-using DirFileHelper = ExcelPatternTool.Core.Helper.DirFileHelper;
+using DirFileHelper = ExcelPatternTool.Common.Helper.DirFileHelper;
 
 namespace ExcelPatternTool.Validators.Implements
 {

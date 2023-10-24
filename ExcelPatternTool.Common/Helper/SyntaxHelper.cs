@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using System;
 
-namespace ExcelPatternTool.Core.Helper
+namespace ExcelPatternTool.Common.Helper
 {
     public class SyntaxHelper
     {

@@ -14,7 +14,7 @@
 
 using System;
 
-namespace ExcelPatternTool.Validation.Linq
+namespace ExcelPatternTool.Common.Linq
 {
 
     /// <summary>

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using ExcelPatternTool.Tests.Entites;
 using ExcelPatternTool.Core.NPOI;
 using ExcelPatternTool.Contracts.Models;
-using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Common.Helper;
 using ExcelPatternTool.Core.StyleMapping;
 
 namespace ExcelPatternTool.Tests.NPOI

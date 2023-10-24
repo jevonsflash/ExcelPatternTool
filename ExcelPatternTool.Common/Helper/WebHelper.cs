@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 
-namespace ExcelPatternTool.Core.Helper
+namespace ExcelPatternTool.Common.Helper
 {
     public enum Method
     {

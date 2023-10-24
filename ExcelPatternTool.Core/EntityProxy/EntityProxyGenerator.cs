@@ -12,6 +12,7 @@ using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 using Newtonsoft.Json;
 using ExcelPatternTool.Contracts.Patterns;
+using ExcelPatternTool.Common.Helper;
 
 namespace ExcelPatternTool.Core.EntityProxy
 {

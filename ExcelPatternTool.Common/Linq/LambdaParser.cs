@@ -18,9 +18,8 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using ExcelPatternTool.Contracts.Linq;
 
-namespace ExcelPatternTool.Validation.Linq
+namespace ExcelPatternTool.Common.Linq
 {
 
     /// <summary>

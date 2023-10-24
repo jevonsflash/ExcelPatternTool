@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace ExcelPatternTool.Core.Helper
+namespace ExcelPatternTool.Common.Helper
 {
     public class LocalDataHelper
     {

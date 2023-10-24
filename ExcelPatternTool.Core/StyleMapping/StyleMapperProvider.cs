@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using ExcelPatternTool.Common.Linq;
 using ExcelPatternTool.Contracts;
 using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Patterns;
-using ExcelPatternTool.Validation.Linq;
 
 namespace ExcelPatternTool.Core.StyleMapping
 {

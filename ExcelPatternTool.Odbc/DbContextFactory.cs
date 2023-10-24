@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExcelPatternTool.Core.DataBase
+namespace ExcelPatternTool.Odbc
 {
     public class DbContextFactory
     {
-        public ExcelPatternToolDbContext CreateExcelPatternToolDbContext(string connectionString, string use)
+        public ExcelPatternToolDbContext CreateExcelPatternToolDbContext(string connectionString, string use, Type entityType)
         {
             ExcelPatternToolDbContext _dataContext;
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<ExcelPatternToolDbContext>();
@@ -18,11 +18,11 @@ namespace ExcelPatternTool.Core.DataBase
                 "sqlite" => dbContextOptionsBuilder.UseSqlite(connectionString).Options,
                 "sqlserver" => dbContextOptionsBuilder.UseSqlServer(connectionString).Options,
                 "mysql" => dbContextOptionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29))).Options,
-                _ => throw new NotImplementedException("暂不支持"+use)
+                _ => throw new NotImplementedException("暂不支持" + use)
             };
 
 
-            _dataContext= new ExcelPatternToolDbContext(contextOptions);
+            _dataContext = new ExcelPatternToolDbContext(contextOptions, entityType);
 
             return _dataContext;
         }

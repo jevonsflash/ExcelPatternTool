@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ExcelPatternTool.Common.Helper;
 using ExcelPatternTool.Contracts.Validations;
-using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 
 namespace ExcelPatternTool.Validation.Validators.Implements

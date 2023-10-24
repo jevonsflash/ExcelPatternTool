@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ExcelPatternTool.Common.Helper;
 using ExcelPatternTool.Contracts.Validations;
-using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Core.Patterns;
 using ExcelPatternTool.Validation;
 

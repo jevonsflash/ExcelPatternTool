@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
-namespace ExcelPatternTool.Core.Helper
+namespace ExcelPatternTool.Common.Helper
 {
     public class DatatableHelper
     {

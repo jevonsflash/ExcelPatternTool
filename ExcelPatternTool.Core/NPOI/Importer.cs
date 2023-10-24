@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ExcelPatternTool.Contracts;
 using ExcelPatternTool.Core.EntityProxy;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ExcelPatternTool.Core.NPOI
 {

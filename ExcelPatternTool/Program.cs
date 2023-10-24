@@ -4,7 +4,7 @@ using ExcelPatternTool.Core.EntityProxy;
 using ExcelPatternTool.Core.Patterns;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using DirFileHelper = ExcelPatternTool.Core.Helper.DirFileHelper;
+using DirFileHelper = ExcelPatternTool.Common.Helper.DirFileHelper;
 
 namespace ExcelPatternTool
 {

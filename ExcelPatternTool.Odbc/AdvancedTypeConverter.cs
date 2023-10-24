@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExcelPatternTool.Core.NPOI.AdvancedTypes
+namespace ExcelPatternTool.Odbc
 {
     public class AdvancedTypeConverter : ValueConverter
     {

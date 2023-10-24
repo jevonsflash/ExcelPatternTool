@@ -1,6 +1,6 @@
 ﻿using ExcelPatternTool.Contracts;
-using ExcelPatternTool.Core.DataBase;
 using ExcelPatternTool.Core.EntityProxy;
+using ExcelPatternTool.Odbc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace ExcelPatternTool
                 {
                     return;
                 }
-                using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(connectingString, dbtype))
+                using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(connectingString, dbtype, EntityProxyContainer.Current.EntityType))
                 {
                     dbcontext.AddRange(odInfos);
                     dbcontext.SaveChanges();
@@ -38,7 +38,7 @@ namespace ExcelPatternTool
 
         public static List<IExcelEntity> ImportFromDb(Type entityType, string dbtype, string connectingString)
         {
-            using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(connectingString, dbtype))
+            using (var dbcontext = dbContextFactory.CreateExcelPatternToolDbContext(connectingString, dbtype, EntityProxyContainer.Current.EntityType))
             {
                 var dbset = dbcontext.GetDbSet(entityType);
                 return ((IEnumerable<IExcelEntity>)dbset).ToList();

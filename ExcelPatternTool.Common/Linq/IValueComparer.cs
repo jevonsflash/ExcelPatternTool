@@ -13,7 +13,7 @@
 #endregion
 
 
-namespace ExcelPatternTool.Contracts.Linq
+namespace ExcelPatternTool.Common.Linq
 {
     /// <summary>
     /// Exposes a method that compares two objects.

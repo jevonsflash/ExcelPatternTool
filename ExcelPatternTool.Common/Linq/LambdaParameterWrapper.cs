@@ -18,9 +18,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Linq;
 using System.Linq.Expressions;
-using ExcelPatternTool.Contracts.Linq;
 
-namespace ExcelPatternTool.Validation.Linq
+namespace ExcelPatternTool.Common.Linq
 {
 
     /// <summary>
@@ -132,7 +131,7 @@ namespace ExcelPatternTool.Validation.Linq
             for (int i = 0; i < resolvedArgs.Length; i++)
             {
                 var argObj = args[i] is LambdaParameterWrapper ? ((LambdaParameterWrapper)args[i]).Value : args[i];
-                if (!ExcelPatternTool.Validation.Linq.InvokeMethod.IsInstanceOfType(delegParams[i].ParameterType, argObj))
+                if (!Linq.InvokeMethod.IsInstanceOfType(delegParams[i].ParameterType, argObj))
                     argObj = Convert.ChangeType(argObj, delegParams[i].ParameterType, CultureInfo.InvariantCulture);
                 resolvedArgs[i] = argObj;
             }

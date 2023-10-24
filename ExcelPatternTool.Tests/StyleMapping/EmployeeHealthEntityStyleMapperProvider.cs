@@ -4,12 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using ExcelPatternTool.Common.Linq;
 using ExcelPatternTool.Contracts;
 using ExcelPatternTool.Contracts.Models;
 using ExcelPatternTool.Contracts.NPOI.AdvancedTypes;
 using ExcelPatternTool.Contracts.Patterns;
+using ExcelPatternTool.Core.StyleMapping;
 using ExcelPatternTool.Tests.Entites;
-using ExcelPatternTool.Validation.Linq;
 
 namespace ExcelPatternTool.Core.StyleMapping
 {
@@ -71,7 +72,9 @@ namespace ExcelPatternTool.Core.StyleMapping
 
         public override Dictionary<string, StyleConvention> InitConventions()
         {
-            var generalOne = new Func<string, StyleMapping, object, StyleMetadata>((key, c, e) =>
+
+            var baseOne = base.InitConventions();
+            baseOne.Add("BloodPressureResultExpression", new StyleConvention(new Func<string, StyleMapping, object, StyleMetadata>((key, c, e) =>
             {
                 StyleMetadata result = null;
                 var lambdaParser = new LambdaParser();
@@ -120,10 +123,7 @@ namespace ExcelPatternTool.Core.StyleMapping
 
                 return result;
 
-            });
-
-            var baseOne = base.InitConventions();
-            baseOne.Add("BloodPressureResultExpression", new StyleConvention(generalOne));
+            })));
             return baseOne;
 
         }

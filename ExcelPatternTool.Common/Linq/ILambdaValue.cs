@@ -13,7 +13,7 @@
 #endregion
 
 
-namespace ExcelPatternTool.Contracts.Linq
+namespace ExcelPatternTool.Common.Linq
 {
     /// <summary>
     /// Represents a value in expressions produced by <see cref="LambdaParser"/>.

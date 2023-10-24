@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>0.2.0</Version>
+		<Version>0.3.1</Version>
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Description>Out-of-the-box Excel toolkit with NPOI, No need to write pattern.json, specify a C# class to start immediately</Description>
 		<Authors>LinXiao</Authors>

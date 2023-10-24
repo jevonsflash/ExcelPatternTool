@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace ExcelPatternTool.Core.Helper
+namespace ExcelPatternTool.Common.Helper
 {
     public class CommonHelper
     {

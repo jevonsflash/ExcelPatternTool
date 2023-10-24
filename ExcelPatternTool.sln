@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelPatternTool.Tests", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelPatternTool", "ExcelPatternTool\ExcelPatternTool.csproj", "{3A4B8E3F-3A65-4167-B65A-DB14E9510878}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Validation", "ExcelPatternTool.Validation\ExcelPatternTool.Validation.csproj", "{3572FF84-DBE6-4DCD-847E-1646B8CE15D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelPatternTool.Validation", "ExcelPatternTool.Validation\ExcelPatternTool.Validation.csproj", "{3572FF84-DBE6-4DCD-847E-1646B8CE15D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Contracts", "ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj", "{75FC0E42-5424-4346-A253-67EB303BE30F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelPatternTool.Contracts", "ExcelPatternTool.Contracts\ExcelPatternTool.Contracts.csproj", "{75FC0E42-5424-4346-A253-67EB303BE30F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Common", "ExcelPatternTool.Common\ExcelPatternTool.Common.csproj", "{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelPatternTool.Common", "ExcelPatternTool.Common\ExcelPatternTool.Common.csproj", "{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPatternTool.Odbc", "ExcelPatternTool.Odbc\ExcelPatternTool.Odbc.csproj", "{ACFFFC87-D30E-4507-8AA9-5559B07E7F1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E79EAB1-CFD9-4C8E-A392-F895F8FA21EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACFFFC87-D30E-4507-8AA9-5559B07E7F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACFFFC87-D30E-4507-8AA9-5559B07E7F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACFFFC87-D30E-4507-8AA9-5559B07E7F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACFFFC87-D30E-4507-8AA9-5559B07E7F1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
