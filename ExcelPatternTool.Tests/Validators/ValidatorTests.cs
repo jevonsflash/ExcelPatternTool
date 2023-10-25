@@ -25,12 +25,12 @@ namespace ExcelPatternTool.Tests.Validators
 
             data1 = File.ReadAllBytes(filePath);
             import.LoadXlsx(data1);
-            var importOption = new ImportOption<EmployeeEntity>(0, 2);
+            var importOption = new ImportOption<WriteRowTestEntity>(0, 2);
             importOption.SheetName = "全职";
-            Employees = import.Process<EmployeeEntity>(importOption).ToList();
+            Employees = import.Process<WriteRowTestEntity>(importOption).ToList();
 
             var validator = new Validator();
-            validator.SetValidatorProvider<EmployeeEntity>(new DefaultValidatorProvider());
+            validator.SetValidatorProvider<WriteRowTestEntity>(new DefaultValidatorProvider());
             foreach (var item in Employees)
             {
 
@@ -64,7 +64,7 @@ namespace ExcelPatternTool.Tests.Validators
         }
         public List<ProcessResult> ProcessResultList { get; set; }
 
-        public List<EmployeeEntity> Employees { get; set; }
+        public List<WriteRowTestEntity> Employees { get; set; }
 
 
     }

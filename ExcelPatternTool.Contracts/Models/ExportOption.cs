@@ -11,7 +11,7 @@ namespace ExcelPatternTool.Contracts.Models
         {
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
-            SheetName = "未命名";
+            SheetName = "Sheet1";
             EntityType = entityType;
 
         }
@@ -32,7 +32,7 @@ namespace ExcelPatternTool.Contracts.Models
             SheetNumber = sheetNumber;
             SkipRows = skipRows;
             EntityType = typeof(T);
-            SheetName = "未命名";
+            SheetName = "Sheet1";
 
         }
 

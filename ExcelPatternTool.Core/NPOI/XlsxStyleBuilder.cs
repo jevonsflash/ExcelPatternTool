@@ -45,7 +45,7 @@ namespace ExcelPatternTool.Core.NPOI
 
         public short GetBuiltIndDataFormat(string dataFormat)
         {
-            var result = new XSSFDataFormat(new StylesTable()).GetFormat(dataFormat);
+            var result = (short)-1;
             return result;
         }
         public ICellStyle GetCellStyle(IColor backColor, IColor borderColor, IFont font)

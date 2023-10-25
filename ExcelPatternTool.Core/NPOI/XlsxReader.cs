@@ -69,7 +69,7 @@ namespace ExcelPatternTool.Core.NPOI
                     result.Add(objectInstance);
                 }
             });
-            result.OrderBy(c => c.RowNumber);
+            result = result.OrderBy(c => c.RowNumber).ToList();
             return result;
 
         }
@@ -116,7 +116,7 @@ namespace ExcelPatternTool.Core.NPOI
                 }
 
             });
-            result.OrderBy(c => c.RowNumber);
+            result = result.OrderBy(c => c.RowNumber).ToList();
             return result;
         }
 
@@ -163,7 +163,7 @@ namespace ExcelPatternTool.Core.NPOI
                     result.Add(objectInstance);
                 }
             });
-            result.OrderBy(c => c.RowNumber);
+            result = result.OrderBy(c => c.RowNumber).ToList();
             return result;
 
         }
@@ -209,7 +209,7 @@ namespace ExcelPatternTool.Core.NPOI
                 }
 
             });
-            result.OrderBy(c => c.RowNumber);
+            result = result.OrderBy(c => c.RowNumber).ToList();
             return result;
         }
 

@@ -136,6 +136,7 @@ namespace ExcelPatternTool.Core.NPOI
                     styleMetadata.IsItalic = exportableAttribute.IsItalic;
                     styleMetadata.IsBold = exportableAttribute.IsBold;
                     styleMetadata.IsStrikeout = exportableAttribute.IsStrikeout;
+
                     styleMetadata.TypeOffset = exportableAttribute.TypeOffset;
                     styleMetadata.Underline = exportableAttribute.Underline;
                     return styleMetadata;

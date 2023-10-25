@@ -28,9 +28,9 @@ namespace ExcelPatternTool.Tests.NPOI
             var filePath = Path.Combine(outputPath, "writeRowsTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<EmployeeEntity>(1, 0);
+            var eo = new ExportOption<WriteRowTestEntity>(1, 0);
             eo.GenHeaderRow = true;
-            var data = GetDatas<EmployeeEntity>(Path.Combine(importPath, "test.xlsx"), "Sheet1");
+            var data = GetDatas<WriteRowTestEntity>(Path.Combine(importPath, "test.xlsx"), "常规");
             var bytes = exporter.ProcessGetBytes(data, eo);
 
 
@@ -45,7 +45,59 @@ namespace ExcelPatternTool.Tests.NPOI
 
 
         [TestMethod()]
-        public void StyleMappingTest()
+        public void WriteAdvancedTypesTest()
+        {
+            Exporter exporter = new Exporter();
+
+            var filePath = Path.Combine(outputPath, "writeAdvancedTypesTest.xlsx");
+            exporter.DumpXlsx(filePath);
+
+            var eo = new ExportOption<AdvancedTypeTestEntity>(1, 0);
+            eo.GenHeaderRow = true;
+            var data = GetDatas<AdvancedTypeTestEntity>(Path.Combine(importPath, "test.xlsx"), "高级类型");
+            var bytes = exporter.ProcessGetBytes(data, eo);
+
+
+
+            using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+
+                file.Write(bytes);
+            }
+
+        }
+
+        [TestMethod()]
+        public void WriteCustomStylesTest()
+        {
+            Exporter exporter = new Exporter();
+
+            var filePath = Path.Combine(outputPath, "writeCustomStylesTest.xlsx");
+            exporter.DumpXlsx(filePath);
+
+            var eo = new ExportOption<CustomStyleTestEntity>(1, 0);
+            eo.GenHeaderRow = true;
+            var data = GetDatas<CustomStyleTestEntity>(Path.Combine(importPath, "test.xlsx"), "自定义样式");
+            var bytes = exporter.ProcessGetBytes(data, eo);
+
+
+
+            using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+
+                file.Write(bytes);
+            }
+
+        }
+
+
+
+
+
+
+
+        [TestMethod()]
+        public void WriteRowsStyleMappingTest()
         {
             Exporter exporter = new Exporter();
 
@@ -57,7 +109,7 @@ namespace ExcelPatternTool.Tests.NPOI
             eo.GenHeaderRow = true;
             eo.StyleMapperProvider = typeof(EmployeeHealthEntityStyleMapperProvider);
 
-            var data = GetDatas<EmployeeHealthEntity>(Path.Combine(importPath, "test.xlsx"), "Sheet2");
+            var data = GetDatas<EmployeeHealthEntity>(Path.Combine(importPath, "test.xlsx"), "样式映射");
             var bytes = exporter.ProcessGetBytes(data, eo);
 
             using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
@@ -101,7 +153,7 @@ namespace ExcelPatternTool.Tests.NPOI
             var output = import.Process<MedicalLibEntity>(importOption).ToList();
 
             stopwatch.Stop();
-            Assert.IsTrue(stopwatch.ElapsedMilliseconds <= 100000);
+            Assert.IsTrue(stopwatch.ElapsedMilliseconds <= 5000);
             Assert.IsNotNull(output);
 
         }
