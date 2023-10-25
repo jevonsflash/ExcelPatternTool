@@ -60,7 +60,7 @@ namespace ExcelPatternTool
                 }
                 if (CliProcessor.destination=="excel")
                 {
-                    var op2 = new ExportOption(EntityProxyContainer.Current.EntityType, _pattern.ExcelExport.SheetNumber, _pattern.ExcelExport.SkipRow);
+                    var op2 = new ExportOption(EntityProxyContainer.Current.EntityType, _pattern.ExcelExport.SkipRow);
                     op2.SheetName=_pattern.ExcelExport.SheetName;
                     op2.GenHeaderRow=_pattern.ExcelExport.GenHeaderRow;
 

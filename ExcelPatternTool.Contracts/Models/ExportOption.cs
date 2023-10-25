@@ -7,18 +7,16 @@ namespace ExcelPatternTool.Contracts.Models
 {
     public class ExportOption : IExportOption
     {
-        public ExportOption(Type entityType, int sheetNumber, int skipRows)
+        public ExportOption(Type entityType, int skipRows, string sheetName = "Sheet1")
         {
-            SheetNumber = sheetNumber;
             SkipRows = skipRows;
-            SheetName = "Sheet1";
+            SheetName = sheetName;
             EntityType = entityType;
 
         }
 
         public Type EntityType { get; set; }
         public string SheetName { get; set; }
-        public int SheetNumber { get; set; }
         public int SkipRows { get; set; }
         public bool GenHeaderRow { get; set; }
         public Type StyleMapperProvider { get; set; }
@@ -27,18 +25,16 @@ namespace ExcelPatternTool.Contracts.Models
 
     public class ExportOption<T> : IExportOption
     {
-        public ExportOption(int sheetNumber, int skipRows)
+        public ExportOption(int skipRows, string sheetName = "Sheet1")
         {
-            SheetNumber = sheetNumber;
             SkipRows = skipRows;
             EntityType = typeof(T);
-            SheetName = "Sheet1";
+            SheetName = sheetName;
 
         }
 
         public Type EntityType { get; set; }
         public string SheetName { get; set; }
-        public int SheetNumber { get; set; }
         public int SkipRows { get; set; }
         public bool GenHeaderRow { get; set; }
         public Type StyleMapperProvider { get; set; }

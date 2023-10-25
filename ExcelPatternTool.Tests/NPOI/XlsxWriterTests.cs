@@ -28,7 +28,7 @@ namespace ExcelPatternTool.Tests.NPOI
             var filePath = Path.Combine(outputPath, "writeRowsTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<WriteRowTestEntity>(1, 0);
+            var eo = new ExportOption<WriteRowTestEntity>(0);
             eo.GenHeaderRow = true;
             var data = GetDatas<WriteRowTestEntity>(Path.Combine(importPath, "test.xlsx"), "常规");
             var bytes = exporter.ProcessGetBytes(data, eo);
@@ -52,7 +52,7 @@ namespace ExcelPatternTool.Tests.NPOI
             var filePath = Path.Combine(outputPath, "writeAdvancedTypesTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<AdvancedTypeTestEntity>(1, 0);
+            var eo = new ExportOption<AdvancedTypeTestEntity>(0);
             eo.GenHeaderRow = true;
             var data = GetDatas<AdvancedTypeTestEntity>(Path.Combine(importPath, "test.xlsx"), "高级类型");
             var bytes = exporter.ProcessGetBytes(data, eo);
@@ -75,7 +75,7 @@ namespace ExcelPatternTool.Tests.NPOI
             var filePath = Path.Combine(outputPath, "writeCustomStylesTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<CustomStyleTestEntity>(1, 0);
+            var eo = new ExportOption<CustomStyleTestEntity>(0);
             eo.GenHeaderRow = true;
             var data = GetDatas<CustomStyleTestEntity>(Path.Combine(importPath, "test.xlsx"), "自定义样式");
             var bytes = exporter.ProcessGetBytes(data, eo);
@@ -104,7 +104,7 @@ namespace ExcelPatternTool.Tests.NPOI
             var filePath = Path.Combine(outputPath, "styleMappingTest.xlsx");
             exporter.DumpXlsx(filePath);
 
-            var eo = new ExportOption<EmployeeHealthEntity>(1, 0);
+            var eo = new ExportOption<EmployeeHealthEntity>(0);
             eo.SheetName = "Sheet1";
             eo.GenHeaderRow = true;
             eo.StyleMapperProvider = typeof(EmployeeHealthEntityStyleMapperProvider);
