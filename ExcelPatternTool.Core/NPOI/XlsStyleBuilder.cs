@@ -85,7 +85,6 @@ namespace ExcelPatternTool.Core.NPOI
                 newStyle.FillPattern = FillPattern.SolidForeground;
                 newStyle.VerticalAlignment = VerticalAlignment.Center;
                 ((HSSFCellStyle)newStyle).FillForegroundColor = ((HSSFColor)backColor).Indexed;
-                _cellStyles.Add(newStyle);
                 cell = newStyle;
 
                 if (borderColor != null)
@@ -100,6 +99,8 @@ namespace ExcelPatternTool.Core.NPOI
                     cell.SetFont(font);
                 }
             }
+            _cellStyles.Add(cell);
+
             return cell;
         }
         public IColor GetFontColor(ICellStyle cellStyle)
