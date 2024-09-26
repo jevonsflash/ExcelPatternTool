@@ -264,7 +264,7 @@ namespace ExcelPatternTool.Core.NPOI
 
         private DateTime ExtractDateFromCell(ICell cell)
         {
-            DateTime value = DateTime.Now;
+            DateTime? value = DateTime.Now;
             switch (cell.CellType)
             {
                 case CellType.Formula:
@@ -284,7 +284,7 @@ namespace ExcelPatternTool.Core.NPOI
                     value = cell.DateCellValue;
                     break;
             }
-            return value;
+            return value??default;
         }
 
         private string ExtractStringFromCell(ICell cell)
