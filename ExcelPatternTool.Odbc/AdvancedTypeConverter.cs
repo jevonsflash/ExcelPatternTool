@@ -28,5 +28,7 @@ namespace ExcelPatternTool.Odbc
         public override Type ModelClrType => modelClrType;
 
         public override Type ProviderClrType => providerClrType;
+
+        public override Expression ConstructorExpression => Expression.New(GetType());
     }
 }

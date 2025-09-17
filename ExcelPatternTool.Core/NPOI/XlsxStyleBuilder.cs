@@ -8,6 +8,7 @@ using NPOI.XSSF.UserModel.Extensions;
 using ExcelPatternTool.Core.Helper;
 using ExcelPatternTool.Contracts.NPOI;
 using NPOI.HSSF.Util;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -124,7 +125,7 @@ namespace ExcelPatternTool.Core.NPOI
         {
             if (string.IsNullOrEmpty(htmlColor))
             {
-                return new XSSFColor(IndexedColors.Automatic);
+                return new XSSFColor(IndexedColors.Automatic, new DefaultIndexedColorMap());
             }
             var result = new XSSFColor(Color.Parse(htmlColor));
             return result;
