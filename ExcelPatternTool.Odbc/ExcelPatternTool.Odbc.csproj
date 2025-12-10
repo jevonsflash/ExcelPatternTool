@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <Version>0.3.2</Version>
+	  <Version>0.3.3</Version>
 	  <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 	  <Description>Out-of-the-box Excel toolkit with NPOI, No need to write pattern.json, specify a C# class to start immediately</Description>
 	  <Authors>LinXiao</Authors>
 	  <Company>MatoApp</Company>
-	  <Copyright>Copyright ©  2023</Copyright>
+	  <Copyright>Copyright ©  2026</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/jevonsflash/ExcelPatternTool</RepositoryUrl>
   </PropertyGroup>

@@ -16,18 +16,15 @@ namespace ExcelPatternTool.Core.EntityProxy
         {
             get
             {
-                if (instance==null)
+                if (instance == null)
                 {
-                    instance=new EntityProxyContainer();
+                    instance = new EntityProxyContainer();
                 }
                 return instance;
             }
         }
 
-        private EntityProxyContainer()
-        {
-
-        }
+        private EntityProxyContainer() { }
 
         private Assembly entityAss;
 
@@ -35,17 +32,17 @@ namespace ExcelPatternTool.Core.EntityProxy
         {
             var entityProxyGenerator = new EntityProxyGenerator();
             entityProxyGenerator.Process();
-            this.entityAss= entityProxyGenerator.GetEntityProxyAssembly();
+            this.entityAss = entityProxyGenerator.GetEntityProxyAssembly();
         }
 
         public void Init(string patternFilePath)
         {
             var entityProxyGenerator = new EntityProxyGenerator(patternFilePath);
             entityProxyGenerator.Process();
-            this.entityAss= entityProxyGenerator.GetEntityProxyAssembly();
+            this.entityAss = entityProxyGenerator.GetEntityProxyAssembly();
         }
 
-        public Type EntityType => this.entityAss.GetType("ExcelPatternTool.Core.Entites.ExcelEntity");
-
+        public Type EntityType =>
+            this.entityAss.GetType("ExcelPatternTool.Core.Entites.ExcelEntity");
     }
 }

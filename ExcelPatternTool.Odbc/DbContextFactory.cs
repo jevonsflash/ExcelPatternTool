@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ExcelPatternTool.Odbc
 {
@@ -23,6 +25,8 @@ namespace ExcelPatternTool.Odbc
 
 
             _dataContext = new ExcelPatternToolDbContext(contextOptions, entityType);
+
+            _dataContext.Database.EnsureCreated();
 
             return _dataContext;
         }

@@ -6,6 +6,7 @@ using NPOI.SS.UserModel;
 using System.Threading.Tasks;
 using System.Linq;
 using ExcelPatternTool.Contracts;
+using System.Collections.Concurrent;
 
 namespace ExcelPatternTool.Core.NPOI
 {
@@ -33,7 +34,7 @@ namespace ExcelPatternTool.Core.NPOI
         public IEnumerable<T> ReadRows<T>(IImportOption importOption) where T : IExcelEntity
         {
 
-            List<T> result = new List<T>();
+            ConcurrentBag<T> result = new();
             var columns = GetTypeDefinition(typeof(T));
             sheet = Document.GetSheet(importOption.SheetName);
             try
@@ -76,14 +77,13 @@ namespace ExcelPatternTool.Core.NPOI
 
             });
 
-            result = result.OrderBy(c => c.RowNumber).ToList();
-            return result;
+            return result.OrderBy(c => c.RowNumber).ToList();
 
         }
 
         public IEnumerable<T> ReadRows<T>(int sheetNumber, int rowsToSkip) where T : IExcelEntity
         {
-            List<T> result = new List<T>();
+            ConcurrentBag<T> result = new();
             var columns = GetTypeDefinition(typeof(T));
             try
             {
@@ -123,14 +123,13 @@ namespace ExcelPatternTool.Core.NPOI
                     result.Add(objectInstance);
                 }
             });
-            result = result.OrderBy(c => c.RowNumber).ToList();
-            return result;
+            return result.OrderBy(c => c.RowNumber).ToList();
         }
 
         public IEnumerable<IExcelEntity> ReadRows(Type entityType, IImportOption importOption)
         {
 
-            List<IExcelEntity> result = new List<IExcelEntity>();
+            ConcurrentBag<IExcelEntity> result = new();
             var columns = GetTypeDefinition(entityType);
             sheet = Document.GetSheet(importOption.SheetName);
             try
@@ -171,14 +170,13 @@ namespace ExcelPatternTool.Core.NPOI
                 }
 
             });
-            result = result.OrderBy(c => c.RowNumber).ToList();
-            return result;
+            return result.OrderBy(c => c.RowNumber).ToList();
 
         }
 
         public IEnumerable<IExcelEntity> ReadRows(Type entityType, int sheetNumber, int rowsToSkip)
         {
-            List<IExcelEntity> result = new List<IExcelEntity>();
+            ConcurrentBag<IExcelEntity> result = new();
             var columns = GetTypeDefinition(entityType);
             try
             {
@@ -217,8 +215,7 @@ namespace ExcelPatternTool.Core.NPOI
                     result.Add(objectInstance);
                 }
             });
-            result = result.OrderBy(c => c.RowNumber).ToList();
-            return result;
+            return result.OrderBy(c => c.RowNumber).ToList();
         }
 
 
