@@ -12,8 +12,11 @@
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimMode>full</TrimMode>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ExcelPatternTool.Core\ExcelPatternTool.Core.csproj" />
 		<ProjectReference Include="..\ExcelPatternTool.Odbc\ExcelPatternTool.Odbc.csproj" />

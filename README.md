@@ -5,11 +5,16 @@ Excel表格-数据库互导工具
 ## 介绍
 指定Pattern文件-一个规则描述的json文档，基于此规则实现Excel表格与数据库之间的导入导出，校验等功能。使用场景有：Excel导入至数据库、Excel转Excel（合并，校验，规范化）、数据库导出至Excel（报表生成）等。
 
-本工具提供其他版本：
 
-[ExcelPatternTool with UI]( https://github.com/jevonsflash/ExcelPatternTool-UI)
+[ExcelPatternTool]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool) - ExcelPatternTool Cli 工具
+[ExcelPatternTool.Core]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Core) - 核心模块 [查看文档](https://github.com/jevonsflash/ExcelPatternTool/blob/master/ExcelPatternTool.Core/README.md)
+[ExcelPatternTool.Odbc]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Odbc) - Odbc数据库扩展
+[ExcelPatternTool.Validation]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Validation) - 数据校验模块
 
-[ExcelPatternTool.Core]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Core)
+可视化GUI工具：
+
+[ExcelPatternTool with UI]( https://github.com/jevonsflash/ExcelPatternTool-UI) - 以上模块与.NET项目的集成示例，可以参考这个项目
+
 
 ## 特点
 1. 小巧，轻量化的命令行工具
@@ -21,13 +26,14 @@ Excel表格-数据库互导工具
 
 ## 更新内容
 
-|  Date  |  Version   | Content                                                                                         |
-| :----: | :--------: | :---------------------------------------------------------------------------------------------- |
-| V0.1.0 | 2022-7-29  | 初始版本                                                                                        |
-| V0.1.1 |  2022-8-3  | 1. 新增数据库导入 2. 减小程序包体积                                                             |
-| V0.2.0 | 2023-10-19 | 1. 更新引用库，使用SixLabors.ImageSharp替换System.Drawing以兼容Linux 2. 升级项目框架到 .Net 7.0 |
-| V0.3.1 | 2023-10-24 | 修复部分错误 |
-| V0.3.2 | 2024-9-26 | 更新引用库，升级项目框架到 .Net 8.0 |
+|  Date  |  Version   | Content                                                                                                          |
+| :----: | :--------: | :--------------------------------------------------------------------------------------------------------------- |
+| V0.1.0 | 2022-7-29  | 初始版本                                                                                                         |
+| V0.1.1 |  2022-8-3  | 1. 新增数据库导入 2. 减小程序包体积                                                                              |
+| V0.2.0 | 2023-10-19 | 1. 更新引用库，使用SixLabors.ImageSharp替换System.Drawing以兼容Linux 2. 升级项目框架到 .Net 7.0                  |
+| V0.3.1 | 2023-10-24 | 修复部分错误                                                                                                     |
+| V0.3.2 | 2024-9-26  | 更新引用库，升级项目框架到 .Net 8.0                                                                              |
+| V0.3.3 | 2025-12-10 | 1. 更新引用库，升级项目框架到 .Net 9.0。 2. 修复导入时数据可能丢失问题。 3. 增加导出至数据库时，自动生成数据库表 |
 
 ## 快速开始
 
@@ -41,10 +47,10 @@ Excel表格-数据库互导工具
 Sample：
 ```
 "ExcelImport": {			// excel导入规则
-    "SheetName": "",		// 工作表名称
-    "SheetNumber": 0,       // 工作表序号
-    "SkipRow": 3           // 开始行数
-  }
+	"SheetName": "",		// 工作表名称
+	"SheetNumber": 0,       // 工作表序号
+	"SkipRow": 3           // 开始行数
+}
 ```
 2. 导出规则编写
 * 指定数据库表的名称，主键类型。数据库类型将在Cli参数中指定
@@ -52,9 +58,9 @@ Sample：
 Sample：
 ```
 "DbExport": {               // Db导出规则
-    "TableKeyType": "Guid", // 表主键类型 可选 "无"，"int"，"long"，"Guid"，
-    "TableName": "Employee" // 表名称
-  }
+	"TableKeyType": "Guid", // 表主键类型 可选 "无"，"int"，"long"，"Guid"，
+	"TableName": "Employee" // 表名称
+}
 ```
 3. Pattern配置
 
@@ -69,18 +75,35 @@ Sample：
 Sample：
 ```
 
-"Patterns": [                       // Pattern配置
-    {
-      "PropName": "EmployeeName",   // 属性名称
-      "HeaderName": "姓名",         // 列标题名称
-      "PropType": "string",         // 属性类型，可选 "string"， "DateTime"，"int"，"double"，"bool"，
-      "CellType": "常规",           // 单元格类型 可选 "常规"，"包含注解"，"包含样式"，"包含公式"，"全包含"
-      "Ignore": false,              // 是否忽略
-      "Order": 0,                   // 列序号
-      "Validation": {               // 校验配置
-       ...
-      }
-    },
+"Patterns": [    									// Pattern配置
+	// 第1列配置
+	{
+		"PropName": "EmployeeName", 	// 属性名称
+		"HeaderName": "姓名", 				// 列标题名称
+		"PropType": "string", 				// 属性类型，可选 "string"， "DateTime"，"int"，"double"，"bool"，
+		"CellType": "常规", 					// 单元格类型 可选 "常规"，"包含注解"，"包含样式"，"包含公式"，"全包含"
+		"Ignore": false, 							// 是否忽略
+		"Order": 0, 									// 列序号
+		"Validation": {
+																	// 校验配置，详情请参考“配置校验”
+		}
+	},
+	// 第2列配置
+	{
+		"PropName": "EmployeeAge",
+		"HeaderName": "年龄",
+		"PropType": "int",
+		"CellType": "常规",
+		"Ignore": false,
+		"Order": 1,
+		"Validation": {
+
+		}
+	}
+
+	...
+]
+
 ```
 配置校验
 
@@ -90,25 +113,25 @@ Sample：
 
 Sample1：
 ```  
-    
-      "Validation": {
-        "Target": "单元格数值",
-        "Description": "整数值需要大于2",
-        "Convention": "普通校验器",
-        "Expression": "{value}>=2"
-      }
-    
+
+"Validation": {
+	"Target": "单元格数值",
+	"Description": "整数值需要大于2",
+	"Convention": "普通校验器",
+	"Expression": "{value}>=2"
+}
+
 ```
 Sample2：
 ```  
-    
-      "Validation": {
-        "Target": "单元格公式",
-        "Description": "需要满足正则表达式",
-        "Convention": "正则表达式校验器",
-        "Expression": "^ROUND\\(AN\\d+\\+BC\\d+\\+BD\\d+\\+BE\\d+\\+BF\\d+\\+BG\\d+\\+BH\\d+,2\\)$"
-      }
-    
+
+"Validation": {
+	"Target": "单元格公式",
+	"Description": "需要满足正则表达式",
+	"Convention": "正则表达式校验器",
+	"Expression": "^ROUND\\(AN\\d+\\+BC\\d+\\+BD\\d+\\+BE\\d+\\+BF\\d+\\+BG\\d+\\+BH\\d+,2\\)$"
+}
+
 ```
 
 完整示例请参考 [Sample](https://github.com/jevonsflash/ExcelPatternTool/raw/master/EPT/sample/pattern.json)

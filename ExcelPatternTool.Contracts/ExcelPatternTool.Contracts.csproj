@@ -6,13 +6,15 @@
       <Nullable>enable</Nullable>
 	  <Description>Out-of-the-box Excel toolkit with NPOI, No need to write pattern.json, specify a C# class to start immediately</Description>
 	  <Authors>LinXiao</Authors>
-	  
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <Company>MatoApp</Company>
 	  <Copyright>Copyright ©  2026</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/jevonsflash/ExcelPatternTool</RepositoryUrl>
   </PropertyGroup>
-
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NPOI" Version="2.7.4" />
