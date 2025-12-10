@@ -1,12 +1,13 @@
-﻿using ExcelPatternTool.Contracts;
-using ExcelPatternTool.Core.EntityProxy;
-using ExcelPatternTool.Validation;
-using ExcelPatternTool.Validators.Implements;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExcelPatternTool.Contracts;
+using ExcelPatternTool.Core.EntityProxy;
+using ExcelPatternTool.Validation;
+using ExcelPatternTool.Validators.Implements;
+using Newtonsoft.Json;
 
 namespace ExcelPatternTool
 {
@@ -16,6 +17,11 @@ namespace ExcelPatternTool
 
         public static void Init()
         {
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Converters = { new ValidationConverter() }
+            };
             EntityProxyContainer.Current.Init(CliProcessor.patternFilePath);
             ProcessResultList=new List<ProcessResultDto>();
             validator = new Validator();
