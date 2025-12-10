@@ -6,14 +6,14 @@ Excel表格-数据库互导工具
 指定Pattern文件-一个规则描述的json文档，基于此规则实现Excel表格与数据库之间的导入导出，校验等功能。使用场景有：Excel导入至数据库、Excel转Excel（合并，校验，规范化）、数据库导出至Excel（报表生成）等。
 
 
-[ExcelPatternTool]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool) - ExcelPatternTool Cli 工具
-[ExcelPatternTool.Core]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Core) - 核心模块 [查看文档](https://github.com/jevonsflash/ExcelPatternTool/blob/master/ExcelPatternTool.Core/README.md)
-[ExcelPatternTool.Odbc]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Odbc) - Odbc数据库扩展
-[ExcelPatternTool.Validation]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Validation) - 数据校验模块
+* [ExcelPatternTool]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool) - ExcelPatternTool Cli 工具
+* [ExcelPatternTool.Core]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Core) - 核心模块 [查看文档](https://github.com/jevonsflash/ExcelPatternTool/blob/master/ExcelPatternTool.Core/README.md)
+* [ExcelPatternTool.Odbc]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Odbc) - Odbc数据库扩展
+* [ExcelPatternTool.Validation]( https://github.com/jevonsflash/ExcelPatternTool/tree/master/ExcelPatternTool.Validation) - 数据校验模块
 
 可视化GUI工具：
 
-[ExcelPatternTool with UI]( https://github.com/jevonsflash/ExcelPatternTool-UI) - 以上模块与.NET项目的集成示例，可以参考这个项目
+* [ExcelPatternTool with UI]( https://github.com/jevonsflash/ExcelPatternTool-UI) - 以上模块与.NET项目的集成示例，可以参考这个项目
 
 
 ## 特点
